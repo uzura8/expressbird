@@ -48,7 +48,7 @@ chatFrame.setAttribute('src', site.uri('include.html'))
 chatFrame.setAttribute('title', 'EB Chat')
 chatFrame.setAttribute('style', chatFlameStyles.inActive)
 
-document.addEventListener('DOMContentLoaded', () => {
+const gcInclude = () => {
   const elms = document.getElementsByTagName('body')
   if (elms.length == 1) {
     const chatContainer = document.createElement('div')
@@ -62,7 +62,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     elms[0].appendChild(chatContainer)
   }
-})
+}
+
+if (document.readyState !== 'loading') {
+  gcInclude()
+} else {
+  document.addEventListener('DOMContentLoaded', gcInclude, false);
+}
 
 window.addEventListener('message', (e) => {
   if (e.origin == origin) {
