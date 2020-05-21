@@ -8,6 +8,7 @@ import ChatAcl from '@/middlewares/chatAcl'
 import config from '@/config/config'
 const isFBEnabled = config.auth.firebase.isEnabled
 
+const ADMIN_USER_ID = process.env.ADMIN_USER_ID || config.greatefulChat.support.adminUserId
 
 export default {
   isAuthenticated: (req, res, next) => {
@@ -191,20 +192,19 @@ export default {
       return res.status(422).json({ errors: errors.array() })
     }
     const userId = req.params.userId
-    const adminUserId = config.greatefulChat.support.adminUserId
     try {
       db.sequelize.transaction(async (t) => {
         const chats = await Chat.getChatByUserId(userId, 'support')
         if (chats.length > 0) return res.json(chats)
 
-        //const userAdmin = await User.findById(adminUserId)
+        //const userAdmin = await User.findById(ADMIN_USER_ID)
         const chat = await Chat.create({
           type: 'support',
           userId: userId,
         })
         const chatComment = await ChatComment.create({
           chatId: chat.id,
-          userId: config.greatefulChat.support.adminUserId,
+          userId: ADMIN_USER_ID,
           body: config.greatefulChat.support.comment.first,
         })
         const resChatComment = {
@@ -268,11 +268,10 @@ export default {
         res.json(result)
 
         if (config.greatefulChat.isEnabled) {
-          const adminUserId = config.greatefulChat.support.adminUserId
-          if (result.userId != adminUserId) {
+          if (result.userId != ADMIN_USER_ID) {
             const chat = await Chat.findById(chatComment.chatId)
             if (chat.type == 'support') {
-              const adminUser = await User.findById(adminUserId)
+              const adminUser = await User.findById(ADMIN_USER_ID)
               req.gcBot = {
                 comment: result,
                 sessAttrs: null,

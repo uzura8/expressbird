@@ -1,15 +1,22 @@
 import Sequelize from 'sequelize'
 import config from '@/config/config.json'
 
+const DB_HOST = process.env.DB_HOST || config.dbs.mysql.host
+const DB_PORT = process.env.DB_PORT || config.dbs.mysql.port
+const DB_USER = process.env.DB_USER || config.dbs.mysql.user
+const DB_PASSWORD = process.env.DB_PASSWORD || config.dbs.mysql.password
+const DB_NAME = process.env.DB_NAME || config.dbs.mysql.database
+const DB_LOGGING = process.env.DB_LOGGING || config.dbs.mysql.logging
+
 const sequelize = new Sequelize(
-  config.dbs.mysql.database,
-  config.dbs.mysql.user,
-  config.dbs.mysql.password,
+  DB_NAME,
+  DB_USER,
+  DB_PASSWORD,
   {
-    user: config.dbs.mysql.user,
-    host: config.dbs.mysql.host,
-    port: config.dbs.mysql.port,
-    logging: config.dbs.mysql.logging,
+    user: DB_USER,
+    host: DB_HOST,
+    port: DB_PORT,
+    logging: DB_LOGGING,
     dialect: 'mysql',
   }
 )

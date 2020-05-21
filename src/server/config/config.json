@@ -1,7 +1,7 @@
 {
   "port": 8080,
   "session": {
-    "secretKey": "secret-key",
+    "secretKey": "",
     "cookie": {
       "maxAgeHours": 24,
       "secure": false
@@ -11,9 +11,9 @@
     "mysql": {
       "host": "localhost",
       "port": "3306",
-      "user": "username",
-      "password": "password",
-      "database": "db-name",
+      "user": "root",
+      "password": "",
+      "database": "gc_db",
       "logging": false
     }
   },

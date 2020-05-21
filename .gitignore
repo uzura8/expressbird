@@ -16,7 +16,7 @@ tags
 package-lock.json
 /node_modules/*
 
-/src/server/config/config.json
+/env.sh
 /src/client/js/config/config.json
 /src/client/js/config/firebase_config.js
 /src/server/config/firebase-admin-credentials.json
