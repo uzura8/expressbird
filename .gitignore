@@ -17,7 +17,6 @@ package-lock.json
 /node_modules/*
 
 /env.sh
-/src/client/js/config/config.json
 /src/client/js/config/firebase_config.js
 /src/server/config/firebase-admin-credentials.json
 
