@@ -3,6 +3,13 @@ import awsConfig from '@/config/aws-config'
 import boom from '@hapi/boom'
 import { ChatComment } from '@/models'
 
+const LEX_BOT_NAME = process.env.LEX_BOT_NAME || awsConfig.lex.bots.initialSupport
+const LEX_CREDENTIAL = {
+  accessKeyId: process.env.AWS_ACCESS_KEY || awsConfig.lex.credential.accessKeyId,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || awsConfig.lex.credential.secretAccessKey,
+  region: process.env.AWS_REGION || awsConfig.lex.credential.region,
+}
+
 export default {
   talkToChatBot: (req, res, next) => {
     if (req.gcBot == null) {
@@ -12,8 +19,8 @@ export default {
     const comment = req.gcBot.comment
 
     const botAlias = '$LATEST'
-    const botName = awsConfig.lex.bots.initialSupport
-    const lexruntime = new AWS.LexRuntime(awsConfig.lex.credential)
+    const botName = LEX_BOT_NAME
+    const lexruntime = new AWS.LexRuntime(LEX_CREDENTIAL)
 
     try {
       const params = {
