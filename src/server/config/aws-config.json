@@ -1,10 +1,18 @@
 {
+  "credential": {
+    "accessKeyId": "",
+    "secretAccessKey": ""
+  },
+  "s3": {
+    "region": "us-west-2",
+    "bucketName": "grateful-chat",
+    "keys": {
+      "firebaseCredential": "config/firebase-admin-credentials.json",
+      "firebaseAppSdkConfig": "config/firebase-app-sdk-config.json"
+    }
+  },
   "lex": {
-    "credential": {
-      "accessKeyId": "",
-      "secretAccessKey": "",
-      "region": "us-west-2"
-    },
+    "region": "us-west-2",
     "bots": {
       "initialSupport": "GCSupportBot"
     }

@@ -3,11 +3,11 @@ import awsConfig from '@/config/aws-config'
 import boom from '@hapi/boom'
 import { ChatComment } from '@/models'
 
-const LEX_BOT_NAME = process.env.LEX_BOT_NAME || awsConfig.lex.bots.initialSupport
+const AWS_LEX_BOT_NAME = process.env.AWS_LEX_BOT_NAME || awsConfig.lex.bots.initialSupport
 const LEX_CREDENTIAL = {
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID || awsConfig.lex.credential.accessKeyId,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || awsConfig.lex.credential.secretAccessKey,
-  region: process.env.AWS_REGION || awsConfig.lex.credential.region,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID || awsConfig.credential.accessKeyId,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || awsConfig.credential.secretAccessKey,
+  region: process.env.AWS_LEX_REGION || awsConfig.lex.region,
 }
 
 export default {
@@ -19,7 +19,7 @@ export default {
     const comment = req.gcBot.comment
 
     const botAlias = '$LATEST'
-    const botName = LEX_BOT_NAME
+    const botName = AWS_LEX_BOT_NAME
     const lexruntime = new AWS.LexRuntime(LEX_CREDENTIAL)
 
     try {
