@@ -17,13 +17,15 @@ nbproject/
 package-lock.json
 /node_modules/*
 
-/env.sh
-
-/docker-compose.yml
+/docker-compose.yml*
 
 /server/*
 /public/assets/js/*
 /public/assets/css/*
 /mysql/mysql_data/*
 /nginx/logs/*
+
+.git
+.gitignore
+README.md
 
