@@ -17,7 +17,6 @@ export default {
         return next(boom.badImplementation(err))
       } else {
         const config = JSON.parse(data.Body.toString())
-        console.log(config)
         return res.json(config)
       }
     })
