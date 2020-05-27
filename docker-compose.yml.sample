@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    ports:
+      - '8000:8080'
+    volumes:
+      - ./nginx/logs:/var/log/nginx
+      #- '.:/gratefulchat'
+    tty: true
+    environment:
+      #NODE_ENV: 'development'
+      NODE_ENV: 'production'
+      SESSION_KEY: 'set-your-session-key'
+      AWS_ACCESS_KEY_ID: ''
+      AWS_SECRET_ACCESS_KEY: ''
+      DB_HOST: 'db'
+      DB_USER: 'root'
+      DB_PASSWORD: 'set-your-password'
+      DB_NAME: 'gc_db'
+      #DB_LOGGING: '1'
+      TZ: Asia/Tokyo
+    links:
+      - 'db'
+    #command: python3 /flaskbird/server/run.py
+
+  db:
+    build: ./mysql
+    environment:
+      TZ: Asia/Tokyo
+    volumes:
+      - ./mysql/mysql_data:/var/lib/mysql
+      - ./mysql/sqls:/docker-entrypoint-initdb.d # import initiarize data
+    environment:
+      - MYSQL_ROOT_PASSWORD='set-your-password'
