@@ -52,37 +52,44 @@ const createUser = function(name, email = '', password = '', serviceCode = '', s
   })
 }
 
-try {
-  if (config.auth.firebase.isEnabled) {
-    const params = {
-      Bucket: AWS_S3_BUCKET_NAME,
-      Key: firebaseCredentialFile,
-    }
-    s3.getObject(params, (err, data) => {
-      if (err) {
-        console.log(err, err.stack);
-      } else {
-        const firebaseConfig = JSON.parse(data.Body.toString())
-        admin.initializeApp({ credential: admin.credential.cert(firebaseConfig) })
-        admin.auth().createUser({
-          email: email,
-          emailVerified: false,
-          password: password,
-          displayName: userName,
-          disabled: false
-        })
-          .then(async (userRecord) => {
-            await createUser(userName, '', '', 'firebase', userRecord.uid)
+User.count()
+  .then(count => {
+    if (count > 0) {
+      console.log('Admin user already exists')
+    } else {
+      try {
+        if (config.auth.firebase.isEnabled) {
+          const params = {
+            Bucket: AWS_S3_BUCKET_NAME,
+            Key: firebaseCredentialFile,
+          }
+          s3.getObject(params, (err, data) => {
+            if (err) {
+              console.log(err, err.stack);
+            } else {
+              const firebaseConfig = JSON.parse(data.Body.toString())
+              admin.initializeApp({ credential: admin.credential.cert(firebaseConfig) })
+              admin.auth().createUser({
+                email: email,
+                emailVerified: false,
+                password: password,
+                displayName: userName,
+                disabled: false
+              })
+                .then(async (userRecord) => {
+                  await createUser(userName, '', '', 'firebase', userRecord.uid)
+                })
+                .catch((err) => {
+                  cli.handleError('Error creating new user:', err)
+                })
+            }
           })
-          .catch((err) => {
-            cli.handleError('Error creating new user:', err)
-          })
+        } else {
+          createUser(userName, email, password)
+        }
+      } catch (err) {
+        cli.handleError(err)
       }
-    })
-  } else {
-    createUser(userName, email, password)
-  }
-} catch (err) {
-  cli.handleError(err)
-}
+    }
+  })
 

@@ -29,7 +29,7 @@ RUN npm run build
 #EXPOSE 80
 EXPOSE 8080
 
-#CMD ["node", "/gratefulchat/server/create_admin_user.js", "admin@example.com", "password", "AdminUser"]
+CMD ["node", "/gratefulchat/server/create_admin_user.js", "admin@example.com", "password", "AdminUser"]
 #CMD ["npm", "run", "start-pm2"]
 CMD ["pm2", "--no-daemon", "start", "/gratefulchat/server/app.js"]
 
