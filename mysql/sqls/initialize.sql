@@ -1,4 +1,4 @@
-CREATE DATABASE gc_db;
+CREATE DATABASE gc_db DEFAULT CHARACTER SET utf8;
 use gc_db;
 
 CREATE TABLE `user` (
