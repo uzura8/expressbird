@@ -3,11 +3,14 @@ import str from './str'
 
 export default {
   uri: (path) => {
+    const validPath = str.ltrimChar(path, '/')
     const domain = config.domain
     const port = config.port ? ':' + config.port: ''
     const basePath = config.baseUrl
+    if (!domain && !port) return basePath + validPath
+
     const schem = config.isSSL ? 'https://' : 'http://'
-    let items = [schem, domain, port, basePath, str.ltrimChar(path, '/')]
+    let items = [schem, domain, port, basePath, validPath]
     return items.join('')
   },
 
@@ -15,6 +18,8 @@ export default {
     const domain = config.domain
     const port = config.port ? ':' + config.port: ''
     const basePath = config.baseUrl
+    if (!domain && !port) return basePath
+
     const schem = config.isSSL ? 'https://' : 'http://'
     let items = [domain, port]
 

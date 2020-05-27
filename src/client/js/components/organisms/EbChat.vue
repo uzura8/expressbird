@@ -71,7 +71,7 @@ export default {
 
   data(){
     return {
-      socket: io(`${config.domain}:${config.port}`),
+      socket: io(),
     }
   },
 
@@ -97,6 +97,12 @@ export default {
     chatId: function (val) {
       this.resetComments()
     },
+  },
+
+  mounted() {
+    if (config.domanin && config.port) {
+      this.socket = io(`${config.domain}:${config.port}`)
+    }
   },
 
   created() {
