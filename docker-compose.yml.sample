@@ -4,13 +4,11 @@ services:
   app:
     build: .
     ports:
-      - '8000:8080'
+      - '80:80'
     volumes:
       - ./nginx/logs:/var/log/nginx
-      #- '.:/gratefulchat'
     tty: true
     environment:
-      #NODE_ENV: 'development'
       NODE_ENV: 'production'
       SESSION_KEY: 'set-your-session-key'
       AWS_ACCESS_KEY_ID: ''
@@ -23,7 +21,6 @@ services:
       TZ: Asia/Tokyo
     links:
       - 'db'
-    #command: python3 /flaskbird/server/run.py
 
   db:
     build: ./mysql
