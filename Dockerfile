@@ -24,7 +24,6 @@ RUN npm run build
 
 EXPOSE 80
 
-#CMD ["node", "/gratefulchat/server/create_admin_user.js", "admin@example.com", "password", "AdminUser"]
 #CMD ["pm2", "--no-daemon", "start", "/gratefulchat/server/app.js"]
 CMD ["/bin/bash", "/gratefulchat/startup.sh"]
 
