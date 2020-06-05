@@ -2,11 +2,13 @@ version: 0.2
 
 phases:
   install:
+    runtime-versions:
+      nodejs: 12
     commands:
-      - yum install -y mariadb-server
-  build:
+      - npm install
+  pre_build:
     commands:
-      - env | sort
-      - echo "CREATE DATABASE ${DB_NAME} DEFAULT CHARACTER SET utf8" | mysql -u${DB_USER} -p${DB_PASSWORD} -h${DB_HOST}
-      - mysql -u${DB_USER} -p${DB_PASSWORD} -h${DB_HOST} ${DB_NAME} < mysql/sqls/initialize.sql
+      - npm run build
+        - sequelize db:migrate --env production --config server/config/config.json --migrations-path server/migrations
+        #- node server/create_admin_user.js admin@example.com password 'AdminUser'
 
