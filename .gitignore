@@ -28,3 +28,23 @@ package-lock.json
 /mysql/mysql_data/*
 /nginx/logs/*
 
+
+*.pyc
+/venv/*
+__pycache__
+.Python
+[Bb]in
+[Ii]nclude
+[Ll]ib
+[Ll]ib64
+[Ll]ocal
+[Ss]cripts
+pyvenv.cfg
+.venv
+pip-selfcheck.json
+
+/terraform/.terraform
+/terraform/.terraform.tfstate.lock.info
+/terraform/terraform.tfstate*
+/terraform/var/*
+/terraform/bin/setup.conf
