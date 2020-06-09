@@ -43,8 +43,8 @@ pyvenv.cfg
 .venv
 pip-selfcheck.json
 
-/terraform/.terraform
-/terraform/.terraform.tfstate.lock.info
-/terraform/terraform.tfstate*
-/terraform/var/*
-/terraform/bin/setup.conf
+/infra/.terraform
+/infra/.terraform.tfstate.lock.info
+/infra/terraform.tfstate*
+/infra/var/*
+/infra/bin/setup.conf

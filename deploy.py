@@ -14,7 +14,7 @@ def main():
                           '-backend-config=bucket=%s' % backend_bucket,
                           '-backend-config=key=terraform.tfstat',
                           '-backend-config=region=%s' % backend_region]
-    subprocess.run(terraform_init_cmd, cwd='./terraform', check=True)
+    subprocess.run(terraform_init_cmd, cwd='./infra', check=True)
 
     terraform_apply_cmd = ['terraform', 'apply', '-auto-approve']
 
@@ -26,11 +26,11 @@ def main():
         terraform_apply_cmd.append('-var')
         terraform_apply_cmd.append('aws_db_password=%s' % db_passwd)
 
-    subprocess.run(terraform_apply_cmd, cwd='./terraform', check=True)
+    subprocess.run(terraform_apply_cmd, cwd='./infra', check=True)
     state = subprocess.run(
         ['terraform', 'show', '-json'],
         stdout=subprocess.PIPE,
-        cwd='./terraform',
+        cwd='./infra',
         check=True
     )
     resources = json.loads(state.stdout.decode('utf8'))['values']['root_module']['child_modules']
