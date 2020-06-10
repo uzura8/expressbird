@@ -37,24 +37,24 @@ def main():
     db_host = [x for x in resources if x['address'] == 'module.module_rds'][0]['resources'][0]['values']['address']
 
 
-    print('2. deploy grateful chat')
-    subprocess.run(['npm', 'install'], check=True)
-    subprocess.run(['npm', 'run', 'build'], check=True)
+    #print('2. deploy grateful chat')
+    #subprocess.run(['npm', 'install'], check=True)
+    #subprocess.run(['npm', 'run', 'build'], check=True)
 
-    db_user = os.environ.get('DB_USER') or 'db_admin'
-    db_name = os.environ.get('DB_NAME') or 'gc_db'
-    database_url = 'mysql://{}:{}@{}:3306/{}'.format(db_user, db_passwd, db_host, db_name)
+    #db_user = os.environ.get('DB_USER') or 'db_admin'
+    #db_name = os.environ.get('DB_NAME') or 'gc_db'
+    #database_url = 'mysql://{}:{}@{}:3306/{}'.format(db_user, db_passwd, db_host, db_name)
 
-    migrate_cmd = ['./node_modules/.bin/sequelize',
-                        'db:migrate',
-                        '--env', 'production',
-                        '--config', 'server/config/config.json',
-                        '--migrations-path', 'server/migrations']
-    subprocess.run(migrate_cmd, env={'DATABASE_URL': database_url}, check=True)
+    #migrate_cmd = ['./node_modules/.bin/sequelize',
+    #                    'db:migrate',
+    #                    '--env', 'production',
+    #                    '--config', 'server/config/config.json',
+    #                    '--migrations-path', 'server/migrations']
+    #subprocess.run(migrate_cmd, env={'DATABASE_URL': database_url}, check=True)
 
-    create_user_cmd = ['node', 'server/create_admin_user.js',
-                    'admin@example.com', 'password', 'AdminUser']
-    subprocess.run(create_user_cmd, check=True)
+    #create_user_cmd = ['node', 'server/create_admin_user.js',
+    #                'admin@example.com', 'password', 'AdminUser']
+    #subprocess.run(create_user_cmd, check=True)
 
 
 if __name__ == '__main__':
