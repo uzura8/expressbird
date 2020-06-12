@@ -20,7 +20,6 @@ package-lock.json
 /docker-compose.yml*
 
 /var/*
-/server/*
 /public/assets/js/*
 /public/assets/css/*
 /mysql/mysql_data/*

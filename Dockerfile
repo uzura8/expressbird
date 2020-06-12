@@ -11,7 +11,7 @@ RUN apt-get -y update && apt-get -y install nginx
 RUN rm /etc/nginx/sites-enabled/default
 COPY ./nginx/default.conf /etc/nginx/conf.d/
 
-RUN apt-get -y install nodejs npm
+RUN apt-get -y update && apt-get -y install nodejs npm
 RUN npm install n -g
 RUN n stable
 
