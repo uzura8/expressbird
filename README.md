@@ -4,103 +4,24 @@ GratefulChat is a Support Chat System for every site
 
 
 
-## Getting Started
+## Installation
 
-### Prerequisites
+### 1. Firebase Setting
 
-* NodeJS >= ver10
-* MySQL >= ver5.7
-* Firebase
-* AWS CLI
-
-
-
-### Installing
-
-Before installing, you need to setup NodeJS, MySQL and Web server.
-
-
-
-#### Install required libraries
-
-```bash
-npm install
-```
-
-
-
-#### Copy and edit config files
-
-Edit configs for your env, after copy from sample.
-
-```bash
-cp src/server/config/config.json.sample src/server/config/config.json
-cp src/client/js/config/config.json.sample src/client/js/config/config.json
-cp src/client/js/config/firebase_config.js.sample src/client/js/config/firebase_config.js
-```
-
-Edit server side setting  for your environment
-
-```json
-// src/server/config/config.json
-{
-  "port": 8080,
-  "session": {
-    "secretKey": "secret-key",
-    "cookie": {
-      "maxAgeHours": 24,
-      "secure": false
-    }
-  },
-  "dbs": {
-    "mysql": {
-      "host": "localhost",
-      "port": "3306",
-      "user": "username",
-      "password": "password",
-      "database": "db-name",
-      "logging": false
-    }
-  },
-```
-
-
-
-Edit client side setting  for your environment
-
-```json
-// src/client/js/config/config.json
-{
-  "domain": "localhost",
-  "port": 8080,
-  "baseUrl": "/",
-  "isSSL": false,
-  "siteName": "Sample Site",
-```
-
-
-
-#### Create DB
-
-```bash
-echo "CREATE DATABASE DB-name DEFAULT CHARACTER SET utf8" | mysql -u user-name -p
-mysql -u user-name -p DB-name < data/sql/setup.sql
-```
-
-
-
-#### Firebase setting
+Get Firebase config files and upload to S3 bucket
 
 You need register and sign in to [Firebase](https://firebase.google.com/), before below settings
 
-##### Create FIrebase Project
+#### Create FIrebase Project
 
 * Set project name
 * Set to use GoogleAnalytics, if you need
 
-##### Add web app
+#### Add Web App
 
-Choose icon for "Add Web App" ![firebase_config_01](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/firebase_config_01.png)
+Choose icon for "Add Web App" 
+
+![firebase_config_01](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/firebase_config_01.png)
 
 
 
@@ -114,33 +35,36 @@ After registered, push "Next" button
 
 And press "Continue to  console" button, then you go back to the project top
 
+#### Get app sdk config for client side
 
+Press "1 app" label, and press the cog icon of registered Web App 
 
-##### Set web app config to client side setting
-
-Press "1 app" label, and press the cog icon of registered Web App ![firebase_config_03](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/firebase_config_03.png)
+![firebase_config_03](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/firebase_config_03.png)
 
  ![firebase_config_04](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/firebase_config_04.png)
 
 
 
-Scroll to "Firebase SDK snippet" section, and select "config" radio button ![firebase_config_05](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/firebase_config_05.png)
+Scroll to "Firebase SDK snippet" section, and select "config" radio button 
 
+![firebase_config_05](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/firebase_config_05.png)
 
+Save config for json format like below with filename __"firebase-app-sdk-config.json"__
 
-Copy rows in "const firebaseConfig" object on the source code, and paste to src/client/js/config/firebase_config.js
-
-```  json
-// src/client/js/config/config.json
-
-const firebaseConfig = {
-  // Paste Here!
+````json
+{
+  "apiKey": "******************",
+  "authDomain": "sample-chat-system.firebaseapp.com",
+  "databaseURL": "https://sample-chat-system.firebaseio.com",
+  "projectId": "sample-chat-system",
+  "storageBucket": "sample-chat-system.appspot.com",
+  "messagingSenderId": "******************",
+  "appId": "******************",
+  "measurementId": "********"
 }
-```
+````
 
-
-
-##### Set web app config to server side setting
+#### Get credentials
 
 Press "Service account" tab on "Settings" page, and press "Generate new private key" button
 
@@ -148,15 +72,9 @@ Press "Service account" tab on "Settings" page, and press "Generate new private 
 
 
 
-After downloaded, move the file to "src/server/config/" and rename "firebase-admin-credentials.json"
+After downloaded, rename to __"firebase-admin-credentials.json__"
 
-```bash
-mv /path-to-downloaded-file src/server/config/firebase-admin-credentials.json
-```
-
-
-
-##### Authentication setting
+####Authentication setting 
 
 Open Authentication page.
 
@@ -172,179 +90,236 @@ Register "Email/Password" and "Anonymous" for "Sign-in providers"
 
 
 
-#### For Lambda
+#### Upload config files to S3 Bucket
+
+Access to [S3 console on AWS](https://s3.console.aws.amazon.com/s3/home)
+
+Create bucket name as __"grateful-chat"__, and save below
+
+* /config/firebase-app-sdk-config.json
+* /config/firebase-admin-credentials.json
 
-##### Create Lambda function for chat bot on AWS Console
+### 2. Setup infra
 
-Create new function.
+#### Execute terraform by CodeBuild
 
-![lambda_setting_01](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/lambda_setting_01.png)
+Access to CodeBuild console on AWS
 
-Select "Auter from scrach", input "Function name" and select "Node.js 10.x" for Runtime" 
-And push "Create function"
+Press "ビルドプロジェクトを作成する" button
 
-![lambda_setting_02](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/lambda_setting_02.png)
+Input below
 
+* Section "プロジェクトの設定"
+    * プロジェクト名: cb-gc-setup-infra
+* Section "ソース"
+    * ソースプロバイダ: "GitHub"
+    * リポジトリ: "GitHub アカウントのリポジトリ"
+    * GitHubアカウントのリポジトリ: https://github.com/rysk92/grateful-chat-private
+    * ソースバージョン: master
+* Section "環境"
+    * 環境イメージ: マネージド型イメージ
+    * オペレーティングシステム: Ubuntu
+    * ランタイム: Standard
+    * イメージ: aws/codebuild/standard:2.0
+    * イメージのバージョン: 常に最新
+    * 環境タイプ: Linux
+    * 特権付与: Checked
+    * サービスロール: ※あとでまとめる
+    * 追加設定 > 環境変数
+        * AWS_ACCESS_KEY_ID: ほげ
+        * AWS_SECRET_ACCESS_KEY: ほげ
+        * AWS_DEFAULT_REGION: ap-northeast-1
+        * DB_PASSWORD: password_hoge
+*  Section "Buildspec"
+    * ビルド仕様: buildspec ファイルを使用する
+    * Buildspec 名: buildspec_deploy_infra.yml
 
+Press button "ビルドプロジェクトを作成する", then created buid project and moved to project top
 
-##### Upload function from local
+Start build by press button "ビルドの開始", then complete
 
-Before execute this section, you have to setup [AWS CLI](https://docs.aws.amazon.com/cli/) on your env. 
-Refer to [AWS Document](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html)
+### 3. Setup database
 
-Clone Lex Bot Function from [Github](https://github.com/uzura8/gc-support-chat-lex-bot), and execute deploy command.
+#### Get AWS resouce informations
 
-```bash
-cd /path-to-your-dir
-git clone git@github.com:uzura8/gc-support-chat-lex-bot.git
-cd gc-support-chat-lex-bot
-cp setup.conf.sample setup.conf
-vi setup.conf
-# Edit for your env
-sh deploy.sh
-```
+##### 1) RDS endpoint
+
+Access to RDS console, and chose "fggc-prod-rds-db"
 
+Copy endpoint like "fggc-prod-rds-db.*********.ap-northeast-1.rds.amazonaws.com"
 
+##### 2) VPC
 
-#### For Amazon Lex
+Access to VPC console
 
-##### Create Chat Bot
+Confirm VPC ID named "fggc-prod-vpc"
 
-Singn in AWS console, and move to Amazon Lex page.
+#### Execute setup db script by CodeBuild
 
-Put create bot button
+Access to CodeBuild console on AWS
 
-![lex_config_01](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/lex_config_01.png)
+Press "ビルドプロジェクトを作成する" button
 
+Input below
 
+* Section "プロジェクトの設定"
+    * プロジェクト名: cb-gc-setup-app
+* Section "ソース"
+    * ソースプロバイダ: "GitHub"
+    * リポジトリ: "GitHub アカウントのリポジトリ"
+    * GitHubアカウントのリポジトリ: https://github.com/rysk92/grateful-chat-private
+    * ソースバージョン: master
+* Section "環境"
+    * 環境イメージ: マネージド型イメージ
+    * オペレーティングシステム: Ubuntu
+    * ランタイム: Standard
+    * イメージ: aws/codebuild/standard:2.0
+    * イメージのバージョン: 常に最新
+    * 環境タイプ: Linux
+    * 特権付与: Checked
+    * サービスロール: ※あとでまとめる
+    * 追加設定
+        * VPC: ↑で作ったVPC
+        * サブネット: fggc-prod-subnet-private_a
+        * セキュリティグループ:  fggc-prod-sg-db
+        * [VPC 設定の確認]を押して、「 VPC はインターネットに接続されています」が表示されることを確認
+        *  環境変数
+            * AWS_ACCESS_KEY_ID: ほげ
+            * AWS_SECRET_ACCESS_KEY: ほげ
+            * AWS_DEFAULT_REGION: ap-northeast-1
+            * DATABASE_URL: "mysql://db_admin:password_hoge@fggc-prod-rds-db.*********.ap-northeast-1.rds.amazonaws.com:3306/gc_db"
+            * SESSION_KEY: ほげ 
+*  Section "Buildspec"
+    * ビルド仕様: buildspec ファイルを使用する
+    * Buildspec 名: buildspec_deploy_app.yml
 
-Select "Custom bot", and input Bot name, Output voice and COPPA, then push "Create" button.
+Press button "ビルドプロジェクトを作成する", then created buid project and moved to project top
 
-![lex_config_02](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/lex_config_02.png)
+Start build by press button "ビルドの開始", then complete
 
+### 4. Build and Push Docker Container to ECR by CodeBuild
 
+#### 1) Create ECR Repository
 
-##### Create Intent
+Access to ECR console on AWS
 
-Push "Create Intent" button
+Press button "リポジトリを作成"
 
-![lex_config_03](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/lex_config_03.png)
+Input below
 
+* リポジトリ名: gc-fargate
+* Press button "リポジトリを作成"
 
+Copy URI named "gc-fargate" -> {{your-account-id}}.dkr.ecr.ap-northeast-1.amazonaws.com/gc-fargate
 
-Create Slot to select number like below.
+#### 2) Build and Push Docker Container by CodeBuild
 
-###### Example
+Access to CodeBuild console on AWS
 
-* Name: "SelectNum"
-* Slot type: AMZAON.NUMBER
-* Prompt: Which number?
+Press "ビルドプロジェクトを作成する" button
 
-![lex_config_04](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/lex_config_04.png)
+Input below
 
+* Section "プロジェクトの設定"
+    * プロジェクト名: cb-gc
+* Section "ソース"
+    * ソースプロバイダ: "GitHub"
+    * リポジトリ: "GitHub アカウントのリポジトリ"
+    * GitHubアカウントのリポジトリ: https://github.com/rysk92/grateful-chat-private
+    * ソースバージョン: master
+* Section "環境"
+    * 環境イメージ: マネージド型イメージ
+    * オペレーティングシステム: Ubuntu
+    * ランタイム: Standard
+    * イメージ: aws/codebuild/standard:2.0
+    * イメージのバージョン: 常に最新
+    * 環境タイプ: Linux
+    * 特権付与: Checked
+    * サービスロール: ※あとでまとめる
+    * 追加設定
+        * 環境変数
+            * AWS_ACCOUNT_ID: ほげ
+                * Get this value on My Account page
+            * AWS_DEFAULT_REGION: ap-northeast-1
+            * IMAGE_NAME: gc-fargate 
+* Section "Buildspec"
+    * ビルド仕様: buildspec ファイルを使用する
 
+Press button "ビルドプロジェクトを作成する", then created buid project and moved to project top
 
-Register sample utterance.
+Start build by press button "ビルドの開始", then complete
 
-![lex_config_05](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/lex_config_05.png)
+### 5. Setup ECS/Fargate
 
+#### 1) Create Task Definition
 
+Access to ECS console on AWS
 
-In "Fulfillment" section, select "Lambda function" and select your lambda function.  
-And Build and test.   
-And publish.
+Move to "タスク定義" by link on left side menu
 
-![lex_config_06](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/lex_config_06.png)
+Press button "新しいタスク定義の作成"
 
-![lex_config_07](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/lex_config_07.png)
+Input below
 
+* 起動タイプの互換性の選択: Fargate
+* タスク定義名: gc-fargate
+* タスク実行ロール: ※あとでまとめる
+* タスクメモリ: 0.5GB
+* タスク CPU: 0.25 vCPU
+* Press button "コンテナの追加"
+    * コンテナ名: gc-fargate
+    * イメージ: {{your-account-id}}.dkr.ecr.ap-northeast-1.amazonaws.com/gc-fargate
+        * This value copied before
+    * ポートマッピング: 80 | TCP
+    * 環境変数:
+        * AWS_ACCESS_KEY_ID: ほげ
+        * AWS_SECRET_ACCESS_KEY: ほげ
+        * AWS_DEFAULT_REGION: ap-northeast-1
+        * DATABASE_URL: "mysql://db_admin:password_hoge@fggc-prod-rds-db.*********.ap-northeast-1.rds.amazonaws.com:3306/gc_db"
+        * SESSION_KEY: ほげ 
+    * Press button "更新"
+* Press button "作成"
 
+#### 2) Create Cluster
 
-##### Create IAM User for Amazon Lex
+Access to ECS console on AWS
 
-Open AIM page on AWS console and press "Users" link.
+Move to "クラスター" by link on left side menu
 
-![lex_config_08](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/lex_config_08.png)
+Press button "クラスターの作成"
 
+Input below
 
+* クラスターテンプレートの選択: ネットワーキングのみ(AWS Fargate を使用)
+* クラスター名: cl-gc
 
-Press "Add User" button.
+Press button "作成"
 
-![lex_config_09](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/lex_config_09.png)
+####3) Create Service
 
+Press tab "サービス"
 
+Press button "作成"
 
-Input "User name" and select "Programatic access" for access type.
+Input below
 
-![lex_config_10](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/lex_config_10.png)
+* サービスの設定
+    * 起動タイプ: Fargate
+    * タスク定義: gc-fargate
+    * サービス名: srv-gc-fargate
+    * タスクの数: 1
+* デプロイメント
+    * デプロイメントタイプ: ローリングアップデート
+* ネットワーク構成
+    * クラスター VPC: VPC: ↑で作ったVPC
+    * サブネット: 
+        * fggc-prod-subnet-public_web_a
+        * fggc-prod-subnet-public_web_b
+    * セキュリティグループ: 
+        * Accept HTTP | TCP | 80
+* ロードバランシング
+    * ロードバランサーの種類: Application Load Balancer
+    * あとで書く
 
+Press button "作成"
 
-
-Select "Attach existing policies directly", and Check "AmazonLexRunBotsOnly" forPollicy name
-
-![lex_config_11](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/lex_config_11.png)
-
-
-
-Press "Create user" button.
-
-![lex_config_12](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/lex_config_12.png)
-
-
-
-Copy "Access key ID" and "Secret access key" on complete page.
-
-![lex_config_13](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/lex_config_13.png)
-
-
-
-##### Setup config for AWS
-
-Copy from sample file.
-
-```bash
-cp src/server/config/aws-config.json.sample src/server/config/aws-config.json
-vi src/server/config/aws-config.json
-```
-
-Edit config.  
-Paste accessKeyId and secretAccessKey.
-
-```json
-{
-  "lex": {
-    "credential": {
-      "accessKeyId": "Paste here!",
-      "secretAccessKey": "Paste here!",
-      "region": "us-west-2"
-    },
-    "bots": {
-      "initialSupport": "GCSupportBot"
-    }
-  }
-}
-```
-
-
-
-#### Build source
-
-```bash
-npm run build
-```
-
-
-
-#### Create Admin User
-
-```bash
-node server/create_admin_user.js admin@example.com password 'AdminUser'
-```
-
-
-
-### Start server ###
-
-```bash
-npm run start
-```
