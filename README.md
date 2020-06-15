@@ -325,3 +325,42 @@ Input below
 
 Press button "作成"
 
+### Destroy infra, if you need
+
+#### Execute terraform by CodeBuild
+
+Access to CodeBuild console on AWS
+
+Press "ビルドプロジェクトを作成する" button
+
+Input below
+
+* Section "プロジェクトの設定"
+    * プロジェクト名: cb-gc-destroy-infra
+* Section "ソース"
+    * ソースプロバイダ: "GitHub"
+    * リポジトリ: "GitHub アカウントのリポジトリ"
+    * GitHubアカウントのリポジトリ: https://github.com/rysk92/grateful-chat-private
+    * ソースバージョン: master
+* Section "環境"
+    * 環境イメージ: マネージド型イメージ
+    * オペレーティングシステム: Ubuntu
+    * ランタイム: Standard
+    * イメージ: aws/codebuild/standard:2.0
+    * イメージのバージョン: 常に最新
+    * 環境タイプ: Linux
+    * 特権付与: Checked
+    * サービスロール: ※あとでまとめる
+    * 追加設定 > 環境変数
+        * AWS_ACCESS_KEY_ID: ほげ
+        * AWS_SECRET_ACCESS_KEY: ほげ
+        * AWS_DEFAULT_REGION: ap-northeast-1
+        * DB_PASSWORD: password_hoge
+        * TERRAFORM_BACKEND_BUCKET: fggc-prod-terraform-state-hoge
+* Section "Buildspec"
+    * ビルド仕様: buildspec ファイルを使用する
+    * Buildspec 名: buildspec_destroy_infra.yml
+
+Press button "ビルドプロジェクトを作成する", then created buid project and moved to project top
+
+Start build by press button "ビルドの開始", then complete
