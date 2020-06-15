@@ -94,7 +94,7 @@ Register "Email/Password" and "Anonymous" for "Sign-in providers"
 
 Access to [S3 console on AWS](https://s3.console.aws.amazon.com/s3/home)
 
-Create bucket name as __"grateful-chat"__, and save below
+Create bucket name as __"grateful-chat-hoge"__, and save below
 
 * /config/firebase-app-sdk-config.json
 * /config/firebase-admin-credentials.json
@@ -130,6 +130,7 @@ Input below
         * AWS_SECRET_ACCESS_KEY: ほげ
         * AWS_DEFAULT_REGION: ap-northeast-1
         * DB_PASSWORD: password_hoge
+        * TERRAFORM_BACKEND_BUCKET: fggc-prod-terraform-state-hoge
 *  Section "Buildspec"
     * ビルド仕様: buildspec ファイルを使用する
     * Buildspec 名: buildspec_deploy_infra.yml
@@ -189,6 +190,7 @@ Input below
             * AWS_DEFAULT_REGION: ap-northeast-1
             * DATABASE_URL: "mysql://db_admin:password_hoge@fggc-prod-rds-db.*********.ap-northeast-1.rds.amazonaws.com:3306/gc_db"
             * SESSION_KEY: ほげ 
+            * AWS_S3_BUCKET_NAME: grateful-chat-hoge
 *  Section "Buildspec"
     * ビルド仕様: buildspec ファイルを使用する
     * Buildspec 名: buildspec_deploy_app.yml
