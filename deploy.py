@@ -12,7 +12,7 @@ def main():
     print('1. deploy infra')
     terraform_init_cmd = ['terraform', 'init',
                           '-backend-config=bucket=%s' % backend_bucket,
-                          '-backend-config=key=terraform.tfstat',
+                          '-backend-config=key=terraform.tfstate',
                           '-backend-config=region=%s' % backend_region]
     subprocess.run(terraform_init_cmd, cwd='./infra', check=True)
 
