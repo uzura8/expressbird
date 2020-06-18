@@ -6,7 +6,7 @@ phases:
       python: 3.7
       nodejs: 10
     commands:
-      - ASSUME_ROLE_ARN="arn:aws:iam::$account_id:role/Secretassumerole"
+      - ASSUME_ROLE_ARN="arn:aws:iam::$account_id:role/service-role/codebuild-gc-service-role"
       - TEMP_ROLE=`aws sts assume-role --role-arn $ASSUME_ROLE_ARN --role-session-name test`
       - export TEMP_ROLE
       - echo $TEMP_ROLE
