@@ -6,14 +6,14 @@ phases:
       python: 3.7
       nodejs: 10
     commands:
-      - ASSUME_ROLE_ARN="arn:aws:iam::929447396189:role/service-role/codebuild-gc-service-role"
+      #- ASSUME_ROLE_ARN="arn:aws:iam::929447396189:role/service-role/codebuild-gc-service-role"
       #- ASSUME_ROLE_ARN="arn:aws:iam::$account_id:role/service-role/codebuild-gc-service-role"
-      - TEMP_ROLE=`aws sts assume-role --role-arn $ASSUME_ROLE_ARN --role-session-name test`
-      - export TEMP_ROLE
-      - echo $TEMP_ROLE
-      - export AWS_ACCESS_KEY_ID=$(echo "${TEMP_ROLE}" | jq -r '.Credentials.AccessKeyId')
-      - export AWS_SECRET_ACCESS_KEY=$(echo "${TEMP_ROLE}" | jq -r '.Credentials.SecretAccessKey')
-      - export AWS_SESSION_TOKEN=$(echo "${TEMP_ROLE}" | jq -r '.Credentials.SessionToken')
+      #- TEMP_ROLE=`aws sts assume-role --role-arn $ASSUME_ROLE_ARN --role-session-name test`
+      #- export TEMP_ROLE
+      #- echo $TEMP_ROLE
+      #- export AWS_ACCESS_KEY_ID=$(echo "${TEMP_ROLE}" | jq -r '.Credentials.AccessKeyId')
+      #- export AWS_SECRET_ACCESS_KEY=$(echo "${TEMP_ROLE}" | jq -r '.Credentials.SecretAccessKey')
+      #- export AWS_SESSION_TOKEN=$(echo "${TEMP_ROLE}" | jq -r '.Credentials.SessionToken')
       - wget https://releases.hashicorp.com/terraform/0.12.25/terraform_0.12.25_linux_amd64.zip
       - unzip terraform_0.12.25_linux_amd64.zip
       - mv terraform /usr/local/bin/terraform
@@ -21,14 +21,14 @@ phases:
       - python --version
       - terraform --version
       - echo 'install finish !!!!!!!!!!!!!!'
-      - echo $AWS_ACCESS_KEY_ID
-      - echo $AWS_SECRET_ACCESS_KEY
-      - echo $AWS_SESSION_TOKEN
+        #- echo $AWS_ACCESS_KEY_ID
+        #- echo $AWS_SECRET_ACCESS_KEY
+        #- echo $AWS_SESSION_TOKEN
   build:
     commands:
       - echo 'Deploy start !!!!!!!!!!!'
-      - echo $AWS_ACCESS_KEY_ID
-      - echo $AWS_SECRET_ACCESS_KEY
-      - echo $AWS_SESSION_TOKEN
+        #- echo $AWS_ACCESS_KEY_ID
+        #- echo $AWS_SECRET_ACCESS_KEY
+        #- echo $AWS_SESSION_TOKEN
       - python deploy.py
 
