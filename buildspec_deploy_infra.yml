@@ -19,9 +19,13 @@ phases:
       - docker --version
       - python --version
       - terraform --version
+      - echo 'install finish !!!!!!!!!!!!!!'
+      - echo $AWS_ACCESS_KEY_ID
+      - echo $AWS_SECRET_ACCESS_KEY
+      - echo $AWS_SESSION_TOKEN
   build:
     commands:
-      - echo 'Deploy start'
+      - echo 'Deploy start !!!!!!!!!!!'
       - echo $AWS_ACCESS_KEY_ID
       - echo $AWS_SECRET_ACCESS_KEY
       - echo $AWS_SESSION_TOKEN
