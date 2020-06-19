@@ -125,12 +125,14 @@ Input below
     * 環境タイプ: Linux
     * 特権付与: Checked
     * サービスロール: ※あとでまとめる
+        * Create role named "iam-role-cb-gc"
+        * Reffer
+            * https://www.terraform.io/docs/providers/aws/index.html#ecs-and-codebuild-task-roles
+            * https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html
     * 追加設定 > 環境変数
-        * AWS_ACCESS_KEY_ID: ほげ
-        * AWS_SECRET_ACCESS_KEY: ほげ
         * AWS_DEFAULT_REGION: ap-northeast-1
         * DB_PASSWORD: password_hoge
-        * TERRAFORM_BACKEND_BUCKET: fggc-prod-terraform-state-hoge
+        * TERRAFORM_BACKEND_BUCKET: gc-terraform-state-hoge
 *  Section "Buildspec"
     * ビルド仕様: buildspec ファイルを使用する
     * Buildspec 名: buildspec_deploy_infra.yml
@@ -164,7 +166,7 @@ Press "ビルドプロジェクトを作成する" button
 Input below
 
 * Section "プロジェクトの設定"
-    * プロジェクト名: cb-gc-setup-app
+    * プロジェクト名: cb-gc-setup-db
 * Section "ソース"
     * ソースプロバイダ: "GitHub"
     * リポジトリ: "GitHub アカウントのリポジトリ"
@@ -179,21 +181,20 @@ Input below
     * 環境タイプ: Linux
     * 特権付与: Checked
     * サービスロール: ※あとでまとめる
+        * Select role "iam-role-cb-gc" created before 
     * 追加設定
         * VPC: ↑で作ったVPC
         * サブネット: fggc-prod-subnet-private_a
         * セキュリティグループ:  fggc-prod-sg-db
         * [VPC 設定の確認]を押して、「 VPC はインターネットに接続されています」が表示されることを確認
-        *  環境変数
-            * AWS_ACCESS_KEY_ID: ほげ
-            * AWS_SECRET_ACCESS_KEY: ほげ
+        * 環境変数
             * AWS_DEFAULT_REGION: ap-northeast-1
             * DATABASE_URL: "mysql://db_admin:password_hoge@fggc-prod-rds-db.*********.ap-northeast-1.rds.amazonaws.com:3306/gc_db"
             * SESSION_KEY: ほげ 
             * AWS_S3_BUCKET_NAME: grateful-chat-hoge
 *  Section "Buildspec"
     * ビルド仕様: buildspec ファイルを使用する
-    * Buildspec 名: buildspec_deploy_app.yml
+    * Buildspec 名: buildspec_deploy_db.yml
 
 Press button "ビルドプロジェクトを作成する", then created buid project and moved to project top
 
@@ -238,6 +239,7 @@ Input below
     * 環境タイプ: Linux
     * 特権付与: Checked
     * サービスロール: ※あとでまとめる
+        * Select role "iam-role-cb-gc" created before 
     * 追加設定
         * 環境変数
             * AWS_ACCOUNT_ID: ほげ
@@ -297,7 +299,7 @@ Input below
 
 Press button "作成"
 
-####3) Create Service
+#### 3) Create Service
 
 Press tab "サービス"
 
@@ -351,12 +353,11 @@ Input below
     * 環境タイプ: Linux
     * 特権付与: Checked
     * サービスロール: ※あとでまとめる
+        * Select role "iam-role-cb-gc" created before 
     * 追加設定 > 環境変数
-        * AWS_ACCESS_KEY_ID: ほげ
-        * AWS_SECRET_ACCESS_KEY: ほげ
         * AWS_DEFAULT_REGION: ap-northeast-1
         * DB_PASSWORD: password_hoge
-        * TERRAFORM_BACKEND_BUCKET: fggc-prod-terraform-state-hoge
+        * TERRAFORM_BACKEND_BUCKET: gc-terraform-state-hoge
 * Section "Buildspec"
     * ビルド仕様: buildspec ファイルを使用する
     * Buildspec 名: buildspec_destroy_infra.yml
