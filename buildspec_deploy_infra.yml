@@ -15,6 +15,7 @@ phases:
       - cd ./lambda
       - npm install
       - npm run build
+      - cd ../
   build:
     commands:
       - python deploy.py
