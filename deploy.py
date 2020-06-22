@@ -1,15 +1,33 @@
 import subprocess
 import json
 import os
+import shutil
 
 
 def main():
+    print('1. setup lambda resource')
+    subprocess.run(
+        ['npm', 'install'],
+        stdout=subprocess.PIPE,
+        cwd='./lambda',
+        check=True
+    )
+    subprocess.run(
+        ['npm', 'run', 'build'],
+        stdout=subprocess.PIPE,
+        cwd='./lambda',
+        check=True
+    )
+    os.mkdir('./var/lambda_function')
+    shutil.copyfile('./lambda/index.js', './var/lambda_function')
+    shutil.copytree('./lambda//node_modules', './var/lambda_function')
+
+    print('2. deploy infra')
     region = os.environ.get('AWS_DEFAULT_REGION') or 'ap-northeast-1'
     backend_bucket = os.environ.get('TERRAFORM_BACKEND_BUCKET')\
                         or 'fggc-prod-terraform-state'
     backend_region = os.environ.get('TERRAFORM_BACKEND_REGION') or region
 
-    print('1. deploy infra')
     terraform_init_cmd = ['terraform', 'init',
                           '-backend-config=bucket=%s' % backend_bucket,
                           '-backend-config=key=terraform.tfstate',

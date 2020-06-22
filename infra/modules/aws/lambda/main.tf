@@ -1,11 +1,3 @@
-variable "aws_profile" {}
-variable "aws_region" {}
-
-provider "aws" {
-  profile = "${var.aws_profile}"
-  region  = "${var.aws_region}"
-}
-
 // Role for Lambda
 resource "aws_iam_role" "lambda-role-for-lex" {
   name               = "lambda-lex-trigger"
@@ -71,13 +63,13 @@ EOF
 
 data "archive_file" "lambda_zip" {
   type        = "zip"
-  source_dir  = "./var/workspace/lambda_function"
-  output_path = "./var/lambda.zip"
+  source_dir  = "../var/lambda_function"
+  output_path = "../var/lambda.zip"
 }
 
 resource "aws_lambda_function" "gc_lex_lambda" {
   function_name    = "answerBySelectedNum"
-  filename         = "./var/lambda.zip"
+  filename         = "../var/lambda.zip"
   handler          = "index.handler"
   source_code_hash = "${data.archive_file.lambda_zip.output_base64sha256}"
   runtime          = "nodejs10.x"

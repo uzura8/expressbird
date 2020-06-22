@@ -43,6 +43,11 @@ module "module_rds" {
   common_prefix          = var.common_prefix
 }
 
+# Lambda
+module "module_lambda" {
+  source = "./modules/aws/lambda"
+}
+
 
 variable "common_prefix" {}
 variable "aws_db_is_enabled" {}

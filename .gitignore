@@ -48,3 +48,6 @@ pip-selfcheck.json
 /infra/terraform.tfstate*
 /infra/var/*
 /infra/bin/setup.conf
+
+# lambda dif
+/lambda/node_modules/*
