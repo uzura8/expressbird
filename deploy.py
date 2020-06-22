@@ -6,18 +6,18 @@ import shutil
 
 def main():
     print('1. setup lambda resource')
-    #subprocess.run(
-    #    ['npm', 'install'],
-    #    stdout=subprocess.PIPE,
-    #    cwd='./lambda',
-    #    check=True
-    #)
-    #subprocess.run(
-    #    ['npm', 'run', 'build'],
-    #    stdout=subprocess.PIPE,
-    #    cwd='./lambda',
-    #    check=True
-    #)
+    subprocess.run(
+        ['npm', 'install'],
+        stdout=subprocess.PIPE,
+        cwd='./lambda',
+        check=True
+    )
+    subprocess.run(
+        ['npm', 'run', 'build'],
+        stdout=subprocess.PIPE,
+        cwd='./lambda',
+        check=True
+    )
     os.mkdir('./var/lambda_function')
     shutil.copyfile('./lambda/index.js', './var/lambda_function/index.js')
     shutil.copytree('./lambda/node_modules', './var/lambda_function')
