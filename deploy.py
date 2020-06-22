@@ -19,7 +19,7 @@ def main():
         check=True
     )
     os.mkdir('./var/lambda_function')
-    shutil.copyfile('./lambda/index.js', './var/lambda_function')
+    shutil.copyfile('./lambda/index.js', './var/lambda_function/index.js')
     shutil.copytree('./lambda//node_modules', './var/lambda_function')
 
     print('2. deploy infra')
