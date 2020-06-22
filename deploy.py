@@ -6,21 +6,21 @@ import shutil
 
 def main():
     print('1. setup lambda resource')
-    subprocess.run(
-        ['npm', 'install'],
-        stdout=subprocess.PIPE,
-        cwd='./lambda',
-        check=True
-    )
-    subprocess.run(
-        ['npm', 'run', 'build'],
-        stdout=subprocess.PIPE,
-        cwd='./lambda',
-        check=True
-    )
+    #subprocess.run(
+    #    ['npm', 'install'],
+    #    stdout=subprocess.PIPE,
+    #    cwd='./lambda',
+    #    check=True
+    #)
+    #subprocess.run(
+    #    ['npm', 'run', 'build'],
+    #    stdout=subprocess.PIPE,
+    #    cwd='./lambda',
+    #    check=True
+    #)
     os.mkdir('./var/lambda_function')
     shutil.copyfile('./lambda/index.js', './var/lambda_function/index.js')
-    shutil.copytree('./lambda//node_modules', './var/lambda_function')
+    shutil.copytree('./lambda/node_modules', './var/lambda_function')
 
     print('2. deploy infra')
     region = os.environ.get('AWS_DEFAULT_REGION') or 'ap-northeast-1'
@@ -53,26 +53,6 @@ def main():
     )
     resources = json.loads(state.stdout.decode('utf8'))['values']['root_module']['child_modules']
     db_host = [x for x in resources if x['address'] == 'module.module_rds'][0]['resources'][0]['values']['address']
-
-
-    #print('2. deploy grateful chat')
-    #subprocess.run(['npm', 'install'], check=True)
-    #subprocess.run(['npm', 'run', 'build'], check=True)
-
-    #db_user = os.environ.get('DB_USER') or 'db_admin'
-    #db_name = os.environ.get('DB_NAME') or 'gc_db'
-    #database_url = 'mysql://{}:{}@{}:3306/{}'.format(db_user, db_passwd, db_host, db_name)
-
-    #migrate_cmd = ['./node_modules/.bin/sequelize',
-    #                    'db:migrate',
-    #                    '--env', 'production',
-    #                    '--config', 'server/config/config.json',
-    #                    '--migrations-path', 'server/migrations']
-    #subprocess.run(migrate_cmd, env={'DATABASE_URL': database_url}, check=True)
-
-    #create_user_cmd = ['node', 'server/create_admin_user.js',
-    #                'admin@example.com', 'password', 'AdminUser']
-    #subprocess.run(create_user_cmd, check=True)
 
 
 if __name__ == '__main__':

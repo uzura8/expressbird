@@ -12,6 +12,9 @@ phases:
       - docker --version
       - python --version
       - terraform --version
+      - cd ./lambda
+      - npm install
+      - npm run build
   build:
     commands:
       - python deploy.py
