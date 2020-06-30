@@ -12,15 +12,25 @@ def main():
         cwd='./lambda',
         check=True
     )
-    subprocess.run(
-        ['npm', 'run', 'build'],
-        stdout=subprocess.PIPE,
-        cwd='./lambda',
-        check=True
-    )
+    #subprocess.run(
+    #    ['npm', 'run', 'build'],
+    #    stdout=subprocess.PIPE,
+    #    cwd='./lambda',
+    #    check=True
+    #)
+
+    lambda_path = './var/lambda_function'
+    if os.path.exists(lambda_path):
+        shutil.rmtree(lambda_path)
+
     os.mkdir('./var/lambda_function')
     shutil.copyfile('./lambda/index.js', './var/lambda_function/index.js')
     shutil.copytree('./lambda/node_modules', './var/lambda_function/node_modules')
+    #subprocess.run(
+    #    ['zip', '-r', './var/lambda.zip', './var/lambda_function'],
+    #    stdout=subprocess.PIPE,
+    #    check=True
+    #)
 
     print('2. deploy infra')
     region = os.environ.get('AWS_DEFAULT_REGION') or 'ap-northeast-1'
@@ -36,7 +46,7 @@ def main():
 
     terraform_apply_cmd = ['terraform', 'apply', '-auto-approve']
 
-    if os.path.exists('terraform.tfvars'):
+    if os.path.exists('./infra/terraform.tfvars'):
         terraform_apply_cmd.append('-var-file=%s' % './terraform.tfvars')
 
     db_passwd = os.environ.get('DB_PASSWORD', '')
