@@ -62,7 +62,9 @@ def main():
         check=True
     )
     resources = json.loads(state.stdout.decode('utf8'))['values']['root_module']['child_modules']
-    db_host = [x for x in resources if x['address'] == 'module.module_rds'][0]['resources'][0]['values']['address']
+    if resources:
+        db_host = [x for x in resources if x['address'] == 'module.module_rds'][0]['resources'][0]['values']['address']
+        print(db_host)
 
 
 if __name__ == '__main__':
