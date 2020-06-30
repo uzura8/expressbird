@@ -26,11 +26,6 @@ def main():
     os.mkdir('./var/lambda_function')
     shutil.copyfile('./lambda/index.js', './var/lambda_function/index.js')
     shutil.copytree('./lambda/node_modules', './var/lambda_function/node_modules')
-    #subprocess.run(
-    #    ['zip', '-r', './var/lambda.zip', './var/lambda_function'],
-    #    stdout=subprocess.PIPE,
-    #    check=True
-    #)
 
     print('2. deploy infra')
     region = os.environ.get('AWS_DEFAULT_REGION') or 'ap-northeast-1'
