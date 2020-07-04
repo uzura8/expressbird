@@ -242,8 +242,6 @@ Input below
         * Select role "iam-role-cb-gc" created before 
     * 追加設定
         * 環境変数
-            * AWS_ACCOUNT_ID: ほげ
-                * Get this value on My Account page
             * AWS_DEFAULT_REGION: ap-northeast-1
             * IMAGE_NAME: gc-fargate 
 * Section "Buildspec"
