@@ -16,7 +16,10 @@ phases:
       #- npm install
       #- npm run build
       #- cd ../
+  pre_build:
+    commands:
+      - ACCOUNT_ID=${CODEBUILD_BUILD_ARN} && IFS=':' && set -- $ACCOUNT_ID && ACCOUNT_ID=$5
   build:
     commands:
-      - python deploy.py
+      - python deploy.py $ACCOUNT_ID
 

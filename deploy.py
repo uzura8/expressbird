@@ -2,6 +2,7 @@ import subprocess
 import json
 import os
 import shutil
+import sys
 
 
 def main():
@@ -60,6 +61,46 @@ def main():
     if resources:
         db_host = [x for x in resources if x['address'] == 'module.module_rds'][0]['resources'][0]['values']['address']
         print(db_host)
+
+    print('3. deploy lex')
+    lambda_func_name = os.environ.get('LAMBDA_FUNC_NAME') or 'answerBySelectedNum'
+    lex_bot_name = os.environ.get('LEX_BOT_NAME') or 'GCSupportBot'
+    lex_intent_name = os.environ.get('LEX_INTENT_NAME') or 'FirstSupport'
+    args = sys.argv
+    account_id = args[1]
+
+    source_arn = 'arn:aws:lex:{}:{}:intent:{}:*'.format(
+            region, account_id, lex_intent_name)
+    lambda_arn = 'arn:aws:lambda:{}:{}:function:{}'.format(
+            region, account_id, lambda_func_name)
+    intent_json_file = 'var/{}.json'.format(lex_intent_name)
+
+    f = open('infra/data/FirstSupport.json', 'r')
+    lex_intent = json.load(f)
+    lex_intent['fulfillmentActivity']['codeHook']['uri'] = lambda_arn
+    with open(intent_json_file, 'w') as f:
+        json.dump(lex_intent, f, indent=4)
+
+    lex_add_permission_cmd = ['aws', 'lambda', 'add-permission',
+                              '--region', region,
+                              '--function-name', lambda_func_name,
+                              '--statement-id', 'Allow%s' % lex_bot_name,
+                              '--action', 'lambda:InvokeFunction',
+                              '--principal', 'lex.amazonaws.com',
+                              '--source-arn', source_arn]
+    subprocess.run(lex_add_permission_cmd, check=True)
+
+    lex_put_intent_cmd = ['aws', 'lex-models', 'put-intent',
+                  '--region', region,
+                  '--name', lex_intent_name,
+                  '--cli-input-json', 'file://%s' % intent_json_file]
+    subprocess.run(lex_put_intent_cmd, check=True)
+
+    lex_put_bot_cmd = ['aws', 'lex-models', 'put-bot',
+                  '--region', region,
+                  '--name', lex_bot_name,
+                  '--cli-input-json', 'file://infra/data/{}.json' % lex_bot_name]
+    subprocess.run(lex_put_bot_cmd, check=True)
 
 
 if __name__ == '__main__':
