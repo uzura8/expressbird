@@ -58,9 +58,9 @@ def main():
         check=True
     )
     resources = json.loads(state.stdout.decode('utf8'))['values']['root_module']['child_modules']
-    if resources:
-        db_host = [x for x in resources if x['address'] == 'module.module_rds'][0]['resources'][0]['values']['address']
-        print(db_host)
+    #if resources:
+    #    db_host = [x for x in resources if x['address'] == 'module.module_rds'][0]['resources'][0]['values']['address']
+    #    print(db_host)
 
     print('3. deploy lex')
     lambda_func_name = os.environ.get('LAMBDA_FUNC_NAME') or 'answerBySelectedNum'
