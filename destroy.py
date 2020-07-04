@@ -10,10 +10,10 @@ def main():
     lex_bot_name = os.environ.get('LEX_BOT_NAME') or 'GCSupportBot'
     lex_intent_name = os.environ.get('LEX_INTENT_NAME') or 'FirstSupport'
 
-    lex_delete_bot_cmd = ['aws', 'lex-models', 'delete-bot',
-                  '--region', region,
-                  '--name', lex_bot_name]
-    subprocess.run(lex_delete_bot_cmd, check=True)
+    #lex_delete_bot_cmd = ['aws', 'lex-models', 'delete-bot',
+    #              '--region', region,
+    #              '--name', lex_bot_name]
+    #subprocess.run(lex_delete_bot_cmd, check=True)
 
     #lex_put_intent_cmd = ['aws', 'lex-models', 'delete-intent',
     #              '--region', region,

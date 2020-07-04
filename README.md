@@ -327,6 +327,12 @@ Press button "作成"
 
 ### Destroy infra, if you need
 
+#### Delete Lex bot and intent manually
+
+* Access to Lex console
+* Delete bot named "GCSupportBot"
+* Delete intent named "FirstSupport"
+
 #### Execute terraform by CodeBuild
 
 Access to CodeBuild console on AWS
@@ -363,8 +369,3 @@ Input below
 Press button "ビルドプロジェクトを作成する", then created buid project and moved to project top
 
 Start build by press button "ビルドの開始", then complete
-
-#### Delete Lex intent "FirstSupport" manually
-
-Access to Lex console, and delete intent named "FirstSupport" manually
-
