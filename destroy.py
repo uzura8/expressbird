@@ -5,7 +5,21 @@ import shutil
 
 
 def main():
-    print('1. setup lambda resource')
+    print('1. delete lex resource')
+    lex_bot_name = os.environ.get('LEX_BOT_NAME') or 'GCSupportBot'
+    lex_intent_name = os.environ.get('LEX_INTENT_NAME') or 'FirstSupport'
+
+    lex_delete_bot_cmd = ['aws', 'lex-models', 'delete-bot',
+                  '--region', region,
+                  '--name', lex_bot_name]
+    subprocess.run(lex_delete_bot_cmd, check=True)
+
+    lex_put_intent_cmd = ['aws', 'lex-models', 'delete-intent',
+                  '--region', region,
+                  '--name', lex_intent_name]
+    subprocess.run(lex_put_intent_cmd, check=True)
+
+    print('2. Prepare lambda resource')
     subprocess.run(
         ['npm', 'install'],
         stdout=subprocess.PIPE,
