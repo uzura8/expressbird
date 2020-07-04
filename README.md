@@ -363,3 +363,8 @@ Input below
 Press button "ビルドプロジェクトを作成する", then created buid project and moved to project top
 
 Start build by press button "ビルドの開始", then complete
+
+#### Delete Lex intent "FirstSupport" manually
+
+Access to Lex console, and delete intent named "FirstSupport" manually
+

@@ -15,10 +15,10 @@ def main():
                   '--name', lex_bot_name]
     subprocess.run(lex_delete_bot_cmd, check=True)
 
-    lex_put_intent_cmd = ['aws', 'lex-models', 'delete-intent',
-                  '--region', region,
-                  '--name', lex_intent_name]
-    subprocess.run(lex_put_intent_cmd, check=True)
+    #lex_put_intent_cmd = ['aws', 'lex-models', 'delete-intent',
+    #              '--region', region,
+    #              '--name', lex_intent_name]
+    #subprocess.run(lex_put_intent_cmd, check=True)
 
     print('2. Prepare lambda resource')
     subprocess.run(
