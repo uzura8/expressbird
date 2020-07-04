@@ -99,7 +99,7 @@ def main():
     lex_put_bot_cmd = ['aws', 'lex-models', 'put-bot',
                   '--region', region,
                   '--name', lex_bot_name,
-                  '--cli-input-json', 'file://infra/data/{}.json' % lex_bot_name]
+                  '--cli-input-json', 'file://infra/data/%s.json' % lex_bot_name]
     subprocess.run(lex_put_bot_cmd, check=True)
 
 
