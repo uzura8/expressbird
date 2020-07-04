@@ -6,6 +6,7 @@ import shutil
 
 def main():
     print('1. delete lex resource')
+    region = os.environ.get('AWS_DEFAULT_REGION') or 'ap-northeast-1'
     lex_bot_name = os.environ.get('LEX_BOT_NAME') or 'GCSupportBot'
     lex_intent_name = os.environ.get('LEX_INTENT_NAME') or 'FirstSupport'
 
@@ -40,7 +41,6 @@ def main():
         shutil.copytree('./lambda/node_modules', './var/lambda_function/node_modules')
 
     print('2. destroy infra')
-    region = os.environ.get('AWS_DEFAULT_REGION') or 'ap-northeast-1'
     backend_bucket = os.environ.get('TERRAFORM_BACKEND_BUCKET')\
                         or 'fggc-prod-terraform-state'
     backend_region = os.environ.get('TERRAFORM_BACKEND_REGION') or region
