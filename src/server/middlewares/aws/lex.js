@@ -7,7 +7,7 @@ const AWS_LEX_BOT_NAME = process.env.AWS_LEX_BOT_NAME || awsConfig.lex.bots.init
 const LEX_CREDENTIAL = {
   //accessKeyId: process.env.AWS_ACCESS_KEY_ID || awsConfig.credential.accessKeyId,
   //secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || awsConfig.credential.secretAccessKey,
-  region: process.env.AWS_LEX_REGION || awsConfig.lex.region,
+  region: process.env.AWS_DEFAULT_REGION || awsConfig.lex.region,
 }
 
 export default {

@@ -4,7 +4,7 @@
     "secretAccessKey": ""
   },
   "s3": {
-    "region": "us-west-2",
+    "region": "ap-northeast-1",
     "bucketName": "grateful-chat",
     "keys": {
       "firebaseCredential": "config/firebase-admin-credentials.json",
@@ -12,7 +12,7 @@
     }
   },
   "lex": {
-    "region": "us-west-2",
+    "region": "ap-northeast-1",
     "bots": {
       "initialSupport": "GCSupportBot"
     }
