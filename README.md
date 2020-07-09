@@ -265,7 +265,10 @@ Input below
 
 * 起動タイプの互換性の選択: Fargate
 * タスク定義名: gc-fargate
-* タスク実行ロール: ※あとでまとめる
+* タスクロール: 以下のポリシーを付与した role を設定する
+    * AmazonECSTaskExecutionRolePolicy
+    * AmazonS3ReadOnlyAccess
+* タスク実行ロール: ポリシー AmazonECSTaskExecutionRolePolicy を付与した role を設定する
 * タスクメモリ: 0.5GB
 * タスク CPU: 0.25 vCPU
 * Press button "コンテナの追加"
@@ -274,8 +277,6 @@ Input below
         * This value copied before
     * ポートマッピング: 80 | TCP
     * 環境変数:
-        * AWS_ACCESS_KEY_ID: ほげ
-        * AWS_SECRET_ACCESS_KEY: ほげ
         * AWS_DEFAULT_REGION: ap-northeast-1
         * DATABASE_URL: "mysql://db_admin:password_hoge@fggc-prod-rds-db.*********.ap-northeast-1.rds.amazonaws.com:3306/gc_db"
         * SESSION_KEY: ほげ 
@@ -318,12 +319,39 @@ Input below
         * fggc-prod-subnet-public_web_a
         * fggc-prod-subnet-public_web_b
     * セキュリティグループ: 
-        * Accept HTTP | TCP | 80
+        * Select below
+            * 既存のセキュリティグループの選択
+            * fggc-prod-sg-alb_web
+        * Press button "保存"
 * ロードバランシング
     * ロードバランサーの種類: Application Load Balancer
-    * あとで書く
+    * ロードバランサー名: fggc-prod-alb-web
+    * コンテナの選択:
+        * gc-fargate:80:80
+        * Press button "ロードバランサーに追加"
+    * ロードバランス用のコンテナ
+        * プロダクションリスナーポート: 80|HTTP
+        * ターゲットグループ名:
+            * 新規作成
+            * ecs-cl-gc-srv-gc
+        * ターゲットグループのプロトコル: HTTP
+        * ヘルスチェックパス: /
 
 Press button "作成"
+
+Access to サービス > タスク, and check "パブリック IP"
+
+You enable to access http://パブリックIP on browser
+
+### 6. Set Chat Window on your web site
+
+Set below script tag on your web site
+
+````
+<script type="text/javascript" src="http://パブリックIP/assets/js/chat_frame.js"></script>
+````
+
+
 
 ### Destroy infra, if you need
 
