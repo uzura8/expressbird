@@ -1,3 +1,7 @@
 terraform init -backend-config="bucket=fggc-prod-terraform-state" -backend-config="key=terraform.tfstate" -backend-config="region=ap-northeast-1" -backend-config="profile=default"
 terraform apply -auto-approve -var-file=./terraform.tfvars -var aws_db_password=password
 terraform destroy -auto-approve -var-file=./terraform.tfvars -var aws_db_password=password
+
+./node_modules/.bin/sequelize db:migrate --env development --config server/config/config.json --migrations-path server/migrations --debug
+./node_modules/.bin/sequelize db:migrate:undo --env development --config server/config/config.json --migrations-path server/migrations --debug
+node server/create_admin_user.js admin@example.com password 'AdminUser'
