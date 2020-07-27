@@ -61,6 +61,11 @@ def main():
         terraform_destroy_cmd.append('-var')
         terraform_destroy_cmd.append('aws_db_password=%s' % db_passwd)
 
+    app_session_key = os.environ.get('SESSION_KEY', '')
+    if len(app_session_key) > 0:
+        terraform_apply_cmd.append('-var')
+        terraform_apply_cmd.append('session_key=%s' % app_session_key)
+
     subprocess.run(terraform_destroy_cmd, cwd='./infra', check=True)
 
 

@@ -18,3 +18,6 @@ aws_db_engine_version      = "5.7.28"
 aws_db_port                = "3306"
 aws_db_name                = "gc_db" # Set this, if create db
 aws_db_username            = "db_admin"
+
+# ECS
+ecs_service_task_desired_count = 1

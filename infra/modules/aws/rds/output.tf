@@ -2,6 +2,6 @@
 #  value = "${aws_db_instance.db.address}"
 #}
 
-output "rds_obj" {
+output "rds_objs" {
   value = "${aws_db_instance.db}"
 }

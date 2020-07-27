@@ -99,7 +99,58 @@ Create bucket name as __"grateful-chat-hoge"__, and save below
 * /config/firebase-app-sdk-config.json
 * /config/firebase-admin-credentials.json
 
-### 2. Setup infra
+### 2. Build and Push Docker Container to ECR by CodeBuild
+
+#### 1) Create ECR Repository
+
+Access to ECR console on AWS
+
+Press button "リポジトリを作成"
+
+Input below
+
+* リポジトリ名: gc-fargate
+* Press button "リポジトリを作成"
+
+Copy URI named "gc-fargate" -> {{your-account-id}}.dkr.ecr.ap-northeast-1.amazonaws.com/gc-fargate
+
+#### 2) Build and Push Docker Container by CodeBuild
+
+Access to CodeBuild console on AWS
+
+Press "ビルドプロジェクトを作成する" button
+
+Input below
+
+* Section "プロジェクトの設定"
+    * プロジェクト名: cb-gc
+* Section "ソース"
+    * ソースプロバイダ: "GitHub"
+    * リポジトリ: "GitHub アカウントのリポジトリ"
+    * GitHubアカウントのリポジトリ: https://github.com/rysk92/grateful-chat-private
+    * ソースバージョン: master
+* Section "環境"
+    * 環境イメージ: マネージド型イメージ
+    * オペレーティングシステム: Ubuntu
+    * ランタイム: Standard
+    * イメージ: aws/codebuild/standard:2.0
+    * イメージのバージョン: 常に最新
+    * 環境タイプ: Linux
+    * 特権付与: Checked
+    * サービスロール: ※あとでまとめる
+        * Select role "iam-role-cb-gc" created before 
+    * 追加設定
+        * 環境変数
+            * AWS_DEFAULT_REGION: ap-northeast-1
+            * IMAGE_NAME: gc-fargate 
+* Section "Buildspec"
+    * ビルド仕様: buildspec ファイルを使用する
+
+Press button "ビルドプロジェクトを作成する", then created buid project and moved to project top
+
+Start build by press button "ビルドの開始", then complete
+
+### 3. Setup infra
 
 #### Execute terraform by CodeBuild
 
@@ -131,8 +182,9 @@ Input below
             * https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html
     * 追加設定 > 環境変数
         * AWS_DEFAULT_REGION: ap-northeast-1
-        * DB_PASSWORD: password_hoge
         * TERRAFORM_BACKEND_BUCKET: gc-terraform-state-hoge
+        * DB_PASSWORD: password_hoge
+        * SESSION_KEY: ほげ
 *  Section "Buildspec"
     * ビルド仕様: buildspec ファイルを使用する
     * Buildspec 名: buildspec_deploy_infra.yml
@@ -141,7 +193,7 @@ Press button "ビルドプロジェクトを作成する", then created buid pro
 
 Start build by press button "ビルドの開始", then complete
 
-### 3. Setup database
+### 4. Setup database
 
 #### Get AWS resouce informations
 
@@ -200,57 +252,6 @@ Press button "ビルドプロジェクトを作成する", then created buid pro
 
 Start build by press button "ビルドの開始", then complete
 
-### 4. Build and Push Docker Container to ECR by CodeBuild
-
-#### 1) Create ECR Repository
-
-Access to ECR console on AWS
-
-Press button "リポジトリを作成"
-
-Input below
-
-* リポジトリ名: gc-fargate
-* Press button "リポジトリを作成"
-
-Copy URI named "gc-fargate" -> {{your-account-id}}.dkr.ecr.ap-northeast-1.amazonaws.com/gc-fargate
-
-#### 2) Build and Push Docker Container by CodeBuild
-
-Access to CodeBuild console on AWS
-
-Press "ビルドプロジェクトを作成する" button
-
-Input below
-
-* Section "プロジェクトの設定"
-    * プロジェクト名: cb-gc
-* Section "ソース"
-    * ソースプロバイダ: "GitHub"
-    * リポジトリ: "GitHub アカウントのリポジトリ"
-    * GitHubアカウントのリポジトリ: https://github.com/rysk92/grateful-chat-private
-    * ソースバージョン: master
-* Section "環境"
-    * 環境イメージ: マネージド型イメージ
-    * オペレーティングシステム: Ubuntu
-    * ランタイム: Standard
-    * イメージ: aws/codebuild/standard:2.0
-    * イメージのバージョン: 常に最新
-    * 環境タイプ: Linux
-    * 特権付与: Checked
-    * サービスロール: ※あとでまとめる
-        * Select role "iam-role-cb-gc" created before 
-    * 追加設定
-        * 環境変数
-            * AWS_DEFAULT_REGION: ap-northeast-1
-            * IMAGE_NAME: gc-fargate 
-* Section "Buildspec"
-    * ビルド仕様: buildspec ファイルを使用する
-
-Press button "ビルドプロジェクトを作成する", then created buid project and moved to project top
-
-Start build by press button "ビルドの開始", then complete
-
 ### 5. Setup ECS/Fargate
 
 #### 1) Create Task Definition
@@ -265,9 +266,11 @@ Input below
 
 * 起動タイプの互換性の選択: Fargate
 * タスク定義名: gc-fargate
-* タスクロール: 以下のポリシーを付与した role を設定する
-    * AmazonECSTaskExecutionRolePolicy
-    * AmazonS3ReadOnlyAccess
+* タスクロール:
+    * ロール名: gc-ecs-task-role 
+    * 以下のポリシーを付与した role を設定する
+        * AmazonECSTaskExecutionRolePolicy
+        * AmazonS3ReadOnlyAccess
 * タスク実行ロール: ポリシー AmazonECSTaskExecutionRolePolicy を付与した role を設定する
 * タスクメモリ: 0.5GB
 * タスク CPU: 0.25 vCPU
@@ -278,6 +281,7 @@ Input below
     * ポートマッピング: 80 | TCP
     * 環境変数:
         * AWS_DEFAULT_REGION: ap-northeast-1
+        * AWS_S3_BUCKET_NAME: grateful-chat-hoge
         * DATABASE_URL: "mysql://db_admin:password_hoge@fggc-prod-rds-db.*********.ap-northeast-1.rds.amazonaws.com:3306/gc_db"
         * SESSION_KEY: ほげ 
     * Press button "更新"
@@ -388,8 +392,9 @@ Input below
         * Select role "iam-role-cb-gc" created before 
     * 追加設定 > 環境変数
         * AWS_DEFAULT_REGION: ap-northeast-1
-        * DB_PASSWORD: password_hoge
         * TERRAFORM_BACKEND_BUCKET: gc-terraform-state-hoge
+        * DB_PASSWORD: password_hoge
+        * SESSION_KEY: ほげ
 * Section "Buildspec"
     * ビルド仕様: buildspec ファイルを使用する
     * Buildspec 名: buildspec_destroy_infra.yml

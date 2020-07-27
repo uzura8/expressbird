@@ -50,6 +50,11 @@ def main():
         terraform_apply_cmd.append('-var')
         terraform_apply_cmd.append('aws_db_password=%s' % db_passwd)
 
+    app_session_key = os.environ.get('SESSION_KEY', '')
+    if len(app_session_key) > 0:
+        terraform_apply_cmd.append('-var')
+        terraform_apply_cmd.append('session_key=%s' % app_session_key)
+
     subprocess.run(terraform_apply_cmd, cwd='./infra', check=True)
     state = subprocess.run(
         ['terraform', 'show', '-json'],

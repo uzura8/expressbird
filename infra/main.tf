@@ -43,6 +43,18 @@ module "module_rds" {
   common_prefix          = var.common_prefix
 }
 
+module "module_ecs" {
+  source                         = "./modules/aws/ecs"
+  subnet_public_a_web_id         = module.module_vpc.subnet_public_a_web_id
+  subnet_public_b_web_id         = module.module_vpc.subnet_public_b_web_id
+  security_group_alb_web         = module.module_elb.security_group_alb_web
+  rds_endpoint                   = module.module_rds.rds_objs[0].address
+  ecs_service_task_desired_count = var.ecs_service_task_desired_count
+  aws_db_password                = var.aws_db_password
+  app_session_key                = var.session_key
+  common_prefix                  = var.common_prefix
+}
+
 # Lambda
 module "module_lambda" {
   source = "./modules/aws/lambda"
@@ -63,3 +75,6 @@ variable "aws_db_password" {}
 variable "aws_db_name" {}
 variable "vpc_availability_zones" {}
 variable "elb_health_check_path" {}
+variable "ecs_service_task_desired_count" {}
+variable "session_key" {}
+

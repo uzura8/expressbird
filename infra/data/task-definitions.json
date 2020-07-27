@@ -1,0 +1,43 @@
+[
+  {
+    "image": "${account_id}.dkr.ecr.ap-northeast-1.amazonaws.com/gc-fargate",
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "/ecs/app",
+        "awslogs-region": "ap-northeast-1",
+        "awslogs-stream-prefix": "ecs"
+      }
+    },
+    "cpu": 512,
+    "memory": 512,
+    "mountPoints": [],
+    "environment": [
+      {
+        "name": "AWS_DEFAULT_REGION",
+        "value": "ap-northeast-1"
+      },
+      {
+        "name": "SESSION_KEY",
+        "value": "${app_session_key}"
+      },
+      {
+        "name": "DATABASE_URL",
+        "value": "mysql://db_admin:${db_password}@${rds_endpoint}:3306/gc_db"
+      }
+    ],
+    "networkMode": "awsvpc",
+    "name": "gc-fargate",
+    "essential": true,
+    "portMappings": [
+      {
+        "hostPort": 80,
+        "containerPort": 80,
+        "protocol": "tcp"
+      }
+    ],
+    "command": [
+      "/usr/bin/supervisord"
+    ]
+  }
+]
