@@ -28,7 +28,8 @@ resource "aws_ecs_cluster" "app" {
 }
 
 resource "aws_ecs_task_definition" "app" {
-  family                   = aws_ecs_cluster.app.name
+  #family                   = aws_ecs_cluster.app.name
+  family                   = "gc-fargate"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   task_role_arn            = join(":", ["arn:aws:iam:", data.aws_caller_identity.self.account_id, "role/gc-ecs-task-role"])
