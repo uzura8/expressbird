@@ -42,7 +42,7 @@ resource "aws_ecs_task_definition" "app" {
 }
 
 resource "aws_ecs_service" "app" {
-  depends_on                         = [var.lb_listener_rule_forward_obj]
+  #depends_on                         = [var.lb_listener_rule_forward_obj]
   cluster                            = aws_ecs_cluster.app.id
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 200
