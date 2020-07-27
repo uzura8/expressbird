@@ -2,6 +2,8 @@ variable "ecs_service_task_desired_count" {}
 variable "subnet_public_a_web_id" {}
 variable "subnet_public_b_web_id" {}
 variable "security_group_alb_web" {}
+variable "lb_target_group_web_arn" {}
+variable "lb_listener_rule_forward_obj" {}
 variable "rds_endpoint" {}
 variable "aws_db_password" {}
 variable "app_session_key" {}
@@ -40,12 +42,15 @@ resource "aws_ecs_task_definition" "app" {
 }
 
 resource "aws_ecs_service" "app" {
+  depends_on                         = [var.lb_listener_rule_forward_obj]
   cluster                            = aws_ecs_cluster.app.id
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 200
   desired_count                      = var.ecs_service_task_desired_count
   launch_type                        = "FARGATE"
   name                               = join("-", [var.common_prefix, "ecs", "srv"])
+
+  task_definition = aws_ecs_task_definition.app.arn
 
   lifecycle {
     ignore_changes = [
@@ -65,7 +70,11 @@ resource "aws_ecs_service" "app" {
     ]
   }
 
-  task_definition = aws_ecs_task_definition.app.arn
+  load_balancer {
+    target_group_arn = var.lb_target_group_web_arn
+    container_name   = "gc_fargate"
+    container_port   = "80"
+  }
 }
 
 resource "aws_cloudwatch_log_group" "ecs_app" {
