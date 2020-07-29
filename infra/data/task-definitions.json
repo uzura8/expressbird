@@ -1,6 +1,6 @@
 [
   {
-    "image": "${account_id}.dkr.ecr.ap-northeast-1.amazonaws.com/gc-fargate",
+    "image": "${account_id}.dkr.ecr.ap-northeast-1.amazonaws.com/gc-fargate2",
     "logConfiguration": {
       "logDriver": "awslogs",
       "options": {
@@ -27,7 +27,7 @@
       }
     ],
     "networkMode": "awsvpc",
-    "name": "gc-fargate",
+    "name": "gc-fargate2",
     "essential": true,
     "portMappings": [
       {

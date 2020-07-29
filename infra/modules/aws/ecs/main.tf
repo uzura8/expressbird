@@ -31,7 +31,7 @@ resource "aws_ecs_cluster" "app" {
 
 resource "aws_ecs_task_definition" "app" {
   #family                   = aws_ecs_cluster.app.name
-  family                   = "gc-fargate"
+  family                   = "gc-fargate2"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   task_role_arn            = join(":", ["arn:aws:iam:", data.aws_caller_identity.self.account_id, "role/gc-ecs-task-role"])
@@ -72,7 +72,7 @@ resource "aws_ecs_service" "app" {
 
   load_balancer {
     target_group_arn = var.lb_target_group_web_arn
-    container_name   = "gc-fargate"
+    container_name   = "gc-fargate2"
     container_port   = "80"
   }
 }
