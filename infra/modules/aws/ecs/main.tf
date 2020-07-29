@@ -72,7 +72,7 @@ resource "aws_ecs_service" "app" {
 
   load_balancer {
     target_group_arn = var.lb_target_group_web_arn
-    container_name   = "gc_fargate"
+    container_name   = "gc-fargate"
     container_port   = "80"
   }
 }
