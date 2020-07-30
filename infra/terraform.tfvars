@@ -5,7 +5,7 @@ common_prefix = "fggc-prod"
 vpc_availability_zones = ["ap-northeast-1c", "ap-northeast-1d"]
 
 # ELB
-elb_health_check_path = "/api/health_check/"
+elb_health_check_path = "/"
 
 # RDS
 aws_db_is_enabled          = 1

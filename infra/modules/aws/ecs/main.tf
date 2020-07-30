@@ -48,7 +48,7 @@ resource "aws_ecs_service" "app" {
   deployment_maximum_percent         = 200
   desired_count                      = var.ecs_service_task_desired_count
   launch_type                        = "FARGATE"
-  health_check_grace_period_seconds  = 60
+  health_check_grace_period_seconds  = 600
   name                               = join("-", [var.common_prefix, "ecs", "srv"])
 
   task_definition = aws_ecs_task_definition.app.arn
