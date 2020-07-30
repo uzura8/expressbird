@@ -34,6 +34,7 @@ resource "aws_lb" "web" {
   name               = join("-", [var.common_prefix, "alb", "web"])
   internal           = false #false: for public internet / true: for private network
   load_balancer_type = "application"
+  idle_timeout       = 60
 
   security_groups = [
     aws_security_group.alb_web.id
@@ -52,10 +53,12 @@ resource "aws_lb" "web" {
 
 # Target Group of ALB
 resource "aws_lb_target_group" "web" {
-  name     = join("-", [var.common_prefix, "alb", "tg", "web"])
-  port     = 80
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id
+  name        = join("-", [var.common_prefix, "alb", "tg", "web"])
+  target_type = "ip"
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = var.vpc_id
+  depends_on  = [aws_lb.web]
 
   health_check {
     path = var.health_check_path
