@@ -105,8 +105,9 @@ resource "aws_lb_listener_rule" "forward" {
   }
 
   condition {
-    field  = "path-pattern"
-    values = ["/*"]
+    path_pattern {
+      values = ["/*"]
+    }
   }
 }
 
