@@ -62,6 +62,7 @@ resource "aws_lb_target_group" "web" {
 
   health_check {
     path = var.health_check_path
+    port = 80
   }
 
   tags = {

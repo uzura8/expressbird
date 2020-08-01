@@ -20,10 +20,6 @@
       {
         "name": "SESSION_KEY",
         "value": "${app_session_key}"
-      },
-      {
-        "name": "DATABASE_URL",
-        "value": "mysql://db_admin:${db_password}@${rds_endpoint}:3306/gc_db"
       }
     ],
     "networkMode": "awsvpc",

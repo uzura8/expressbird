@@ -20,4 +20,4 @@ aws_db_name                = "gc_db" # Set this, if create db
 aws_db_username            = "db_admin"
 
 # ECS
-ecs_service_task_desired_count = 2
+ecs_service_task_desired_count = 1

@@ -20,7 +20,7 @@ data "template_file" "task" {
     account_id      = data.aws_caller_identity.self.account_id
     db_password     = var.aws_db_password
     app_session_key = var.app_session_key
-    rds_endpoint    = var.rds_endpoint
+    #rds_endpoint    = var.rds_endpoint
   }
 }
 
@@ -55,8 +55,8 @@ resource "aws_ecs_service" "app" {
 
   lifecycle {
     ignore_changes = [
-      "desired_count",
       "task_definition",
+      #"desired_count",
     ]
   }
 
