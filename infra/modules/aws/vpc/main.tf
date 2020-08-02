@@ -169,7 +169,7 @@ resource "aws_route" "public" {
 
 # Route for WEB
 resource "aws_route" "public_web" {
-  route_table_id         = aws_route_table.public.id
+  route_table_id         = aws_route_table.public_web.id
   gateway_id             = aws_nat_gateway.ng.id
   destination_cidr_block = "0.0.0.0/0"
   depends_on             = [aws_route_table.public_web]
