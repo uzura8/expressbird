@@ -42,8 +42,8 @@ resource "aws_ecs_task_definition" "app" {
   network_mode             = "awsvpc"
   task_role_arn            = join(":", ["arn:aws:iam:", data.aws_caller_identity.self.account_id, "role/gc-ecs-task-role"])
   execution_role_arn       = join(":", ["arn:aws:iam:", data.aws_caller_identity.self.account_id, "role/ecsTaskExecutionRole"])
-  cpu                      = 256
-  memory                   = 512
+  cpu                      = 512
+  memory                   = 1024
   container_definitions    = data.template_file.task.rendered
 }
 
