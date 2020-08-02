@@ -1,9 +1,10 @@
 variable "ecs_service_task_desired_count" {}
 variable "subnet_public_a_web_id" {}
 variable "subnet_public_b_web_id" {}
-variable "security_group_alb_web" {}
+#variable "security_group_alb_web" {}
+variable "security_group_fargate" {}
 variable "lb_target_group_web_arn" {}
-variable "lb_listener_rule_forward_obj" {}
+#variable "lb_listener_rule_forward_obj" {}
 variable "rds_endpoint" {}
 variable "aws_db_password" {}
 variable "app_session_key" {}
@@ -27,6 +28,11 @@ data "template_file" "task" {
 ## Cluster
 resource "aws_ecs_cluster" "app" {
   name = join("-", [var.common_prefix, "ecs", "cl"])
+
+  setting {
+    name  = "containerInsights"
+    value = "disabled"
+  }
 }
 
 resource "aws_ecs_task_definition" "app" {
@@ -36,22 +42,21 @@ resource "aws_ecs_task_definition" "app" {
   network_mode             = "awsvpc"
   task_role_arn            = join(":", ["arn:aws:iam:", data.aws_caller_identity.self.account_id, "role/gc-ecs-task-role"])
   execution_role_arn       = join(":", ["arn:aws:iam:", data.aws_caller_identity.self.account_id, "role/ecsTaskExecutionRole"])
-  cpu                      = 512
-  memory                   = 1024
+  cpu                      = 256
+  memory                   = 512
   container_definitions    = data.template_file.task.rendered
 }
 
 resource "aws_ecs_service" "app" {
-  depends_on                         = [var.lb_listener_rule_forward_obj]
-  cluster                            = aws_ecs_cluster.app.id
-  deployment_minimum_healthy_percent = 50
-  deployment_maximum_percent         = 200
-  desired_count                      = var.ecs_service_task_desired_count
-  launch_type                        = "FARGATE"
-  health_check_grace_period_seconds  = 600
-  name                               = join("-", [var.common_prefix, "ecs", "srv"])
-
-  task_definition = aws_ecs_task_definition.app.arn
+  cluster                           = aws_ecs_cluster.app.id
+  task_definition                   = aws_ecs_task_definition.app.arn
+  desired_count                     = var.ecs_service_task_desired_count
+  launch_type                       = "FARGATE"
+  health_check_grace_period_seconds = 600
+  name                              = join("-", [var.common_prefix, "ecs", "srv"])
+  #depends_on                         = [var.lb_listener_rule_forward_obj]
+  #deployment_minimum_healthy_percent = 50
+  #deployment_maximum_percent         = 200
 
   lifecycle {
     ignore_changes = [
@@ -68,7 +73,7 @@ resource "aws_ecs_service" "app" {
     ]
 
     security_groups = [
-      var.security_group_alb_web.id,
+      var.security_group_fargate.id,
     ]
   }
 

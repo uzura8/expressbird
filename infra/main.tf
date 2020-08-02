@@ -14,9 +14,17 @@ module "module_vpc" {
 }
 
 # ELB
+module "module_security_group" {
+  source        = "./modules/aws/security_group"
+  vpc_id        = module.module_vpc.vpc_id
+  common_prefix = var.common_prefix
+}
+
+# ELB
 module "module_elb" {
   source                 = "./modules/aws/elb"
   vpc_id                 = module.module_vpc.vpc_id
+  security_group_alb_web = module.module_security_group.security_group_alb_web
   subnet_public_a_web_id = module.module_vpc.subnet_public_a_web_id
   subnet_public_b_web_id = module.module_vpc.subnet_public_b_web_id
   common_prefix          = var.common_prefix
@@ -47,14 +55,15 @@ module "module_ecs" {
   source                         = "./modules/aws/ecs"
   subnet_public_a_web_id         = module.module_vpc.subnet_public_a_web_id
   subnet_public_b_web_id         = module.module_vpc.subnet_public_b_web_id
-  security_group_alb_web         = module.module_elb.security_group_alb_web
+  security_group_fargate         = module.module_security_group.security_group_fargate
   lb_target_group_web_arn        = module.module_elb.lb_target_group_web_arn
-  lb_listener_rule_forward_obj   = module.module_elb.lb_listener_rule_forward_obj
   rds_endpoint                   = module.module_rds.rds_objs[0].address
   ecs_service_task_desired_count = var.ecs_service_task_desired_count
   aws_db_password                = var.aws_db_password
   app_session_key                = var.session_key
   common_prefix                  = var.common_prefix
+  #security_group_alb_web         = module.module_security_group.security_group_alb_web
+  #lb_listener_rule_forward_obj   = module.module_elb.lb_listener_rule_forward_obj
 }
 
 # Lambda
