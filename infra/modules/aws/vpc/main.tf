@@ -175,12 +175,12 @@ resource "aws_route" "public_web" {
   depends_on             = [aws_route_table.public_web]
 }
 
-## Route Table for Private
-#resource "aws_route" "private" {
-#  destination_cidr_block = "0.0.0.0/0"
-#  route_table_id         = aws_route_table.private.id
-#  nat_gateway_id         = aws_nat_gateway.ng.id
-#}
+# Route Table for Private
+resource "aws_route" "private" {
+  destination_cidr_block = "0.0.0.0/0"
+  route_table_id         = aws_route_table.private.id
+  nat_gateway_id         = aws_nat_gateway.ng.id
+}
 
 # Associate subnet and route table
 resource "aws_route_table_association" "public_a" {

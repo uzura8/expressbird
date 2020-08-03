@@ -66,7 +66,7 @@ resource "aws_ecs_service" "app" {
   }
 
   network_configuration {
-    assign_public_ip = false
+    assign_public_ip = true
     subnets = [
       var.subnet_public_a_web_id,
       var.subnet_public_b_web_id,
