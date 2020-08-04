@@ -185,6 +185,7 @@ Input below
         * TERRAFORM_BACKEND_BUCKET: gc-terraform-state-hoge
         * DB_PASSWORD: password_hoge
         * SESSION_KEY: ほげ
+        * AWS_S3_BUCKET_NAME: grateful-chat-hoge
 *  Section "Buildspec"
     * ビルド仕様: buildspec ファイルを使用する
     * Buildspec 名: buildspec_deploy_infra.yml
@@ -252,107 +253,26 @@ Press button "ビルドプロジェクトを作成する", then created buid pro
 
 Start build by press button "ビルドの開始", then complete
 
-### 5. Setup ECS/Fargate
+### 5. Check enabled to access Greateful Chat
 
-#### 1) Create Task Definition
+#### 1) Check DNS name of Load Balancer
 
-Access to ECS console on AWS
+Access to [Load Balancer console](https://ap-northeast-1.console.aws.amazon.com/ec2/v2/home?region=ap-northeast-1#LoadBalancers) , and copy DNA name
 
-Move to "タスク定義" by link on left side menu
+#### 2) Check on browser
 
-Press button "新しいタスク定義の作成"
+Request DNS name on your browser, then you can access to Greateful Chat
 
-Input below
+#### 3) Admin user login 
 
-* 起動タイプの互換性の選択: Fargate
-* タスク定義名: gc-fargate
-* タスクロール:
-    * ロール名: gc-ecs-task-role 
-    * 以下のポリシーを付与した role を設定する
-        * AmazonECSTaskExecutionRolePolicy
-        * AmazonS3ReadOnlyAccess
-* タスク実行ロール: ポリシー AmazonECSTaskExecutionRolePolicy を付与した role を設定する
-* タスクメモリ: 0.5GB
-* タスク CPU: 0.25 vCPU
-* Press button "コンテナの追加"
-    * コンテナ名: gc-fargate
-    * イメージ: {{your-account-id}}.dkr.ecr.ap-northeast-1.amazonaws.com/gc-fargate
-        * This value copied before
-    * ポートマッピング: 80 | TCP
-    * 環境変数:
-        * AWS_DEFAULT_REGION: ap-northeast-1
-        * AWS_S3_BUCKET_NAME: grateful-chat-hoge
-        * DATABASE_URL: "mysql://db_admin:password_hoge@fggc-prod-rds-db.*********.ap-northeast-1.rds.amazonaws.com:3306/gc_db"
-        * SESSION_KEY: ほげ 
-    * Press button "更新"
-* Press button "作成"
-
-#### 2) Create Cluster
-
-Access to ECS console on AWS
-
-Move to "クラスター" by link on left side menu
-
-Press button "クラスターの作成"
-
-Input below
-
-* クラスターテンプレートの選択: ネットワーキングのみ(AWS Fargate を使用)
-* クラスター名: cl-gc
-
-Press button "作成"
-
-#### 3) Create Service
-
-Press tab "サービス"
-
-Press button "作成"
-
-Input below
-
-* サービスの設定
-    * 起動タイプ: Fargate
-    * タスク定義: gc-fargate
-    * サービス名: srv-gc-fargate
-    * タスクの数: 1
-* デプロイメント
-    * デプロイメントタイプ: ローリングアップデート
-* ネットワーク構成
-    * クラスター VPC: VPC: ↑で作ったVPC
-    * サブネット: 
-        * fggc-prod-subnet-public_web_a
-        * fggc-prod-subnet-public_web_b
-    * セキュリティグループ: 
-        * Select below
-            * 既存のセキュリティグループの選択
-            * fggc-prod-sg-alb_web
-        * Press button "保存"
-* ロードバランシング
-    * ロードバランサーの種類: Application Load Balancer
-    * ロードバランサー名: fggc-prod-alb-web
-    * コンテナの選択:
-        * gc-fargate:80:80
-        * Press button "ロードバランサーに追加"
-    * ロードバランス用のコンテナ
-        * プロダクションリスナーポート: 80|HTTP
-        * ターゲットグループ名:
-            * 新規作成
-            * ecs-cl-gc-srv-gc
-        * ターゲットグループのプロトコル: HTTP
-        * ヘルスチェックパス: /
-
-Press button "作成"
-
-Access to サービス > タスク, and check "パブリック IP"
-
-You enable to access http://パブリックIP on browser
+Access to Sign In page, and sign in by Input admin@example.com / password_hoge
 
 ### 6. Set Chat Window on your web site
 
 Set below script tag on your web site
 
 ````
-<script type="text/javascript" src="http://パブリックIP/assets/js/chat_frame.js"></script>
+<script type="text/javascript" src="http://load_blancer_dns_name/assets/js/chat_frame.js"></script>
 ````
 
 
@@ -393,8 +313,6 @@ Input below
     * 追加設定 > 環境変数
         * AWS_DEFAULT_REGION: ap-northeast-1
         * TERRAFORM_BACKEND_BUCKET: gc-terraform-state-hoge
-        * DB_PASSWORD: password_hoge
-        * SESSION_KEY: ほげ
 * Section "Buildspec"
     * ビルド仕様: buildspec ファイルを使用する
     * Buildspec 名: buildspec_destroy_infra.yml
