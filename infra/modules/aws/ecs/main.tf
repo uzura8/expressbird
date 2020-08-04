@@ -8,6 +8,7 @@ variable "lb_target_group_web_arn" {}
 variable "rds_endpoint" {}
 variable "aws_db_password" {}
 variable "app_session_key" {}
+variable "app_s3_bucket_name" {}
 variable "common_prefix" {}
 
 ## account_id
@@ -18,10 +19,11 @@ data "template_file" "task" {
   template = file("data/task-definitions.json")
 
   vars = {
-    account_id      = data.aws_caller_identity.self.account_id
-    db_password     = var.aws_db_password
-    app_session_key = var.app_session_key
-    rds_endpoint    = var.rds_endpoint
+    account_id         = data.aws_caller_identity.self.account_id
+    db_password        = var.aws_db_password
+    app_session_key    = var.app_session_key
+    app_s3_bucket_name = var.app_s3_bucket_name
+    rds_endpoint       = var.rds_endpoint
   }
 }
 

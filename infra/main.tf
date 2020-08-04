@@ -61,6 +61,7 @@ module "module_ecs" {
   ecs_service_task_desired_count = var.ecs_service_task_desired_count
   aws_db_password                = var.aws_db_password
   app_session_key                = var.session_key
+  app_s3_bucket_name             = var.s3_bucket_name
   common_prefix                  = var.common_prefix
   #security_group_alb_web         = module.module_security_group.security_group_alb_web
   #lb_listener_rule_forward_obj   = module.module_elb.lb_listener_rule_forward_obj
@@ -88,4 +89,5 @@ variable "vpc_availability_zones" {}
 variable "elb_health_check_path" {}
 variable "ecs_service_task_desired_count" {}
 variable "session_key" {}
+variable "s3_bucket_name" {}
 

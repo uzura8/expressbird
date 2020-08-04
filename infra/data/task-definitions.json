@@ -18,6 +18,10 @@
         "value": "ap-northeast-1"
       },
       {
+        "name": "AWS_S3_BUCKET_NAME",
+        "value": "${app_s3_bucket_name}"
+      },
+      {
         "name": "SESSION_KEY",
         "value": "${app_session_key}"
       },
@@ -36,8 +40,6 @@
         "protocol": "tcp"
       }
     ],
-    "command": [
-      "/usr/bin/supervisord"
-    ]
+    "command": null
   }
 ]
