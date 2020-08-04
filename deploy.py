@@ -55,6 +55,11 @@ def main():
         terraform_apply_cmd.append('-var')
         terraform_apply_cmd.append('session_key=%s' % app_session_key)
 
+    app_s3_bucket_name = os.environ.get('AWS_S3_BUCKET_NAME', '')
+    if len(app_s3_bucket_name) > 0:
+        terraform_apply_cmd.append('-var')
+        terraform_apply_cmd.append('s3_bucket_name=%s' % app_s3_bucket_name)
+
     subprocess.run(terraform_apply_cmd, cwd='./infra', check=True)
     state = subprocess.run(
         ['terraform', 'show', '-json'],
