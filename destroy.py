@@ -56,15 +56,15 @@ def main():
     if os.path.exists('terraform.tfvars'):
         terraform_destroy_cmd.append('-var-file=%s' % './terraform.tfvars')
 
-    db_passwd = os.environ.get('DB_PASSWORD', '')
-    if len(db_passwd) > 0:
-        terraform_destroy_cmd.append('-var')
-        terraform_destroy_cmd.append('aws_db_password=%s' % db_passwd)
+    #db_passwd = os.environ.get('DB_PASSWORD', '')
+    #if len(db_passwd) > 0:
+    #    terraform_destroy_cmd.append('-var')
+    #    terraform_destroy_cmd.append('aws_db_password=%s' % db_passwd)
 
-    app_session_key = os.environ.get('SESSION_KEY', '')
-    if len(app_session_key) > 0:
-        terraform_destroy_cmd.append('-var')
-        terraform_destroy_cmd.append('session_key=%s' % app_session_key)
+    #app_session_key = os.environ.get('SESSION_KEY', '')
+    #if len(app_session_key) > 0:
+    #    terraform_destroy_cmd.append('-var')
+    #    terraform_destroy_cmd.append('session_key=%s' % app_session_key)
 
     subprocess.run(terraform_destroy_cmd, cwd='./infra', check=True)
 
