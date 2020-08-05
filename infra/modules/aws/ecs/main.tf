@@ -44,8 +44,8 @@ resource "aws_ecs_task_definition" "app" {
   family                   = "gc-fargate"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
-  task_role_arn            = iam_role_fargate_task.arn
-  execution_role_arn       = iam_role_fargate_task_execution.arn
+  task_role_arn            = var.iam_role_fargate_task.arn
+  execution_role_arn       = var.iam_role_fargate_task_execution.arn
   cpu                      = 512
   memory                   = 1024
   container_definitions    = data.template_file.task.rendered
