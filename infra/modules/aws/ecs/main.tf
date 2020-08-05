@@ -9,6 +9,8 @@ variable "rds_endpoint" {}
 variable "aws_db_password" {}
 variable "app_session_key" {}
 variable "app_s3_bucket_name" {}
+variable "iam_role_fargate_task" {}
+variable "iam_role_fargate_task_execution" {}
 variable "common_prefix" {}
 
 ## account_id
@@ -42,11 +44,13 @@ resource "aws_ecs_task_definition" "app" {
   family                   = "gc-fargate"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
-  task_role_arn            = join(":", ["arn:aws:iam:", data.aws_caller_identity.self.account_id, "role/gc-ecs-task-role"])
-  execution_role_arn       = join(":", ["arn:aws:iam:", data.aws_caller_identity.self.account_id, "role/ecsTaskExecutionRole"])
+  task_role_arn            = iam_role_fargate_task.arn
+  execution_role_arn       = iam_role_fargate_task_execution.arn
   cpu                      = 512
   memory                   = 1024
   container_definitions    = data.template_file.task.rendered
+  #task_role_arn            = join(":", ["arn:aws:iam:", data.aws_caller_identity.self.account_id, "role/gc-ecs-task-role"])
+  #execution_role_arn       = join(":", ["arn:aws:iam:", data.aws_caller_identity.self.account_id, "role/ecsTaskExecutionRole"])
 }
 
 resource "aws_ecs_service" "app" {

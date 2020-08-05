@@ -6,6 +6,12 @@ terraform {
   }
 }
 
+# IAM
+module "module_iam" {
+  source        = "./modules/aws/iam"
+  common_prefix = var.common_prefix
+}
+
 # VPC
 module "module_vpc" {
   source             = "./modules/aws/vpc"
@@ -51,18 +57,21 @@ module "module_rds" {
   common_prefix          = var.common_prefix
 }
 
+# ECS (Fargate)
 module "module_ecs" {
-  source                         = "./modules/aws/ecs"
-  subnet_public_a_web_id         = module.module_vpc.subnet_public_a_web_id
-  subnet_public_b_web_id         = module.module_vpc.subnet_public_b_web_id
-  security_group_fargate         = module.module_security_group.security_group_fargate
-  lb_target_group_web_arn        = module.module_elb.lb_target_group_web_arn
-  rds_endpoint                   = module.module_rds.rds_objs[0].address
-  ecs_service_task_desired_count = var.ecs_service_task_desired_count
-  aws_db_password                = var.aws_db_password
-  app_session_key                = var.session_key
-  app_s3_bucket_name             = var.s3_bucket_name
-  common_prefix                  = var.common_prefix
+  source                          = "./modules/aws/ecs"
+  iam_role_fargate_task           = module.module_iam.iam_role_fargate_task
+  iam_role_fargate_task_execution = module.module_iam.iam_role_fargate_task_execution
+  subnet_public_a_web_id          = module.module_vpc.subnet_public_a_web_id
+  subnet_public_b_web_id          = module.module_vpc.subnet_public_b_web_id
+  security_group_fargate          = module.module_security_group.security_group_fargate
+  lb_target_group_web_arn         = module.module_elb.lb_target_group_web_arn
+  rds_endpoint                    = module.module_rds.rds_objs[0].address
+  ecs_service_task_desired_count  = var.ecs_service_task_desired_count
+  aws_db_password                 = var.aws_db_password
+  app_session_key                 = var.session_key
+  app_s3_bucket_name              = var.s3_bucket_name
+  common_prefix                   = var.common_prefix
   #security_group_alb_web         = module.module_security_group.security_group_alb_web
   #lb_listener_rule_forward_obj   = module.module_elb.lb_listener_rule_forward_obj
 }
