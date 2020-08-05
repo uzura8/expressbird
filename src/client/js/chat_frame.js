@@ -1,11 +1,13 @@
 import 'es6-promise/auto'
 import config from '@/config/config'
-import site from '@/util/site'
 import str from '@/util/str'
 
-const chatContainerId = config.chatContainerId
-const origin = site.baseUri('origin')
+const siteUrl = document.getElementById(config.chatIncludeScriptId).getAttribute('src')
+const parser = new URL(siteUrl)
+const origin = parser.origin
+const includeUrl = `${origin}/include.html`
 
+const chatContainerId = config.chatContainerId
 const chatFlameStyles = {
   inActive: str.convObjToStr({
     border: 'none',
@@ -44,7 +46,7 @@ const chatFlameStyles = {
 }
 const chatFrame = document.createElement('iframe')
 chatFrame.setAttribute('id', 'ebChatFrame')
-chatFrame.setAttribute('src', site.uri('include.html'))
+chatFrame.setAttribute('src', includeUrl)
 chatFrame.setAttribute('title', 'EB Chat')
 chatFrame.setAttribute('style', chatFlameStyles.inActive)
 
