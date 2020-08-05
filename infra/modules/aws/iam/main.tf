@@ -1,3 +1,5 @@
+variable "common_prefix" {}
+
 # IAM Role
 resource "aws_iam_role" "fargate_task" {
   name               = join("-", [var.common_prefix, "iam", "role", "fg", "task"])
