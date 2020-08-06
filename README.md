@@ -74,7 +74,7 @@ Press "Service account" tab on "Settings" page, and press "Generate new private 
 
 After downloaded, rename to __"firebase-admin-credentials.json__"
 
-####Authentication setting 
+#### Authentication setting 
 
 Open Authentication page.
 
@@ -133,7 +133,7 @@ Input below
     * 環境イメージ: マネージド型イメージ
     * オペレーティングシステム: Ubuntu
     * ランタイム: Standard
-    * イメージ: aws/codebuild/standard:2.0
+    * イメージ: aws/codebuild/standard:3.0
     * イメージのバージョン: 常に最新
     * 環境タイプ: Linux
     * 特権付与: Checked
@@ -171,7 +171,7 @@ Input below
     * 環境イメージ: マネージド型イメージ
     * オペレーティングシステム: Ubuntu
     * ランタイム: Standard
-    * イメージ: aws/codebuild/standard:2.0
+    * イメージ: aws/codebuild/standard:3.0
     * イメージのバージョン: 常に最新
     * 環境タイプ: Linux
     * 特権付与: Checked
@@ -198,17 +198,11 @@ Start build by press button "ビルドの開始", then complete
 
 #### Get AWS resouce informations
 
-##### 1) RDS endpoint
+##### RDS endpoint
 
 Access to RDS console, and chose "fggc-prod-rds-db"
 
 Copy endpoint like "fggc-prod-rds-db.*********.ap-northeast-1.rds.amazonaws.com"
-
-##### 2) VPC
-
-Access to VPC console
-
-Confirm VPC ID named "fggc-prod-vpc"
 
 #### Execute setup db script by CodeBuild
 
@@ -229,7 +223,7 @@ Input below
     * 環境イメージ: マネージド型イメージ
     * オペレーティングシステム: Ubuntu
     * ランタイム: Standard
-    * イメージ: aws/codebuild/standard:2.0
+    * イメージ: aws/codebuild/standard:3.0
     * イメージのバージョン: 常に最新
     * 環境タイプ: Linux
     * 特権付与: Checked
@@ -272,7 +266,7 @@ Access to Sign In page, and sign in by Input admin@example.com / password_hoge
 Set below script tag on your web site
 
 ````
-<script type="text/javascript" src="http://load_blancer_dns_name/assets/js/chat_frame.js"></script>
+<script type="text/javascript" src="http://load_blancer_dns_name/assets/js/chat_frame.js" id="gc-include-script"></script>
 ````
 
 
@@ -304,7 +298,7 @@ Input below
     * 環境イメージ: マネージド型イメージ
     * オペレーティングシステム: Ubuntu
     * ランタイム: Standard
-    * イメージ: aws/codebuild/standard:2.0
+    * イメージ: aws/codebuild/standard:3.0
     * イメージのバージョン: 常に最新
     * 環境タイプ: Linux
     * 特権付与: Checked
