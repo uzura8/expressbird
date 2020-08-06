@@ -39,22 +39,23 @@ module "module_elb" {
 
 # RDS
 module "module_rds" {
-  source                 = "./modules/aws/rds"
-  vpc_id                 = module.module_vpc.vpc_id
-  vpc_cidr_block         = module.module_vpc.vpc_cidr_block
-  subnet_group_db_name   = module.module_vpc.subnet_group_db_name
-  db_is_enabled          = var.aws_db_is_enabled
-  db_is_enabled_multi_az = var.aws_db_is_enabled_multi_az
-  db_instance_type       = var.aws_db_instance_type
-  db_allocated_storage   = var.aws_db_allocated_storage
-  db_block_volume_type   = var.aws_db_block_volume_type
-  db_engine              = var.aws_db_engine
-  db_engine_version      = var.aws_db_engine_version
-  db_port                = var.aws_db_port
-  db_username            = var.aws_db_username
-  db_password            = var.aws_db_password
-  db_name                = var.aws_db_name
-  common_prefix          = var.common_prefix
+  source                    = "./modules/aws/rds"
+  vpc_id                    = module.module_vpc.vpc_id
+  vpc_cidr_block            = module.module_vpc.vpc_cidr_block
+  subnet_group_db_name      = module.module_vpc.subnet_group_db_name
+  db_is_enabled             = var.aws_db_is_enabled
+  db_is_enabled_multi_az    = var.aws_db_is_enabled_multi_az
+  db_instance_type          = var.aws_db_instance_type
+  db_allocated_storage      = var.aws_db_allocated_storage
+  db_block_volume_type      = var.aws_db_block_volume_type
+  db_engine                 = var.aws_db_engine
+  db_engine_version         = var.aws_db_engine_version
+  db_port                   = var.aws_db_port
+  db_username               = var.aws_db_username
+  db_password               = var.aws_db_password
+  db_name                   = var.aws_db_name
+  db_parameter_group_family = var.aws_db_parameter_group_family
+  common_prefix             = var.common_prefix
 }
 
 # ECS (Fargate)
@@ -87,6 +88,7 @@ variable "aws_db_is_enabled" {}
 variable "aws_db_is_enabled_multi_az" {}
 variable "aws_db_instance_type" {}
 variable "aws_db_allocated_storage" {}
+variable "aws_db_parameter_group_family" {}
 variable "aws_db_block_volume_type" {}
 variable "aws_db_engine" {}
 variable "aws_db_engine_version" {}

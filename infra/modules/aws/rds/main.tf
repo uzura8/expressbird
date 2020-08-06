@@ -12,6 +12,7 @@ variable "db_port" {}
 variable "db_username" {}
 variable "db_password" {}
 variable "db_name" {}
+variable "db_parameter_group_family" {}
 variable "common_prefix" {}
 
 resource "aws_security_group" "db" {
@@ -36,6 +37,78 @@ resource "aws_security_group" "db" {
   }
 }
 
+resource "aws_db_parameter_group" "db" {
+  name        = join("-", [var.common_prefix, "pg", "db"])
+  family      = var.db_parameter_group_family
+  description = join(" ", ["mysql parameter group for", var.common_prefix])
+
+  parameter {
+    name         = "character-set-client-handshake"
+    value        = "0"
+    apply_method = "pending-reboot"
+  }
+  parameter {
+    name         = "character_set_client"
+    value        = "utf8mb4"
+    apply_method = "pending-reboot"
+  }
+  parameter {
+    name         = "character_set_connection"
+    value        = "utf8mb4"
+    apply_method = "pending-reboot"
+  }
+  parameter {
+    name         = "character_set_database"
+    value        = "utf8mb4"
+    apply_method = "pending-reboot"
+  }
+  parameter {
+    name         = "character_set_results"
+    value        = "utf8mb4"
+    apply_method = "pending-reboot"
+  }
+  parameter {
+    name         = "character_set_server"
+    value        = "utf8mb4"
+    apply_method = "pending-reboot"
+  }
+  parameter {
+    name         = "log_bin_trust_function_creators"
+    value        = "1"
+    apply_method = "pending-reboot"
+  }
+  parameter {
+    name         = "max_allowed_packet"
+    value        = "10240000"
+    apply_method = "pending-reboot"
+  }
+  parameter {
+    name         = "skip-character-set-client-handshake"
+    value        = "1"
+    apply_method = "pending-reboot"
+  }
+  parameter {
+    name         = "innodb_large_prefix"
+    value        = "1"
+    apply_method = "pending-reboot"
+  }
+  parameter {
+    name         = "innodb_file_format"
+    value        = "Barracuda"
+    apply_method = "pending-reboot"
+  }
+  parameter {
+    name         = "innodb_file_per_table"
+    value        = "1"
+    apply_method = "pending-reboot"
+  }
+  parameter {
+    name         = "init_connect"
+    value        = "SET NAMES utf8mb4"
+    apply_method = "pending-reboot"
+  }
+}
+
 resource "aws_db_instance" "db" {
   count                     = var.db_is_enabled
   identifier                = join("-", [var.common_prefix, "rds", "db"])
@@ -50,6 +123,7 @@ resource "aws_db_instance" "db" {
   vpc_security_group_ids    = [aws_security_group.db.id]
   db_subnet_group_name      = var.subnet_group_db_name
   multi_az                  = var.db_is_enabled_multi_az == 1 ? true : false
+  parameter_group_name      = aws_db_parameter_group.db.name
   backup_retention_period   = 1
   final_snapshot_identifier = false
   skip_final_snapshot       = true
