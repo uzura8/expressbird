@@ -267,7 +267,7 @@ export default {
         res.io.emit(`CHAT_COMMENT_${chatComment.chatId}`, result)
         res.json(result)
 
-        if (config.greatefulChat.isEnabled) {
+        if (config.greatefulChat.support.isEnabled) {
           if (result.userId != ADMIN_USER_ID) {
             const chat = await Chat.findById(chatComment.chatId)
             if (chat.type == 'support') {
