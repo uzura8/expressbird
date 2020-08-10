@@ -105,12 +105,12 @@ Create bucket name as __"grateful-chat-hoge"__, and save below
 
 Access to ECR console on AWS
 
-Press button "リポジトリを作成"
+Press button "Create repository"
 
 Input below
 
-* リポジトリ名: gc-fargate
-* Press button "リポジトリを作成"
+* repository name: gc-fargate
+* Press button "Create repository"
 
 Copy URI named "gc-fargate" -> {{your-account-id}}.dkr.ecr.ap-northeast-1.amazonaws.com/gc-fargate
 
@@ -118,37 +118,37 @@ Copy URI named "gc-fargate" -> {{your-account-id}}.dkr.ecr.ap-northeast-1.amazon
 
 Access to CodeBuild console on AWS
 
-Press "ビルドプロジェクトを作成する" button
+Press "Create build project" button
 
 Input below
 
-* Section "プロジェクトの設定"
-    * プロジェクト名: cb-gc
-* Section "ソース"
-    * ソースプロバイダ: "GitHub"
-    * リポジトリ: "GitHub アカウントのリポジトリ"
-    * GitHubアカウントのリポジトリ: https://github.com/rysk92/grateful-chat-private
-    * ソースバージョン: master
-* Section "環境"
-    * 環境イメージ: マネージド型イメージ
-    * オペレーティングシステム: Ubuntu
-    * ランタイム: Standard
-    * イメージ: aws/codebuild/standard:3.0
-    * イメージのバージョン: 常に最新
-    * 環境タイプ: Linux
-    * 特権付与: Checked
-    * サービスロール: ※あとでまとめる
+* Section "Project configuration"
+    * Project name: cb-gc
+* Section "Source"
+    * Source provider: "GitHub"
+    * Repository: "Repository in my GitHub account"
+    * Repository URL: https://github.com/rysk92/grateful-chat-private
+    * Source version: master
+* Section "Environment"
+    * Environment image: Managed image
+    * Operating system: Ubuntu
+    * Runtime(s): Standard
+    * Image: aws/codebuild/standard:3.0
+    * Image version: Always use the latest image for this runtime version
+    * Environment type: Linux
+    * Privileged: Checked
+    * Service role: ※Write later
         * Select role "iam-role-cb-gc" created before 
-    * 追加設定
-        * 環境変数
+    * Additional configuration
+        * Environment variables
             * AWS_DEFAULT_REGION: ap-northeast-1
             * IMAGE_NAME: gc-fargate 
 * Section "Buildspec"
-    * ビルド仕様: buildspec ファイルを使用する
+    * Build specifications: Use a buildspec file
 
-Press button "ビルドプロジェクトを作成する", then created buid project and moved to project top
+Press button "Create build project", then created buid project and moved to project top
 
-Start build by press button "ビルドの開始", then complete
+Start build by press button "Start build", then complete
 
 ### 3. Setup infra
 
@@ -156,43 +156,43 @@ Start build by press button "ビルドの開始", then complete
 
 Access to CodeBuild console on AWS
 
-Press "ビルドプロジェクトを作成する" button
+Press "Create build project" button
 
 Input below
 
-* Section "プロジェクトの設定"
-    * プロジェクト名: cb-gc-setup-infra
-* Section "ソース"
-    * ソースプロバイダ: "GitHub"
-    * リポジトリ: "GitHub アカウントのリポジトリ"
-    * GitHubアカウントのリポジトリ: https://github.com/rysk92/grateful-chat-private
-    * ソースバージョン: master
-* Section "環境"
-    * 環境イメージ: マネージド型イメージ
-    * オペレーティングシステム: Ubuntu
-    * ランタイム: Standard
-    * イメージ: aws/codebuild/standard:3.0
-    * イメージのバージョン: 常に最新
-    * 環境タイプ: Linux
-    * 特権付与: Checked
-    * サービスロール: ※あとでまとめる
+* Section "Project configuration"
+    * Project name: cb-gc-setup-infra
+* Section "Source"
+    * Sourceprovider: "GitHub"
+    * Repository: "Repository in my GitHub account"
+    * Repository URL: https://github.com/rysk92/grateful-chat-private
+    * Source version: master
+* Section "Environment"
+    * Environment image: Managed image
+    * Operating system: Ubuntu
+    * Runtime(s): Standard
+    * Image: aws/codebuild/standard:3.0
+    * Image version: Always use the latest image for this runtime version
+    * Environment type: Linux
+    * Privileged: Checked
+    * Service role: ※Write later
         * Create role named "iam-role-cb-gc"
         * Reffer
             * https://www.terraform.io/docs/providers/aws/index.html#ecs-and-codebuild-task-roles
             * https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html
-    * 追加設定 > 環境変数
+    * Additional configuration > Environment variables
         * AWS_DEFAULT_REGION: ap-northeast-1
         * TERRAFORM_BACKEND_BUCKET: gc-terraform-state-hoge
         * DB_PASSWORD: password_hoge
-        * SESSION_KEY: ほげ
+        * SESSION_KEY: hoge
         * AWS_S3_BUCKET_NAME: grateful-chat-hoge
 *  Section "Buildspec"
-    * ビルド仕様: buildspec ファイルを使用する
+    * Build specifications: Use a buildspec file
     * Buildspec 名: buildspec_deploy_infra.yml
 
-Press button "ビルドプロジェクトを作成する", then created buid project and moved to project top
+Press button "Create build project", then created buid project and moved to project top
 
-Start build by press button "ビルドの開始", then complete
+Start build by press button "Start build", then complete
 
 ### 4. Setup database
 
@@ -208,44 +208,44 @@ Copy endpoint like "fggc-prod-rds-db.*********.ap-northeast-1.rds.amazonaws.com"
 
 Access to CodeBuild console on AWS
 
-Press "ビルドプロジェクトを作成する" button
+Press "Create build project" button
 
 Input below
 
-* Section "プロジェクトの設定"
-    * プロジェクト名: cb-gc-setup-db
-* Section "ソース"
-    * ソースプロバイダ: "GitHub"
-    * リポジトリ: "GitHub アカウントのリポジトリ"
-    * GitHubアカウントのリポジトリ: https://github.com/rysk92/grateful-chat-private
-    * ソースバージョン: master
-* Section "環境"
-    * 環境イメージ: マネージド型イメージ
-    * オペレーティングシステム: Ubuntu
-    * ランタイム: Standard
-    * イメージ: aws/codebuild/standard:3.0
-    * イメージのバージョン: 常に最新
-    * 環境タイプ: Linux
-    * 特権付与: Checked
-    * サービスロール: ※あとでまとめる
+* Section "Project configuration"
+    * Project name: cb-gc-setup-db
+* Section "Source"
+    * Sourceprovider: "GitHub"
+    * Repository: "Repository in my GitHub account"
+    * Repository URL: https://github.com/rysk92/grateful-chat-private
+    * Source version: master
+* Section "Environment"
+    * Environment image: Managed image
+    * Operating system: Ubuntu
+    * Runtime(s): Standard
+    * Image: aws/codebuild/standard:3.0
+    * Image version: Always use the latest image for this runtime version
+    * Environment type: Linux
+    * Privileged: Checked
+    * Service role: ※Write later
         * Select role "iam-role-cb-gc" created before 
-    * 追加設定
-        * VPC: ↑で作ったVPC
-        * サブネット: fggc-prod-subnet-private_a
-        * セキュリティグループ:  fggc-prod-sg-db
-        * [VPC 設定の確認]を押して、「 VPC はインターネットに接続されています」が表示されることを確認
-        * 環境変数
+    * Additional configuration
+        * VPC: VPC built above
+        * Subnets: fggc-prod-subnet-private_a
+        * Security groups:  fggc-prod-sg-db
+        * Press [Validate VPC Settings] button and confirm that "VPC is connected to the Internet" is displayed
+        * Environment variables
             * AWS_DEFAULT_REGION: ap-northeast-1
             * DATABASE_URL: "mysql://db_admin:password_hoge@fggc-prod-rds-db.*********.ap-northeast-1.rds.amazonaws.com:3306/gc_db"
-            * SESSION_KEY: ほげ 
+            * SESSION_KEY: hoge 
             * AWS_S3_BUCKET_NAME: grateful-chat-hoge
 *  Section "Buildspec"
-    * ビルド仕様: buildspec ファイルを使用する
+    * Build specifications: Use a buildspec file
     * Buildspec 名: buildspec_deploy_db.yml
 
-Press button "ビルドプロジェクトを作成する", then created buid project and moved to project top
+Press button "Create build project", then created buid project and moved to project top
 
-Start build by press button "ビルドの開始", then complete
+Start build by press button "Start build", then complete
 
 ### 5. Check enabled to access Greateful Chat
 
@@ -283,34 +283,34 @@ Set below script tag on your web site
 
 Access to CodeBuild console on AWS
 
-Press "ビルドプロジェクトを作成する" button
+Press "Create build project" button
 
 Input below
 
-* Section "プロジェクトの設定"
-    * プロジェクト名: cb-gc-destroy-infra
-* Section "ソース"
-    * ソースプロバイダ: "GitHub"
-    * リポジトリ: "GitHub アカウントのリポジトリ"
-    * GitHubアカウントのリポジトリ: https://github.com/rysk92/grateful-chat-private
-    * ソースバージョン: master
-* Section "環境"
-    * 環境イメージ: マネージド型イメージ
-    * オペレーティングシステム: Ubuntu
-    * ランタイム: Standard
-    * イメージ: aws/codebuild/standard:3.0
-    * イメージのバージョン: 常に最新
-    * 環境タイプ: Linux
-    * 特権付与: Checked
-    * サービスロール: ※あとでまとめる
+* Section "Project configuration"
+    * Project name: cb-gc-destroy-infra
+* Section "Source"
+    * Sourceprovider: "GitHub"
+    * Repository: "Repository in my GitHub account"
+    * Repository URL: https://github.com/rysk92/grateful-chat-private
+    * Source version: master
+* Section "Environment"
+    * Environment image: Managed image
+    * Operating system: Ubuntu
+    * Runtime(s): Standard
+    * Image: aws/codebuild/standard:3.0
+    * Image version: Always use the latest image for this runtime version
+    * Environment type: Linux
+    * Privileged: Checked
+    * Service role: ※Write later
         * Select role "iam-role-cb-gc" created before 
-    * 追加設定 > 環境変数
+    * Additional configuration > Environment variables
         * AWS_DEFAULT_REGION: ap-northeast-1
         * TERRAFORM_BACKEND_BUCKET: gc-terraform-state-hoge
 * Section "Buildspec"
-    * ビルド仕様: buildspec ファイルを使用する
+    * Build specifications: Use a buildspec file
     * Buildspec 名: buildspec_destroy_infra.yml
 
-Press button "ビルドプロジェクトを作成する", then created buid project and moved to project top
+Press button "Create build project", then created buid project and moved to project top
 
-Start build by press button "ビルドの開始", then complete
+Start build by press button "Start build", then complete
