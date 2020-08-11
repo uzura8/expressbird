@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 import actions from './actions'
 import getters from './getters'
 import mutations from './mutations'
@@ -32,5 +33,12 @@ export default new Vuex.Store({
   getters,
   actions,
   mutations,
+  plugins: [
+    createPersistedState({
+      key: 'GCState',
+      paths: ['auth'],
+      storage: window.sessionStorage
+    })
+  ],
   strict: process.env.NODE_ENV !== 'production'
 })
