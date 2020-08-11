@@ -4,7 +4,6 @@
 .project
 .settings
 *.tmproj
-build
 .idea
 nbproject/
 tags
@@ -23,6 +22,7 @@ package-lock.json
 
 /var/*
 /server/*.js
+/server/*.map
 /public/assets/js/*
 /public/assets/css/*
 /mysql/mysql_data/*

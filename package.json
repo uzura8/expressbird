@@ -4,9 +4,9 @@
   "description": "WEB application platform of the general-purpose created by node.js, express, babel and webpack",
   "main": "server/app.js",
   "scripts": {
-    "build": "webpack --mode production",
-    "dev": "webpack --mode development",
-    "watch": "webpack --mode development --watch",
+    "build": "webpack --mode production --config build/webpack.config.js",
+    "dev": "webpack-dev-server --mode development --config build/webpack.config.js --hot --inline",
+    "watch": "webpack --mode development --watch --config build/webpack.config.js",
     "start": "node ./server/app.js",
     "start-dev": "nodemon ./server/app.js",
     "start-pm2": "pm2 start ./server/app.js -n 'expressbird'",
@@ -81,6 +81,7 @@
     "webpack-cli": "^3.3.12",
     "webpack-dev-middleware": "^3.7.2",
     "webpack-hot-middleware": "^2.25.0",
-    "webpack-node-externals": "^2.5.1"
+    "webpack-node-externals": "^2.5.1",
+    "webpack-dev-server": "^3.10.3"
   }
 }

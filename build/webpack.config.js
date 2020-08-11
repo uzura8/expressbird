@@ -1,24 +1,29 @@
 'use strict';
 const webpack = require('webpack');
 const path = require('path');
-const root = path.join(__dirname, './');
+const root = path.join(__dirname, '../');
 
 const nodeExternals = require('webpack-node-externals')
-//const HtmlWebPackPlugin = require('html-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
+const cssLoaderConfig = require('./css-loader-config');
+const postcssLoaderConfig = require('./postcss-loader-config');
+const sassLoaderConfig = require('./sass-loader-config');
+
 module.exports = [
   {
+    devtool: 'source-map',
+    context: path.resolve(__dirname, '../'),
     entry: {
-      app: './src/server/app.js',
-      create_admin_user: './src/server/create_admin_user.js',
+      app: path.join(root, 'src/server/app.js'),
+      create_admin_user: path.join(root, 'src/server/create_admin_user.js'),
     },
     output: {
-      path: path.join(__dirname, 'server'),
+      path: path.join(root, 'server'),
+      filename: '[name].js',
       publicPath: '/',
-      filename: '[name].js'
     },
     target: 'node',
     node: {
@@ -66,6 +71,7 @@ module.exports = [
   },
   {
     devtool: 'source-map',
+    context: path.resolve(__dirname, '../'),
     entry: {
       index: path.join(root, 'src/client/js/index.js'),
       include: path.join(root, 'src/client/js/include.js'),
@@ -73,7 +79,8 @@ module.exports = [
     },
     output: {
       path: path.join(root, 'public/assets/js'),
-      filename: '[name].js'
+      filename: '[name].js',
+      publicPath: '/assets/js',
     },
     optimization: {
       //splitChunks: {
@@ -95,30 +102,9 @@ module.exports = [
                 loaders: {
                   scss: [
                     'vue-style-loader',
-                    {loader: 'css-loader', options: {url: false}},
-                    {
-                      loader: 'postcss-loader',// Setting for PostCSS
-                      options: {
-                        plugins: (loader) => [
-                          // Enable Autoprefixer
-                          // Add vendor prefix
-                          require('autoprefixer')({
-                            grid: true, // use CSS Grid Layout
-                            //browsers: ['Android >= 4.4', "IE 11"],
-                          })
-                        ],
-                        sourceMap: true
-                      }
-                    },
-                    {
-                      loader: 'sass-loader',
-                      options: {
-                        includePaths: [
-                          path.join(root, 'src/client/scss/'),
-                          path.join(root, 'node_modules/'),
-                        ],
-                      },
-                    },
+                    cssLoaderConfig,
+                    postcssLoaderConfig,
+                    sassLoaderConfig,
                   ],
                 }
               }
@@ -141,37 +127,16 @@ module.exports = [
           test: /\.(sa|sc|c)ss$/,
           use: [
             'style-loader',
-            {loader: 'css-loader', options: {url: false}},
-            {
-              loader: 'postcss-loader',// Setting for PostCSS
-              options: {
-                plugins: (loader) => [
-                  // Enable Autoprefixer
-                  // Add vendor prefix
-                  require('autoprefixer')({
-                    grid: true, // use CSS Grid Layout
-                    //browsers: ['Android >= 4.4', "IE 11"],
-                  })
-                ],
-                sourceMap: true
-              }
-            },
-            {
-              loader: 'sass-loader',
-              options: {
-                includePaths: [
-                  path.join(root, 'src/client/scss/'),
-                  path.join(root, 'node_modules/'),
-                ],
-              },
-            },
+            cssLoaderConfig,
+            postcssLoaderConfig,
+            sassLoaderConfig,
           ],
         },
       ]
     },
     resolve: {
       modules: [
-        path.join(root, '/src/client'),
+        path.join(root, 'src/client'),
         'node_modules'
       ],
       extensions: ['*', '.js', '.vue', '.json'],
@@ -186,6 +151,15 @@ module.exports = [
       // Ignore all locale files of moment.js
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     ],
+    //for webpack-dev-server
+    devServer: {
+      open: true,// Open at brower automatically
+      //openPage: 'index.html',// Open this page automatically
+      contentBase: path.join(root, 'public'),// RootDir for build files
+      watchContentBase: true, // Watch changed forfiles under  contentBase dir
+      host: 'localhost',
+      port: 8080,
+    },
   },
   {
     devtool: 'source-map',
@@ -195,53 +169,26 @@ module.exports = [
     },
     output: {
       path: path.join(root, 'public/assets/css'),
-      filename: '[name].css'
+      filename: '[name].css',
+      publicPath: '/assets/css',
     },
     module: {
       rules: [
         {
           test: /\.(sa|sc|c)ss$/,
           use: [
-            // Output as css file not included js
             MiniCssExtractPlugin.loader,
-            {
-              loader: 'css-loader',
-              options: {
-                url: false,
-                //minimize: true,
-                sourceMap: true
-              }
-            },
-            {
-              loader: 'postcss-loader',// Setting for PostCSS
-              options: {
-                plugins: (loader) => [
-                  // Enable Autoprefixer
-                  // Add vendor prefix
-                  require('autoprefixer')({
-                    grid: true, // use CSS Grid Layout
-                    //browsers: ['Android >= 4.4', "IE 11"],
-                  })
-                ],
-                sourceMap: true
-              }
-            },
-            {
-              loader: 'sass-loader',
-              options: {
-                outputStyle: 'compressed',
-                sourceMap: true
-              }
-            },
+            cssLoaderConfig,
+            postcssLoaderConfig,
+            sassLoaderConfig,
           ]
         }
       ]
     },
     plugins: [
       new MiniCssExtractPlugin({
-        // prefix is output.path
         filename: '[name].min.css'
       })
     ]
-  }
+  },
 ];
