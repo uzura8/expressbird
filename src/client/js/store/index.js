@@ -37,7 +37,7 @@ export default new Vuex.Store({
     createPersistedState({
       key: 'GCState',
       paths: ['auth'],
-      storage: window.sessionStorage
+      //storage: window.sessionStorage
     })
   ],
   strict: process.env.NODE_ENV !== 'production'
