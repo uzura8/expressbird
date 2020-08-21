@@ -36,7 +36,12 @@
     "Name is required": "名称が未入力です",
     "UserName is required": "ユーザ名が未入力です",
     "Description is required": "説明が未入力です",
-    "Sign Up failed": "登録に失敗しました",
+    "Sign Up Completed": "登録が完了しました",
+    "Sign Up Failed": "登録に失敗しました",
+    "Sent verification email": "確認メールを送信しました。受信した確認メールを確認してください。",
+    "Verify Email Failed": "メールアドレスの確認に失敗しました",
+    "Required Email Verification": "メールアドレスの確認が必要です",
+    "Check verification email": "確認メールを再度お確かめください",
     "Sign In failed": "ログインに失敗しました",
     "Email is required": "メールアドレスが未入力です",
     "Email is not valid": "メールアドレスが正しくありません",
@@ -46,11 +51,14 @@
     "You don't have an account?": "登録済ですか？",
     "create account now!!": "まだの場合は登録してください。",
     "Do you have an account?": "登録済ですか？",
+    "email is not verified": "メールアドレスが未確認です。受信した確認メールを確認してください。",
     "sign in now!!": "ログインしてください。",
     "signInGreeting": "こんにちは、{name} さん！"
   },
   "error": {
-    "404": "404: ページが見つかりません"
+    "400": "不正なリクエストです",
+    "403": "禁止されています",
+    "404": "ページが見つかりません"
   },
   "form": {
     "Used for Sign In": "ログインに使用されます",
@@ -71,6 +79,7 @@
     "siteTop": "サイトトップ",
     "adminTop": "管理画面トップ",
     "adminSignIn": "管理画面ログイン",
+    "EmailVerification": "メールアドレスの確認",
     "userTop": "ユーザトップ",
     "about": "このサイトについて",
     "chatRooms": "チャットルーム",

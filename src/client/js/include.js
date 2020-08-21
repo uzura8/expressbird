@@ -1,13 +1,12 @@
 import 'es6-promise/auto'
-import config from '@/config/config'
 import Vue from 'vue'
 import store from '@/store'
 import i18n from '@/i18n'
 import '@/sanitize'
 import App from '@/AppIncluded'
 
-import Firebase from '@/firebase'
-if (config.firebase.isEnabled) Firebase.init()
+import firebase from 'firebase/app'
+import { SiteConfig } from '@/api/'
 
 import mixin from '@/mixins/include'
 Vue.mixin(mixin);
@@ -17,9 +16,18 @@ Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key]);
 });
 
-new Vue({
-  el: '#app',
-  store,
-  i18n,
-  render: h => h(App)
-})
+SiteConfig.get('firebase')
+  .then(res => {
+    firebase.initializeApp(res)
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+
+    new Vue({
+      el: '#app',
+      store,
+      i18n,
+      render: h => h(App)
+    })
+  })
+  .catch(err => {
+    throw err
+  })

@@ -24,6 +24,7 @@ export default {
           id: serviceUser.id,
           uid: res.user.uid,
           name: res.user.displayName,
+          emailVerified: res.user.emailVerified,
           type: serviceUser.type,
           email: res.user.email,
           serviceCode: 'firebase',
@@ -70,6 +71,7 @@ export default {
           id: serviceUser.id,
           email: res.user.email,
           name: res.user.displayName,
+          emailVerified: res.user.emailVerified,
           type: 'anonymous',
           uid: res.user.uid,
           serviceCode: 'firebase',
@@ -102,6 +104,7 @@ export default {
             id: serviceUser.id,
             email: fbuser.email,
             name: fbuser.displayName,
+            emailVerified: fbuser.emailVerified,
             type: serviceUser.type,
             uid: fbuser.uid,
             serviceCode: 'firebase',
@@ -136,6 +139,39 @@ export default {
     }
   },
 
+  reloadUser: async ({ commit }) => {
+    commit(types.SET_COMMON_LOADING, true)
+    try {
+      const fbuser = await Firebase.checkAuth()
+      if (fbuser) {
+        await Firebase.userReload(fbuser)
+        const idToken = await Firebase.getToken(fbuser)
+        const serviceUser = await User.getServiceUser('firebase', fbuser.uid, idToken)
+        const user = {
+          id: serviceUser.id,
+          email: fbuser.email,
+          name: fbuser.displayName,
+          emailVerified: fbuser.emailVerified,
+          type: serviceUser.type,
+          uid: fbuser.uid,
+          serviceCode: 'firebase',
+        }
+        commit(types.SET_COMMON_LOADING, false)
+        commit(types.AUTH_SET_USER, user)
+        commit(types.AUTH_SET_TOKEN, idToken)
+        commit(types.AUTH_UPDATE_STATE, true)
+      } else {
+        commit(types.SET_COMMON_LOADING, false)
+      }
+    } catch (error) {
+      commit(types.AUTH_SET_USER, null)
+      commit(types.AUTH_SET_TOKEN, null)
+      commit(types.AUTH_UPDATE_STATE, false)
+      commit(types.SET_COMMON_LOADING, false)
+      throw error
+    }
+  },
+
   createUser: async ({ commit }, vals) => {
     commit(types.SET_COMMON_LOADING, true)
     if (isEnabledFB) {
@@ -150,6 +186,7 @@ export default {
           id: serviceUser.id,
           name: serviceUser.name,
           email: res.user.email,
+          emailVerified: res.user.emailVerified,
           type: serviceUser.type,
           uid: uid,
           serviceCode: 'firebase',
@@ -178,6 +215,55 @@ export default {
         commit(types.SET_COMMON_LOADING, false)
         throw err
       }
+    }
+  },
+
+  createUserWithEmailSend: async ({ commit }, vals) => {
+    commit(types.SET_COMMON_LOADING, true)
+    commit(types.AUTH_SET_USER, null)
+    commit(types.AUTH_SET_TOKEN, null)
+    commit(types.AUTH_UPDATE_STATE, false)
+    try {
+      let res = await Firebase.createUser(vals)
+      const uid = res.user.uid
+      await Firebase.updateUserProfile(res.user, {displayName: vals.name})
+      const idToken = await Firebase.getToken(res.user)
+      const serviceUserVal = { uid:uid, name:vals.name }
+      await User.createServiceUser('firebase', uid, serviceUserVal, idToken)
+      await Firebase.sendEmailVerification(res.user, 'user/verify-email')
+      commit(types.SET_COMMON_LOADING, false)
+    } catch (err) {
+      console.log(err)
+      commit(types.SET_COMMON_LOADING, false)
+      throw err
+    }
+  },
+
+  signInWithEmailLink: async ({ commit }, payload) => {
+    commit(types.SET_COMMON_LOADING, true)
+    try {
+      const res = await Firebase.signInWithEmailLink(payload.email, payload.path)
+      const idToken = await Firebase.getToken(res.user)
+      const serviceUser = await User.getServiceUser('firebase', res.user.uid, idToken)
+      const user = {
+        id: serviceUser.id,
+        uid: res.user.uid,
+        name: res.user.displayName,
+        emailVerified: res.user.emailVerified,
+        type: serviceUser.type,
+        email: res.user.email,
+        serviceCode: 'firebase',
+      }
+      commit(types.AUTH_SET_USER, user)
+      commit(types.AUTH_SET_TOKEN, idToken)
+      commit(types.AUTH_UPDATE_STATE, true)
+      commit(types.SET_COMMON_LOADING, false)
+    } catch (error) {
+      commit(types.AUTH_SET_USER, null)
+      commit(types.AUTH_SET_TOKEN, null)
+      commit(types.AUTH_UPDATE_STATE, false)
+      commit(types.SET_COMMON_LOADING, false)
+      throw error
     }
   },
 

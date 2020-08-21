@@ -93,11 +93,12 @@ export default {
           email: this.email,
           password: this.password,
         }
-        this.$store.dispatch('createUser', vals)
+        this.$store.dispatch('createUserWithEmailSend', vals)
           .then(() => {
-            this.$router.push({ name:'UserTop' })
+            this.$router.push({ name: 'SentVerificationMail' })
           })
           .catch((err) => {
+            console.log(err)
             this.showGlobalMessage(this.$t('msg["Sign Up Failed"]'))
           })
       }

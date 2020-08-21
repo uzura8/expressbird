@@ -3,6 +3,9 @@ import About from '@/templates/About';
 import NotFound from '@/templates/Notfound';
 import SignUp from '@/templates/SignUp'
 import SignIn from '@/templates/SignIn'
+import SentVerificationMail from '@/templates/SentVerificationMail'
+import RequiredEmailVerification from '@/templates/RequiredEmailVerification'
+import UserVerifyEmail from '@/templates/UserVerifyEmail'
 import UserTop from '@/templates/UserTop'
 import Chats from '@/templates/Chats'
 import ChatkDetail from '@/templates/ChatDetail'
@@ -26,9 +29,24 @@ export default [
     component: SignUp
   },
   {
+    path: '/signup/sent',
+    name: 'SentVerificationMail',
+    component: SentVerificationMail
+  },
+  {
     path: '/signin',
     name: 'SignIn',
     component: SignIn
+  },
+  {
+    path: '/errors/required-email-verification',
+    name: 'RequiredEmailVerification',
+    component: RequiredEmailVerification
+  },
+  {
+    path: '/user/verify-email',
+    name: 'UserVerifyEmail',
+    component: UserVerifyEmail
   },
   {
     path: '/user',

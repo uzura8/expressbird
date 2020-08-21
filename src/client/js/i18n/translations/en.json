@@ -36,7 +36,12 @@
     "Name is required": "Name is required",
     "UserName is required": "Name is required",
     "Description is required": "Description is required",
-    "Sign Up failed": "Sign Up failed",
+    "Sign Up Completed": "Sign Up Completed",
+    "Sign Up Failed": "Sign Up Failed",
+    "Sent verification email": "Verification email has been sent. Please check the verification email you received.",
+    "Verify Email Failed": "Failed to verify email",
+    "Required Email Verification": "Email Verification is Required",
+    "Check verification email": "Please check the verification email again",
     "Sign In failed": "Sign In failed",
     "Email is required": "Email is required",
     "Email is not valid": "Email is not valid",
@@ -46,11 +51,14 @@
     "You don't have an account?": "You don't have an account?",
     "create account now!!": "create account now!!",
     "Do you have an account?": "Do you have an account?",
+    "email is not verified": "Your email is not verified. Please check recieved verification mail.",
     "sign in now!!": "sign in now!!",
     "signInGreeting": "Hi, {name} !"
   },
   "error": {
-    "404": "404: Not Found"
+    "400": "Bad Request",
+    "403": "Forbidden",
+    "404": "Not Found"
   },
   "form": {
     "Used for Sign In": "Used for Sign In",
@@ -72,6 +80,7 @@
     "siteTop": "Site top",
     "adminTop": "Admin Top",
     "adminSignIn": "Admin Sign In",
+    "EmailVerification": "Email Verification",
     "userTop": "User Top",
     "about": "About",
     "chatRooms": "Chat Rooms",

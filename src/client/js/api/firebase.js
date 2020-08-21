@@ -1,6 +1,7 @@
 import firebase from 'firebase/app'
 import 'firebase/app';
 import 'firebase/auth'
+import siteUtil from '@/util/site'
 
 export default {
   createUser: (vals) => {
@@ -47,9 +48,38 @@ export default {
     });
   },
 
+  sendEmailVerification: (fbUser, locationPath) => {
+    const actionCodeSettings = {
+      url: siteUtil.absUri(locationPath),
+      handleCodeInApp: true,
+    }
+    return new Promise((resolve, reject) => {
+      fbUser.sendEmailVerification(actionCodeSettings)
+        .then(res => resolve(res))
+        .catch(err => reject(err))
+    });
+  },
+
+  signInWithEmailLink: (email, locationPath) => {
+    const url = siteUtil.absUri(locationPath)
+    return new Promise((resolve, reject) => {
+      firebase.auth().signInWithEmailLink(email, url)
+        .then(res => resolve(res))
+        .catch(err => reject(err))
+    })
+  },
+
   updateUserProfile: (fbUser, vals) => {
     return new Promise((resolve, reject) => {
       fbUser.updateProfile(vals)
+        .then(res => resolve(res))
+        .catch(err => reject(err))
+    })
+  },
+
+  userReload: (fbUser) => {
+    return new Promise((resolve, reject) => {
+      fbUser.reload()
         .then(res => resolve(res))
         .catch(err => reject(err))
     })

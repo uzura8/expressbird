@@ -30,8 +30,14 @@ router.beforeEach((to, from, next) => {
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
     if (requiresAuth) {
       if (store.state.auth.state) {
-        if (isAdminPath && !store.getters.checkUserType('admin')) {
-          next({ name:'UserTop' })
+        if (!store.getters.checkUserType('admin')) {
+          if (!store.getters.isEmailVerified()) {
+            next({ name:'RequiredEmailVerification' })
+          } else if (isAdminPath) {
+            next({ name:'UserTop' })
+          } else {
+            next()
+          }
         } else {
           next()
         }

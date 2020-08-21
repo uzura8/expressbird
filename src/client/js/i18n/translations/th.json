@@ -36,7 +36,12 @@
     "Name is required": "ไม่มีการป้อนชื่อ",
     "UserName is required": "ไม่ได้ใส่ชื่อผู้ใช้",
     "Description is required": "ไม่มีการป้อนคำอธิบาย",
-    "Sign Up failed": "การลงทะเบียนผู้ใช้ล้มเหลว",
+    "Sign Up Completed": "การลงทะเบียนเสร็จสมบูรณ์",
+    "Sign Up Failed": "การลงทะเบียนผู้ใช้ล้มเหลว",
+    "Sent verification email": "ส่งอีเมลยืนยันแล้ว โปรดตรวจสอบอีเมลยืนยันที่คุณได้รับ",
+    "Verify Email Failed": "ไม่สามารถยืนยันที่อยู่อีเมล",
+    "Required Email Verification": "จำเป็นต้องมีการยืนยันอีเมล",
+    "Check verification email": "โปรดตรวจสอบอีเมลยืนยันอีกครั้ง",
     "Sign In failed": "การเข้าสู่ระบบล้มเหลว",
     "Email is required": "ไม่ได้ใส่ที่อยู่อีเมล",
     "Email is not valid": "ที่อยู่อีเมลไม่ถูกต้อง",
@@ -46,11 +51,14 @@
     "You don't have an account?": "คุณได้ลงทะเบียนแล้วหรือยัง",
     "create account now!!": "กรุณาลงทะเบียนเป็นผู้ใช้",
     "Do you have an account?": "คุณได้ลงทะเบียนแล้วหรือยัง",
+    "email is not verified": "อีเมลของคุณไม่ได้รับการยืนยัน โปรดตรวจสอบอีเมลยืนยันที่ได้รับ",
     "sign in now!!": "กรุณาเข้าสู่ระบบ",
     "signInGreeting": "สวัสดี {name}"
   },
   "error": {
-    "404": "404: ไม่พบหน้า"
+    "400": "คำขอไม่ถูกต้อง",
+    "403": "ต้องห้าม",
+    "404": "ไม่พบหน้า"
   },
   "form": {
     "Used for Sign In": "ใช้สำหรับเข้าสู่ระบบ",
@@ -71,6 +79,7 @@
     "siteTop": "ด้านบนเว็บไซต์",
     "adminTop": "หน้าจอการจัดการด้านบน",
     "adminSignIn": "หน้าจอการจัดการเข้าสู่ระบบ",
+    "EmailVerification": "การยืนยันอีเมล",
     "userTop": "ผู้ใช้ยอดนิยม",
     "about": "เกี่ยวกับเว็บไซต์นี้",
     "chatRooms": "ห้องแชท",
