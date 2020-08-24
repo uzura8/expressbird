@@ -45,6 +45,7 @@
     "Sign In failed": "ログインに失敗しました",
     "Email is required": "メールアドレスが未入力です",
     "Email is not valid": "メールアドレスが正しくありません",
+    "Email is alredy in use": "そのメールアドレスはすでに使用されています",
     "Password is required": "パスワードが未入力です",
     "Password must be at least 6 characters": "パスワードは６文字以上入力してください",
     "Comment as anonymous user": "ゲストユーザで書き込む",

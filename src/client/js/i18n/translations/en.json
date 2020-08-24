@@ -45,6 +45,7 @@
     "Sign In failed": "Sign In failed",
     "Email is required": "Email is required",
     "Email is not valid": "Email is not valid",
+    "Email is alredy in use": "Email address is already in use",
     "Password is required": "Password is required",
     "Password must be at least 6 characters": "Password must be at least 6 characters",
     "Comment as anonymous user": "Comment as anonymous user",
