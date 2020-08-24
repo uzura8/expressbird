@@ -239,6 +239,23 @@ export default {
     }
   },
 
+  sendVerificationMail: async ({ commit }) => {
+    commit(types.SET_COMMON_LOADING, true)
+    try {
+      const fbuser = await Firebase.checkAuth()
+      if (fbuser) {
+        await Firebase.sendEmailVerification(fbuser, 'user/verify-email')
+      }
+      commit(types.SET_COMMON_LOADING, false)
+    } catch (error) {
+      commit(types.AUTH_SET_USER, null)
+      commit(types.AUTH_SET_TOKEN, null)
+      commit(types.AUTH_UPDATE_STATE, false)
+      commit(types.SET_COMMON_LOADING, false)
+      throw error
+    }
+  },
+
   signInWithEmailLink: async ({ commit }, payload) => {
     commit(types.SET_COMMON_LOADING, true)
     try {

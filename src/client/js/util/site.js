@@ -42,4 +42,22 @@ export default {
     items.push(basePath)
     return items.join('')
   },
+
+  convErrorCodeToI18nOnSendVefificationMail: (code) => {
+    let i18nKey = ''
+    switch(code) {
+      case 'auth/email-already-in-use':
+        i18nKey = 'msg["Email is alredy in use"]'
+        break
+      case 'auth/invalid-email':
+        i18nKey = 'msg["Email is not valid"]'
+        break
+      //case 'auth/requires-recent-login':
+      //  break;
+      default:
+        i18nKey = 'msg["Sign Up Failed"]'
+        break
+    }
+    return i18nKey
+  },
 }

@@ -5,11 +5,17 @@
     aria-close-label="Close notification"
     :closable="false"
     role="alert">
-    {{ $t('msg["email is not verified"]') }}
+    <p>{{ $t('msg["email is not verified"]') }}</p>
+    <p><a click="u-clickable" @click="sendVerificationMail">{{ $t('msg["Resend verification email"]') }}</a></p>
   </b-notification>
 </template>
 
 <script>
+import firebase from 'firebase/app'
+import 'firebase/app';
+import 'firebase/auth'
+import site from '@/util/site'
+
 export default {
   nane: 'EbEmailVerifyNotification',
 
@@ -32,6 +38,17 @@ export default {
   },
 
   methods: {
+    sendVerificationMail: function () {
+      this.$store.dispatch('sendVerificationMail')
+        .then(() => {
+          this.showGlobalMessage(this.$t('msg["Sent verification email"]'), 'is-success')
+        })
+        .catch((err) => {
+          console.log(err)// FOR DEBUG
+          const i18nKey = site.convErrorCodeToI18nOnSendVefificationMail(err.code)
+          this.showGlobalMessage(this.$t(i18nKey, 'is-success'))
+        })
+    }
   },
 }
 </script>

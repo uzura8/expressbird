@@ -56,6 +56,7 @@
 import { User, Firebase } from '@/api'
 import config from '@/config/config'
 import str from '@/util/str'
+import site from '@/util/site'
 
 export default {
   name: 'SignUp',
@@ -98,22 +99,9 @@ export default {
             this.$router.push({ name: 'SentVerificationMail' })
           })
           .catch((err) => {
-            let msg = ''
-            switch(err.code) {
-              case 'auth/email-already-in-use':
-                msg = this.$t('msg["Email is alredy in use"]')
-                break
-              case 'auth/invalid-email':
-                msg = this.$t('msg["Email is not valid"]')
-                break
-              //case 'auth/requires-recent-login':
-              //  break;
-              default:
-                console.log(err)// FOR DEBUG
-                msg = this.$t('msg["Sign Up Failed"]')
-                break
-            }
-            this.showGlobalMessage(msg)
+            console.log(err)// FOR DEBUG
+            const i18nKey = site.convErrorCodeToI18nOnSendVefificationMail(err.code)
+            this.showGlobalMessage(this.$t(i18nKey, 'is-success'))
           })
       }
     },

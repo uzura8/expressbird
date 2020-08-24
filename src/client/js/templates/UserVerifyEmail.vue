@@ -68,7 +68,7 @@ export default {
       return new Promise(async (resolve, reject) => {
         await auth.applyActionCode(actionCode).then((resp) => {
           const msg = {
-            'title': this.$t('msg["Sign Up Completed"]'),
+            'title': this.$t('msg["Verify Email Completed"]'),
             'body': '',
             'type': 'success',
           }
