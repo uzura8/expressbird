@@ -239,18 +239,19 @@ export default {
     }
   },
 
-  sendVerificationMail: async ({ commit }) => {
+  changeEmail: async ({ commit }, email) => {
     commit(types.SET_COMMON_LOADING, true)
     try {
       const fbuser = await Firebase.checkAuth()
-      if (fbuser) {
-        await Firebase.sendEmailVerification(fbuser, 'user/verify-email')
-      }
+      if (!fbuser) throw new Error('require to auth')
+      await Firebase.updateEmail(fbuser, email)// Update email
+      const token = await Firebase.getToken(fbuser)// Update token
+      await Firebase.sendEmailVerification(fbuser, 'user/verify-email')
+      commit(types.AUTH_SET_TOKEN, token)
+      commit(types.AUTH_UPDATE_USER_INFO, { key:'email', value:email })
+      commit(types.AUTH_UPDATE_USER_INFO, { key:'emailVerified', value:false })
       commit(types.SET_COMMON_LOADING, false)
     } catch (error) {
-      commit(types.AUTH_SET_USER, null)
-      commit(types.AUTH_SET_TOKEN, null)
-      commit(types.AUTH_UPDATE_STATE, false)
       commit(types.SET_COMMON_LOADING, false)
       throw error
     }

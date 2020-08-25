@@ -7,6 +7,7 @@ import SentVerificationMail from '@/templates/SentVerificationMail'
 import RequiredEmailVerification from '@/templates/RequiredEmailVerification'
 import UserVerifyEmail from '@/templates/UserVerifyEmail'
 import UserTop from '@/templates/UserTop'
+import Settings from '@/templates/Settings'
 import Chats from '@/templates/Chats'
 import ChatkDetail from '@/templates/ChatDetail'
 import ChatCreate from '@/templates/ChatCreate'
@@ -52,6 +53,12 @@ export default [
     path: '/user',
     name: 'UserTop',
     component: UserTop,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/settings',
+    name: 'Settings',
+    component: Settings,
     meta: { requiresAuth: true }
   },
   {

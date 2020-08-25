@@ -1,4 +1,5 @@
 import * as types from './mutation-types'
+import arr from '@/util/arr'
 
 export default {
   [types.SET_COMMON_LOADING] (state, isLoading) {
@@ -7,6 +8,12 @@ export default {
 
   [types.AUTH_SET_USER] (state, payload) {
     state.auth.user = payload
+  },
+
+  [types.AUTH_UPDATE_USER_INFO] (state, payload) {
+    const acceptKeys = ['id', 'name', 'email', 'emailVerified', 'type', 'uid', 'serviceCode']
+    if (!arr.inArray(payload.key, acceptKeys)) new Error('Invalid  argument')
+    state.auth.user[payload.key] = payload.value
   },
 
   [types.AUTH_SET_TOKEN] (state, payload) {

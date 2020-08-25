@@ -16,6 +16,7 @@
     "create": "作成",
     "register": "登録する",
     "delete": "削除",
+    "cancel": "キャンセル",
     "more": "もっと見る"
   },
   "msg": {
@@ -66,6 +67,7 @@
   },
   "form": {
     "Used for Sign In": "ログインに使用されます",
+    "Masked for security": "セキュリティ保護のためマスクしています",
     "Room Name": "チャットルーム名",
     "Description for room": "ルームの説明",
     "Used for display room name": "ルームの表示名に使用されます",
@@ -85,6 +87,8 @@
     "adminSignIn": "管理画面ログイン",
     "EmailVerification": "メールアドレスの確認",
     "userTop": "ユーザトップ",
+    "Settings": "設定",
+    "Change": "ユーザトップ",
     "about": "このサイトについて",
     "chatRooms": "チャットルーム",
     "createChatRoom": "チャットルーム作成"

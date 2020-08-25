@@ -77,6 +77,14 @@ export default {
     })
   },
 
+  updateEmail: (fbUser, email) => {
+    return new Promise((resolve, reject) => {
+      fbUser.updateEmail(email)
+        .then(res => resolve(res))
+        .catch(err => reject(err))
+    })
+  },
+
   userReload: (fbUser) => {
     return new Promise((resolve, reject) => {
       fbUser.reload()

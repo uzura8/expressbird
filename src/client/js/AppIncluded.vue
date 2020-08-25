@@ -87,6 +87,7 @@ export default {
   },
 
   created() {
+    if (this.isAuth) this.$store.dispatch('reloadUser')
   },
 
   methods: {

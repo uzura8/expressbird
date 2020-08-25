@@ -16,6 +16,7 @@
     "create": "สร้าง",
     "register": "สมัครสมาชิก",
     "delete": "ลบ",
+    "cancel": "ยกเลิก",
     "more": "ดูเพิ่มเติม"
   },
   "msg": {
@@ -66,6 +67,7 @@
   },
   "form": {
     "Used for Sign In": "ใช้สำหรับเข้าสู่ระบบ",
+    "Masked for security": "สวมหน้ากากเพื่อความปลอดภัย",
     "Room Name": "ชื่อห้องแชท",
     "Description for room": "คำอธิบายสำหรับห้องแชท",
     "Used for display room name": "ใช้สำหรับชื่อที่แสดงของห้องสนทนา",
@@ -85,6 +87,7 @@
     "adminSignIn": "หน้าจอการจัดการเข้าสู่ระบบ",
     "EmailVerification": "การยืนยันอีเมล",
     "userTop": "ผู้ใช้ยอดนิยม",
+    "Settings": "การตั้งค่า",
     "about": "เกี่ยวกับเว็บไซต์นี้",
     "chatRooms": "ห้องแชท",
     "createChatRoom": "สร้างห้องแชท"

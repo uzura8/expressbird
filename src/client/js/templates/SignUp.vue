@@ -101,7 +101,7 @@ export default {
           .catch((err) => {
             console.log(err)// FOR DEBUG
             const i18nKey = site.convErrorCodeToI18nOnSendVefificationMail(err.code)
-            this.showGlobalMessage(this.$t(i18nKey, 'is-success'))
+            this.showGlobalMessage(this.$t(i18nKey))
           })
       }
     },

@@ -33,6 +33,7 @@ export default {
   },
 
   created: function () {
+    if (this.isAuth) this.$store.dispatch('reloadUser')
   },
 
   methods: {
