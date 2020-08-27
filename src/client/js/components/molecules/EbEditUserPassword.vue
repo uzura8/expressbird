@@ -7,8 +7,10 @@
       </div>
       <div class="field-body">
         <div class="field">
-          <span class="is-italic is-size-6">{{ $t('form["Masked for security"]') }}</span>
-          <a class="is-pulled-right u-clickable" @click="isEdit = true">{{ $t('common.edit') }}</a>
+          <div class="field-val">
+            <span class="is-italic is-size-6">{{ $t('form["Masked for security"]') }}</span>
+            <a class="is-pulled-right u-clickable" @click="isEdit = true">{{ $t('common.edit') }}</a>
+          </div>
         </div>
       </div>
     </div>
@@ -204,4 +206,10 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.field-val {
+  line-height: 2.2;
+}
+</style>
 

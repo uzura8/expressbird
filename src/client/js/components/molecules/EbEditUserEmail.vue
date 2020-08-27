@@ -37,8 +37,10 @@
     </div>
 
     <div class="field" v-else>
-      <span>{{ $store.getters.userInfo('email') }}</span>
-      <a class="is-pulled-right u-clickable" @click="isEdit = true">{{ $t('common.edit') }}</a>
+      <div class="field-val">
+        <span>{{ $store.getters.userInfo('email') }}</span>
+        <a class="is-pulled-right u-clickable" @click="isEdit = true">{{ $t('common.edit') }}</a>
+      </div>
     </div>
   </div>
 </div>
@@ -111,4 +113,10 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.field-val {
+  line-height: 2.2;
+}
+</style>
 
