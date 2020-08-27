@@ -1,6 +1,10 @@
 import * as types from './mutation-types'
 import { Example, User, Chat, ChatComment, Firebase } from '@/api'
 import config from '@/config/config'
+import firebase from 'firebase/app'
+import 'firebase/app';
+import 'firebase/auth'
+
 const isEnabledFB = config.firebase.isEnabled
 
 export default {
@@ -250,6 +254,22 @@ export default {
       commit(types.AUTH_SET_TOKEN, token)
       commit(types.AUTH_UPDATE_USER_INFO, { key:'email', value:email })
       commit(types.AUTH_UPDATE_USER_INFO, { key:'emailVerified', value:false })
+      commit(types.SET_COMMON_LOADING, false)
+    } catch (error) {
+      commit(types.SET_COMMON_LOADING, false)
+      throw error
+    }
+  },
+
+  changePassword: async ({ commit }, vals) => {
+    commit(types.SET_COMMON_LOADING, true)
+    try {
+      const user = await firebase.auth().currentUser
+      const cred = await firebase.auth.EmailAuthProvider.credential(user.email, vals.passwordOld)
+      await user.reauthenticateAndRetrieveDataWithCredential(cred);
+      await user.updatePassword(vals.passwordNew)
+      const token = await Firebase.getToken(user)// Update token
+      commit(types.AUTH_SET_TOKEN, token)
       commit(types.SET_COMMON_LOADING, false)
     } catch (error) {
       commit(types.SET_COMMON_LOADING, false)

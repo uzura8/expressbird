@@ -89,7 +89,7 @@ export default {
         this.isEdit = false
       } catch (err) {
         console.log(err)// FOR DEBUG
-        const i18nKey = site.convErrorCodeToI18nOnSendVefificationMail(err.code)
+        const i18nKey = site.convFirebaseErrorCodeToI18n(err.code)
         this.errorMsg = this.$t(i18nKey)
       }
     },

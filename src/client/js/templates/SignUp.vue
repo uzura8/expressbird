@@ -100,7 +100,7 @@ export default {
           })
           .catch((err) => {
             console.log(err)// FOR DEBUG
-            const i18nKey = site.convErrorCodeToI18nOnSendVefificationMail(err.code)
+            const i18nKey = site.convFirebaseErrorCodeToI18n(err.code)
             this.showGlobalMessage(this.$t(i18nKey))
           })
       }

@@ -43,20 +43,56 @@ export default {
     return items.join('')
   },
 
-  convErrorCodeToI18nOnSendVefificationMail: (code) => {
+  convFirebaseErrorCodeToI18n: (code, method = '') => {
     let i18nKey = ''
-    switch(code) {
+    switch (code) {
+      //case 'auth/cancelled-popup-request':
+      //case 'auth/popup-closed-by-user':
+      //   return null;
       case 'auth/email-already-in-use':
-        i18nKey = 'msg["Email is alredy in use"]'
+        if (method.indexOf('signup') !== -1) {
+          i18nKey = 'msg["Email is alredy in use"]'
+        } else {
+          i18nKey = 'msg["Email or passwords do not match our records"]'
+        }
         break
       case 'auth/invalid-email':
         i18nKey = 'msg["Email is not valid"]'
         break
-      //case 'auth/requires-recent-login':
-      //  break;
-      default:
-        i18nKey = 'msg["Sign Up Failed"]'
+      case 'auth/user-disabled':
+        i18nKey = 'msg["Service is unavailable"]'
         break
+      case 'auth/user-not-found':
+        i18nKey = 'msg["Email or passwords do not match our records"]'
+        break
+      case 'auth/user-mismatch':
+        if (method === 'signin/popup') {
+          return '認証されているユーザーと異なるアカウントが選択されました';
+        } else {
+          i18nKey = 'msg["Email or passwords do not match our records"]'
+        }
+        break
+      case 'auth/weak-password':
+        i18nKey = 'msg["Password must be at least 6 characters"]'
+        break
+      case 'auth/wrong-password':
+        i18nKey = 'msg["Email or passwords do not match our records"]'
+        break
+      //case 'auth/popup-blocked':
+      //  return '認証ポップアップがブロックされました。ポップアップブロックをご利用の場合は設定を解除してください';
+      //case 'auth/operation-not-supported-in-this-environment':
+      //case 'auth/auth-domain-config-required':
+      //case 'auth/operation-not-allowed':
+      //case 'auth/unauthorized-domain':
+      //  return '現在この認証方法はご利用頂けません';
+      //case 'auth/requires-recent-login':
+      //  return '認証の有効期限が切れています';
+      default:
+        if (method.indexOf('signin') !== -1) {
+          i18nKey = 'msg["Sign In failed"]'
+        } else {
+          i18nKey = 'msg["Error occurred"]'
+        }
     }
     return i18nKey
   },
