@@ -73,6 +73,7 @@
   },
   "form": {
     "Used for Sign In": "Used for Sign In",
+    "Sign In with Google": "Sign In with Google",
     "CurrentPassword": "Current Password",
     "NewPassword": "New Password",
     "RetypeNewPassword": "Re-type new Password",

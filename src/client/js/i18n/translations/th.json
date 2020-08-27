@@ -73,6 +73,7 @@
   },
   "form": {
     "Used for Sign In": "ใช้สำหรับเข้าสู่ระบบ",
+    "Sign In with Google": "ลงชื่อเข้าใช้ด้วย Google",
     "CurrentPassword": "รหัสผ่านปัจจุบัน",
     "NewPassword": "รหัสผ่านใหม่",
     "RetypeNewPassword": "พิมพ์รหัสผ่านอีกครั้ง",

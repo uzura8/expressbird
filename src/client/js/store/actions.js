@@ -60,6 +60,52 @@ export default {
     }
   },
 
+  authenticateWithOAuth: async ({ commit }, providerName) => {
+    commit(types.SET_COMMON_LOADING, true)
+    try {
+      let provider
+      switch (providerName) {
+        case 'google.com':
+          provider = new firebase.auth.GoogleAuthProvider()
+          break
+        //case 'twitter.com':
+        //  provider = new firebase.auth.TwitterAuthProvider()
+        //  break
+        //case 'facebook.com':
+        //  provider = new firebase.auth.FacebookAuthProvider()
+        //  break
+      }
+
+      const res = await firebase.auth().signInWithPopup(provider)
+      //const accessToken = res.credential.accessToken
+      const idToken = await Firebase.getToken(res.user)
+      const vals = {
+        name: res.user.displayName,
+        type: 'normal',
+      }
+      const serviceUser = await User.createServiceUser('firebase', res.user.uid, vals)
+      const user = {
+        id: serviceUser.id,
+        uid: res.user.uid,
+        name: res.user.displayName,
+        emailVerified: res.user.emailVerified,
+        type: serviceUser.type,
+        email: res.user.email,
+        serviceCode: 'firebase',
+      }
+      commit(types.AUTH_SET_USER, user)
+      commit(types.AUTH_SET_TOKEN, idToken)
+      commit(types.AUTH_UPDATE_STATE, true)
+      commit(types.SET_COMMON_LOADING, false)
+    } catch (error) {
+      commit(types.AUTH_SET_USER, null)
+      commit(types.AUTH_SET_TOKEN, null)
+      commit(types.AUTH_UPDATE_STATE, false)
+      commit(types.SET_COMMON_LOADING, false)
+      throw error
+    }
+  },
+
   authenticateAnonymously: async ({ commit }, payload) => {
     commit(types.SET_COMMON_LOADING, true)
     if (isEnabledFB) {

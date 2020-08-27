@@ -73,6 +73,7 @@
   },
   "form": {
     "Used for Sign In": "ログインに使用されます",
+    "Sign In with Google": "Google でログイン",
     "CurrentPassword": "現在のパスワード",
     "NewPassword": "新しいパスワード",
     "RetypeNewPassword": "新しいパスワード(確認)",

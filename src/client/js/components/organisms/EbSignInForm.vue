@@ -35,6 +35,20 @@
         @click="signIn">{{ $t('common.signIn') }}</button>
     </div>
   </div>
+
+  <div class="field is-grouped">
+    <div class="control">
+      <button
+        class="button"
+        @click="signInWithOAuth('google.com')"
+      >
+        <span class="icon">
+          <i class="fab fa-google"></i>
+        </span>
+        <span>{{ $t('form["Sign In with Google"]') }}</span>
+      </button>
+    </div>
+  </div>
 </div>
 </template>
 
@@ -99,6 +113,24 @@ export default {
             this.handleApiError(err, this.$t('msg["Sign In failed"]'))
           })
       }
+    },
+
+    signInWithOAuth: function(providerName) {
+      this.$store.dispatch('authenticateWithOAuth', providerName)
+        .then((res) => {
+          if (!this.isEmpty(this.$route.query.redirect)) {
+            this.$router.push({ path:this.$route.query.redirect })
+          } else {
+            if (this.isUseAdmin && this.isAdmin) {
+              this.$router.push({ name:'AdminTop' })
+            } else {
+              this.$router.push({ name:'UserTop' })
+            }
+          }
+        })
+        .catch(err => {
+          this.handleApiError(err, this.$t('msg["Sign In failed"]'))
+        })
     },
 
     keyDownEnter: function(event) {
