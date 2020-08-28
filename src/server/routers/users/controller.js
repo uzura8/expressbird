@@ -4,6 +4,7 @@ import { db, User, UserAuth, ServiceUser } from '@/models'
 import str from '@/util/str'
 import Authenticator from '@/middlewares/passport'
 import FirebaseAuth from '@/middlewares/firebase/auth'
+import UserAcl from '@/middlewares/userAcl'
 import config from '@/config/config'
 const isFBEnabled = config.auth.firebase.isEnabled
 
@@ -15,6 +16,10 @@ export default {
       // TODO: for passport auth
       //Authenticator.isAuthenticated(req, res, next)
     }
+  },
+
+  checkEditable: (req, res, next) => {
+    UserAcl.checkEditable(req, res, next)
   },
 
   signOut: (req, res, next) => {
@@ -57,6 +62,32 @@ export default {
           type: user.type,
           uid: null,
           serviceCode: null,
+        })
+      })
+    } catch (err) {
+      return next(boom.badRequest(err))
+    }
+  },
+
+  edit: (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() })
+    }
+    const id = req.params.userId
+    const name = req.body.name
+    try {
+      const result = db.sequelize.transaction(async (t) => {
+        const user = await User.update({
+          name: name,
+        }, {
+          where: {id: id}
+        })
+        return res.json({
+          id: user.id,
+          name: user.name,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt,
         })
       })
     } catch (err) {
@@ -151,6 +182,13 @@ export default {
             .trim()
             .isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
           check('name', 'Your name is required')
+            .trim()
+            .isLength({ min: 1 }).withMessage('Name is required'),
+        ]
+
+      case 'edit':
+        return [
+          check('name', 'Name is required')
             .trim()
             .isLength({ min: 1 }).withMessage('Name is required'),
         ]

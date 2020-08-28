@@ -53,5 +53,13 @@ router.post(
   controller.create
 )
 
+router.post(
+  '/:userId',
+  controller.isAuthenticated,
+  controller.validate('edit'),
+  controller.checkEditable,
+  controller.edit
+)
+
 export default router
 

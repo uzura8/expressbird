@@ -268,6 +268,26 @@ export default {
     }
   },
 
+  editUserProfile: async ({ commit, state }, payload) => {
+    commit(types.SET_COMMON_LOADING, true)
+    try {
+      if (payload.vals.name != null) {
+        const user = firebase.auth().currentUser;
+        await user.updateProfile({
+          displayName: payload.vals.name,
+        })
+      }
+      await User.edit(payload.id, payload.vals, state.auth.token)
+      Object.keys(payload.vals).map(key => {
+        commit(types.AUTH_UPDATE_USER_INFO, { key:key, value:payload.vals[key] })
+      })
+      commit(types.SET_COMMON_LOADING, false)
+    } catch (err) {
+      commit(types.SET_COMMON_LOADING, false)
+      throw err
+    }
+  },
+
   createUserWithEmailSend: async ({ commit }, vals) => {
     commit(types.SET_COMMON_LOADING, true)
     commit(types.AUTH_SET_USER, null)

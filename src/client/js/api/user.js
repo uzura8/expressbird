@@ -1,11 +1,24 @@
 import client from './client'
 import uri from '@/util/uri'
+import common from '@/util/common'
 
 export default {
   create: (values) => {
     return new Promise((resolve, reject) => {
       const params = uri.convToPostParams(values, ['name', 'email', 'password'])
       client.post('users', params)
+        .then(res => resolve(res.data))
+        .catch(err => reject(err))
+    })
+  },
+
+  edit: (id, values, token = null) => {
+    return new Promise((resolve, reject) => {
+      if (common.isEmpty(values)) throw new Error('No value')
+      const params = uri.convToPostParams(values, ['name'])
+      let options = {}
+      if (token) options.headers = { Authorization: token }
+      client.post(`users/${id}`, params, options)
         .then(res => resolve(res.data))
         .catch(err => reject(err))
     })
