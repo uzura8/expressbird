@@ -110,5 +110,16 @@ export default {
       conved = util.str.nl2br(conved)
       return util.str.url2link(conved)
     },
+
+    convUserTypeToi18n: function (userType) {
+      switch (userType)
+      {
+        case 'admin':
+          return this.$t('common.admin')
+        case 'anonymous':
+          return this.$t('common.anonymous')
+      }
+      return this.$t('common.normal')
+    },
   },
 }

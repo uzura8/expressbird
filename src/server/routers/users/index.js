@@ -3,9 +3,12 @@ import controller from './controller'
 
 const router = express.Router()
 
-router.get('/', (req, res) => {
-  res.json({ page:'users' })
-})
+router.get(
+  '/',
+  controller.isAuthenticated,
+  controller.checkFetchUsersAcl,
+  controller.fetchUsers
+)
 
 router.get(
   '/check',

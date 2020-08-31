@@ -7,3 +7,4 @@ export default {
     return shasum.digest('hex')
   },
 }
+

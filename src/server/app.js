@@ -11,7 +11,7 @@ import bodyParser from 'body-parser'
 import config from './config/config.json'
 import { logErrors, clientErrorHandler, errorHandler } from './middlewares/errorHandler'
 import Authenticator from './middlewares/passport'
-import { siteConfigRouter, usersRouter, chatsRouter } from './routers'
+import { siteConfigRouter, adminRouter, usersRouter, chatsRouter } from './routers'
 
 // set configs
 const PORT = process.env.PORT || config.port
@@ -61,6 +61,7 @@ app.use(staticFileMiddleware);
 
 //app.use('/', indexRouter)
 app.use('/api/site_config', siteConfigRouter)
+app.use('/api/admin', adminRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/chats', chatsRouter)
 

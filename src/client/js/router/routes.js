@@ -13,6 +13,9 @@ import ChatkDetail from '@/templates/ChatDetail'
 import ChatCreate from '@/templates/ChatCreate'
 import ChatEdit from '@/templates/ChatEdit'
 import AdminTop from '@/templates/AdminTop'
+import AdminUsers from '@/templates/AdminUsers'
+import UserCreate from '@/templates/UserCreate'
+import UserEdit from '@/templates/UserEdit'
 import AdminChats from '@/templates/AdminChats'
 import AdminChatCreate from '@/templates/AdminChatCreate'
 import AdminChatEdit from '@/templates/AdminChatEdit'
@@ -110,6 +113,24 @@ export default [
     path: '/admin/chats',
     name: 'AdminChats',
     component: AdminChats,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/admin/users',
+    name: 'AdminUsers',
+    component: AdminUsers,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/admin/users/create',
+    name: 'AdminUserCreate',
+    component: UserCreate,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/admin/users/:id/edit',
+    name: 'AdminUserEdit',
+    component: UserEdit,
     meta: { requiresAuth: true }
   },
   {

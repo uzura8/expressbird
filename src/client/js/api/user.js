@@ -35,10 +35,12 @@ export default {
     })
   },
 
-  get: (userId = '') => {
+  get: (userId = '', token = null) => {
+    let options = {}
+    if (token) options.headers = { Authorization: token }
     return new Promise((resolve, reject) => {
-      if (!userId) userId = 'me'
-      client.get(`users/${userId}`)
+      //if (!userId) userId = 'me'
+      client.get(`users/${userId}`, options)
         .then(res => resolve(res.data))
         .catch(err => reject(err))
     })

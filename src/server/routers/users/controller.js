@@ -18,6 +18,10 @@ export default {
     }
   },
 
+  checkFetchUsersAcl: (req, res, next) => {
+    UserAcl.checkFetchUsersAcl(req, res, next)
+  },
+
   checkEditable: (req, res, next) => {
     UserAcl.checkEditable(req, res, next)
   },
@@ -34,6 +38,15 @@ export default {
     }
   },
 
+  fetchUsers: async (req, res, next) => {
+    try {
+      const users = await User.findAll()
+      return res.json(users)
+    } catch (err) {
+      return next(boom.badRequest(err))
+    }
+  },
+
   create: (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -42,7 +55,6 @@ export default {
     }
     const email = req.body.email
     const password = str.hashing(req.body.password)
-    const name = req.body.name
     try {
       db.sequelize.transaction(async (t) => {
         const user = await User.create({

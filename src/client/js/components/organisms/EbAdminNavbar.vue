@@ -18,6 +18,7 @@
     <div class="navbar-start">
       <router-link to="/admin" class="navbar-item">{{ $t('page.adminTop') }}</router-link>
       <router-link to="/admin/chats" class="navbar-item">{{ $t('page.chatRooms') }}</router-link>
+      <router-link to="/admin/users" class="navbar-item">{{ $t('page.UserManagement') }}</router-link>
       <a v-if="isAuth" class="navbar-item u-clickable" @click="signOut">{{ $t('common.signOut') }}</a>
       <router-link to="/" class="navbar-item">{{ $t('page.siteTop') }}</router-link>
     </div>

@@ -1,5 +1,5 @@
 import * as types from './mutation-types'
-import { Example, User, Chat, ChatComment, Firebase } from '@/api'
+import { Example, Admin, User, Chat, ChatComment, Firebase } from '@/api'
 import config from '@/config/config'
 import firebase from 'firebase/app'
 import 'firebase/app';
@@ -265,6 +265,29 @@ export default {
         commit(types.SET_COMMON_LOADING, false)
         throw err
       }
+    }
+  },
+
+  createUserByAdmin: async ({ commit, state }, payload) => {
+    commit(types.SET_COMMON_LOADING, true)
+    try {
+      const fbVals = {
+        email: payload.email,
+        password: payload.password,
+      }
+      const res = await Firebase.createUser(fbVals)
+      const uid = res.user.uid
+      await Firebase.updateUserProfile(res.user, { displayName: payload.name })
+      const userVals = {
+        uid: uid,
+        name: payload.name,
+        type: payload.type,
+      }
+      await Admin.createUser('firebase', userVals, state.auth.token)
+      commit(types.SET_COMMON_LOADING, false)
+    } catch (err) {
+      commit(types.SET_COMMON_LOADING, false)
+      throw err
     }
   },
 
