@@ -13,6 +13,17 @@ class ServiceUser extends db.Sequelize.Model {
       }
     })
   }
+
+  static findByUserId(userId) {
+    return this.findOne({
+      include: [{
+        model: User,
+      }],
+      where: {
+        userId: userId,
+      }
+    })
+  }
 }
 
 ServiceUser.init(

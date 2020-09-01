@@ -11,5 +11,20 @@ router.post(
   controller.createUser
 )
 
+router.get(
+  '/users/:userId',
+  controller.isAuthenticated,
+  controller.checkEditable,
+  controller.getUser
+)
+
+router.post(
+  '/users/:userId',
+  controller.isAuthenticated,
+  controller.validate('editUser'),
+  controller.checkEditable,
+  controller.editUser
+)
+
 export default router
 

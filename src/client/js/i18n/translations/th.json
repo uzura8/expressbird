@@ -44,6 +44,8 @@
     "Name is required": "ไม่มีการป้อนชื่อ",
     "UserName is required": "ไม่ได้ใส่ชื่อผู้ใช้",
     "Description is required": "ไม่มีการป้อนคำอธิบาย",
+    "Create completed": "สร้างเสร็จแล้ว",
+    "Edit completed": "แก้ไขเสร็จแล้ว",
     "Sign Up Completed": "การลงทะเบียนเสร็จสมบูรณ์",
     "Sign Up Failed": "การลงทะเบียนผู้ใช้ล้มเหลว",
     "Sent verification email": "ส่งอีเมลยืนยันแล้ว โปรดตรวจสอบอีเมลยืนยันที่คุณได้รับ",

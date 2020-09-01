@@ -12,6 +12,10 @@ export default {
     commit(types.SET_COMMON_HEADER_MENU_OPEN, isOpen)
   },
 
+  setLoading: ({ commit }, isLoading) => {
+    commit(types.SET_COMMON_LOADING, isLoading)
+  },
+
   setAuth: ({ commit }, user) => {
     commit(types.AUTH_SET_USER, user)
     commit(types.AUTH_UPDATE_STATE, true)
@@ -268,22 +272,20 @@ export default {
     }
   },
 
-  createUserByAdmin: async ({ commit, state }, payload) => {
+  editUserByAdmin: async ({ commit, state }, payload) => {
     commit(types.SET_COMMON_LOADING, true)
     try {
-      const fbVals = {
+      const userVals = {
         email: payload.email,
         password: payload.password,
-      }
-      const res = await Firebase.createUser(fbVals)
-      const uid = res.user.uid
-      await Firebase.updateUserProfile(res.user, { displayName: payload.name })
-      const userVals = {
-        uid: uid,
         name: payload.name,
         type: payload.type,
       }
-      await Admin.createUser('firebase', userVals, state.auth.token)
+      if (payload.id == null) {
+        await Admin.createUser('firebase', userVals, state.auth.token)
+      } else {
+        await Admin.editUser(payload.id, 'firebase', userVals, state.auth.token)
+      }
       commit(types.SET_COMMON_LOADING, false)
     } catch (err) {
       commit(types.SET_COMMON_LOADING, false)

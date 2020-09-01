@@ -45,6 +45,8 @@
     "Name is required": "Name is required",
     "UserName is required": "Name is required",
     "Description is required": "Description is required",
+    "Create completed": "Create completed",
+    "Edit completed": "Edit completed",
     "Sign Up Completed": "Sign Up Completed",
     "Sign Up Failed": "Sign Up Failed",
     "Sent verification email": "Verification email has been sent. Please check the verification email you received.",

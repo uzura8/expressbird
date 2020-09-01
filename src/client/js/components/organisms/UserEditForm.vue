@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { User, Firebase } from '@/api'
+import { Admin, Firebase } from '@/api'
 import config from '@/config/config'
 import str from '@/util/str'
 import site from '@/util/site'
@@ -105,6 +105,7 @@ export default {
 
   created: function() {
     if (this.isEdit) {
+      this.setUser()
     }
   },
 
@@ -116,21 +117,37 @@ export default {
         return
       }
 
-      const vals = {
+      let vals = {
         email: this.email,
         password: this.password,
         name: this.name,
         type: this.type,
       }
-      this.$store.dispatch('createUserByAdmin', vals)
+      if (this.isEdit) vals.id = this.userId
+      this.$store.dispatch('editUserByAdmin', vals)
         .then(() => {
           this.$router.push('/admin/users')
-          this.showGlobalMessage(this.$t('msg["Sign Up Completed"]'))
+          const msg = this.$t(this.isEdit ? 'msg["Edit completed"]' : 'msg["Create completed"]')
+          this.showGlobalMessage(msg, 'is-success')
         })
         .catch((err) => {
           console.log(err)// FOR DEBUG
           const i18nKey = site.convFirebaseErrorCodeToI18n(err.code)
           this.showGlobalMessage(this.$t(i18nKey))
+        })
+    },
+
+    setUser: function() {
+      this.$store.dispatch('setLoading', true)
+      Admin.getUser(this.userId, this.authUserToken)
+        .then((res) => {
+          this.email = res.email
+          this.name = res.name
+          this.$store.dispatch('setLoading', false)
+        })
+        .catch((err) => {
+          this.showGlobalMessage(this.$t('msg["Failed to get data from server"]'))
+          this.$store.dispatch('setLoading', false)
         })
     },
 
