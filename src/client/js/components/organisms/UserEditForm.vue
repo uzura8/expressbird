@@ -29,8 +29,13 @@
 
   <b-field :label="$t('common.password')"
     :type="isEmpty(errors.password) ? '' : 'is-danger'"
-    :message="isEmpty(errors.password) ? $t(`form['Used for Sign In']`) : errors.password[0]">
-    <b-input type="password"
+    :message="isEmpty(errors.password) ? '' : errors.password[0]">
+    <p v-if="isEdit && !isUpdatePassword">
+      <a class="u-clickable" @click="isUpdatePassword = true">{{ $t('msg["Change password"]') }}</a>
+    </p>
+    <b-input
+      v-else
+      type="password"
       v-model="password"
       :password-reveal="true"
       icon="lock"
@@ -86,12 +91,25 @@ export default {
       name: '',
       email: '',
       password: '',
+      isUpdatePassword: false,
+      defautVals: {},
     }
   },
 
   computed: {
     isEdit: function() {
       return this.isEmpty(this.userId) === false
+    },
+
+    isEdited: function() {
+      if (this.isEdit === false) return true
+
+      if (this.password.length > 0) return true
+      if (this.email != this.defautVals.email) return true
+      if (this.name != this.defautVals.name) return true
+      if (this.type != this.defautVals.type) return true
+
+      return false
     },
 
     hasErrors: function() {
@@ -111,19 +129,18 @@ export default {
 
   methods: {
     edit: function() {
+      if (this.isEdited === false) {
+        this.$router.push('/admin/users')
+        return
+      }
+
       this.validateAll()
       if (this.hasErrors) {
         this.showGlobalMessage(this.$t('msg["Correct inputs"]'))
         return
       }
 
-      let vals = {
-        email: this.email,
-        password: this.password,
-        name: this.name,
-        type: this.type,
-      }
-      if (this.isEdit) vals.id = this.userId
+      const vals = this.getEditVals()
       this.$store.dispatch('editUserByAdmin', vals)
         .then(() => {
           this.$router.push('/admin/users')
@@ -143,12 +160,37 @@ export default {
         .then((res) => {
           this.email = res.email
           this.name = res.name
+          this.type = res.type
+          this.defautVals = {
+            email: this.email,
+            name: this.name,
+            type: this.type,
+          }
           this.$store.dispatch('setLoading', false)
         })
         .catch((err) => {
           this.showGlobalMessage(this.$t('msg["Failed to get data from server"]'))
           this.$store.dispatch('setLoading', false)
         })
+    },
+
+    getEditVals: function(errors) {
+      if (this.isEdit === false) {
+        return {
+          email: this.email,
+          password: this.password,
+          name: this.name,
+          type: this.type,
+        }
+      }
+
+      let vals = {}
+      vals.id = this.userId
+      if (this.password.length > 0) vals.password = this.password
+      if (this.email != this.defautVals.email) vals.email = this.email
+      if (this.name != this.defautVals.name) vals.name = this.name
+      if (this.type != this.defautVals.type) vals.type = this.type
+      return vals
     },
 
     setErrors: function(errors) {
@@ -179,6 +221,11 @@ export default {
 
     validatePassword: function() {
       this.initError('password')
+      if (this.isEdit) {
+        if (this.isUpdatePassword === false) return
+        if (this.isEmpty(this.password)) return
+      }
+
       if (this.isEmpty(this.password)) {
         this.errors.password.push(this.$t('msg["Password is required"]'))
       }

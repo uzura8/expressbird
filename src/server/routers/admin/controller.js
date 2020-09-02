@@ -4,6 +4,7 @@ import admin from '@/middlewares/firebase/admin'
 import { db, User, ServiceUser } from '@/models'
 import FirebaseAuth from '@/middlewares/firebase/auth'
 import AdminAcl from '@/middlewares/adminAcl'
+import common from '@/util/common'
 
 export default {
   isAuthenticated: (req, res, next) => {
@@ -105,26 +106,36 @@ export default {
     const type = req.body.type
     try {
       const user = await User.findById(id)
-      if (user == null) return next(boom.notFound())
+      if (user == null) return next(boom.notFound('Requested id is invalid'))
 
       const serviceUser = await ServiceUser.findByUserId(id)
-      if (serviceUser == null) return next(boom.notFound())
+      if (serviceUser == null) return next(boom.notFound('Requested id is invalid'))
 
-      const fbuser = await admin.auth().updateUser(serviceUser.serviceUserId ,{
-        email: email,
-        password: password,
-        displayName: name,
-      })
+      let fbuser = await admin.auth().getUser(serviceUser.serviceUserId)
+      if (fbuser == null) return next(boom.notFound('Requested id is invalid'))
+
+      let vals = {}
+      if (!common.isEmpty(email) && fbuser.email != email) vals.email = email
+      if (!common.isEmpty(name) && fbuser.name != name) vals.name = name
+      if (!common.isEmpty(password)) vals.password = password
+      fbuser = await admin.auth().updateUser(serviceUser.serviceUserId ,vals)
 
       db.sequelize.transaction(async (t) => {
-        user.name = name
-        user.type = type
-        await user.save()
+        let isUpdated = false
+        if (!common.isEmpty(name) && user.name != name) {
+          user.name = name
+          isUpdated = true
+        }
+        if (!common.isEmpty(type) && user.type != type) {
+          user.type = type
+          isUpdated = true
+        }
+        if (isUpdated) await user.save()
 
         return res.json({
           id: user.id,
-          name: name,
-          type: type,
+          name: user.name,
+          type: user.type,
           uid: fbuser.uid,
           serviceCode: serviceCode,
         })
@@ -162,17 +173,19 @@ export default {
       case 'editUser':
         return [
           check('email')
-            .isLength({ min: 1 }).withMessage('Email is required')
+            .optional({checkFalsy:true})
             .trim()
             //.normalizeEmail()
             .isEmail().withMessage('Email is not valid'),
           check('password', 'Password is not valid')
+            .optional({checkFalsy:true})
             .trim()
             .isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
           check('name', 'Your name is required')
-            .trim()
-            .isLength({ min: 1 }).withMessage('Name is required'),
+            .optional({checkFalsy:true})
+            .trim(),
           check('type')
+            .optional({checkFalsy:true})
             .customSanitizer(value => {
               const defaut = 'normal'
               const accepts = ['normal', 'admin']
