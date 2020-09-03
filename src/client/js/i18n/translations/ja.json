@@ -40,6 +40,7 @@
     "Signed out": "ログアウトしました",
     "Sign Out failed": "ログアウトに失敗しました",
     "Sign Anonymously is failed": "ゲストログインに失敗しました",
+    "Credential already in use": "このアカウントはすでに別のユーザーに使用されています",
     "Send comment failed": "コメントの送信に失敗しました",
     "Correct inputs": "入力に誤りがあります",
     "Name is required": "名称が未入力です",

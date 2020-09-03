@@ -78,6 +78,9 @@ export default {
       case 'auth/wrong-password':
         i18nKey = 'msg["Email or passwords do not match our records"]'
         break
+      case 'auth/credential-already-in-use':
+        i18nKey = 'msg["Credential already in use"]'
+        break
       //case 'auth/popup-blocked':
       //  return '認証ポップアップがブロックされました。ポップアップブロックをご利用の場合は設定を解除してください';
       //case 'auth/operation-not-supported-in-this-environment':

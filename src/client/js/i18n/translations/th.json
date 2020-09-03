@@ -39,6 +39,7 @@
     "Signed out": "ออกจากระบบ",
     "Sign Out failed": "การออกจากระบบล้มเหลว",
     "Sign Anonymously is failed": "การลงชื่อไม่ระบุชื่อล้มเหลว",
+    "Credential already in use": "บัญชีนี้เชื่อมโยงกับผู้ใช้รายอื่นแล้ว",
     "Send comment failed": "ไม่สามารถส่งความคิดเห็น",
     "Correct inputs": "อินพุตไม่ถูกต้อง",
     "Name is required": "ไม่มีการป้อนชื่อ",

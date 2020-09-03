@@ -12,10 +12,13 @@ export default {
     })
   },
 
-  edit: (id, values, token = null) => {
+  edit: (id, vals, token = null) => {
+    let params = new URLSearchParams()
+    if ('name' in vals && vals.name != null) params.append('name', vals.name)
+    if ('type' in vals && vals.type != null) params.append('type', vals.type)
+    if (common.isEmpty(vals)) throw new Error('No value')
+
     return new Promise((resolve, reject) => {
-      if (common.isEmpty(values)) throw new Error('No value')
-      const params = uri.convToPostParams(values, ['name'])
       let options = {}
       if (token) options.headers = { Authorization: token }
       client.post(`users/${id}`, params, options)

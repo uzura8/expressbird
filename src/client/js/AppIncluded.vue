@@ -37,7 +37,8 @@
       <eb-sign-up-form
         v-if="page === 'signUp'"
         :is-include="true"
-        @signup-complete="executeOnSignedUp"
+        @email-signup-complete="executeOnSignedUpEmail"
+        @oauth-signup-complete="executeOnSignedUpOAuth"
         class="u-mt3r"
       ></eb-sign-up-form>
 
@@ -82,7 +83,6 @@ export default {
   data(){
     return {
       isActive: false,
-      isPublicChat: false,
       page: 'supportChat',
       chat: {},
     }
@@ -111,10 +111,6 @@ export default {
       //const origin = site.baseUri('origin')
       window.parent.postMessage({ chatActive: val }, '*');
     },
-
-    isPublicChat: function (val) {
-      this.setChat()
-    }
   },
 
   created() {
@@ -133,17 +129,8 @@ export default {
     changeTab: function(page) {
       this.page = page
 
-      switch (page) {
-        case 'settings':
-          this.isPublicChat = false
-          break;
-        case 'groupChat':
-          this.isPublicChat = true
-          break;
-        case 'supportChat':
-        default :
-          this.isPublicChat = false
-          break;
+      if (page != 'settings') {
+        this.setChat()
       }
     },
 
@@ -166,7 +153,7 @@ export default {
     },
 
     setChat: function() {
-      if (this.isPublicChat) {
+      if (this.page === 'groupChat') {
         this.setPublicChat()
       } else {
         this.setSupportChat()
@@ -214,9 +201,14 @@ export default {
         })
     },
 
-    executeOnSignedUp: function() {
+    executeOnSignedUpEmail: function() {
       this.changeTab('supportChat')
-      this.showGlobalMessage(this.$t('msg["Sent verification email"]'))
+      this.showGlobalMessage(this.$t('msg["Sent verification email"]'), 'is-success')
+    },
+
+    executeOnSignedUpOAuth: function() {
+      this.changeTab('supportChat')
+      this.showGlobalMessage(this.$t('msg["Sign Up Completed"]'), 'is-success')
     },
   },
 }

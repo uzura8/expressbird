@@ -82,25 +82,38 @@ export default {
     }
   },
 
-  edit: (req, res, next) => {
+  edit: async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() })
     }
 
     const id = req.params.userId
-    let vals = {
-      name: req.body.name,
-    }
-    if (common.isEmpty(req.body.type) === false) {
-      vals.type = req.body.type
-    }
-
+    const name = req.body.name
+    const type = req.body.type
     try {
+      const user = await User.findById(id)
+      if (user == null) return next(boom.notFound('Requested id is invalid'))
+      const serviceUser = await ServiceUser.findByUserId(id)
+      if (serviceUser == null) return next(boom.notFound('Requested id is invalid'))
+
+      let vals = {}
+      if (!common.isEmpty(name)) vals.name = name
+      if (!common.isEmpty(type)) vals.type = type
+      if (common.isEmpty(vals)) return next(boom.badRequest('Params is empty'))
+
       db.sequelize.transaction(async (t) => {
-        const user = await User.update(vals, {
-          where: {id: id}
-        })
+        let isUpdated = false
+        if (!common.isEmpty(vals.name) && user.name != name) {
+          user.name = name
+          isUpdated = true
+        }
+        if (!common.isEmpty(type) && user.type != type) {
+          user.type = type
+          isUpdated = true
+        }
+        if (isUpdated) await user.save()
+
         return res.json({
           id: user.id,
           name: user.name,
@@ -208,6 +221,7 @@ export default {
       case 'edit':
         return [
           check('name', 'Name is required')
+            .optional({checkFalsy:true})
             .trim()
             .isLength({ min: 1 }).withMessage('Name is required'),
           check('type')

@@ -40,6 +40,7 @@
     "Signed out": "Signed out",
     "Sign Out failed": "Sign Out failed",
     "Sign Anonymously is failed": "Sign Anonymously is failed",
+    "Credential already in use": "This account is already associated with another user",
     "Send comment failed": "Send comment failed",
     "Correct inputs": "Correct inputs",
     "Name is required": "Name is required",

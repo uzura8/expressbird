@@ -43,6 +43,20 @@
     </div>
   </div>
 
+  <div class="field is-grouped">
+    <div class="control">
+      <button
+        class="button"
+        @click="signInWithOAuth('google.com')"
+      >
+        <span class="icon">
+          <i class="fab fa-google"></i>
+        </span>
+        <span>{{ $t('form["Sign In with Google"]') }}</span>
+      </button>
+    </div>
+  </div>
+
 </div>
 </template>
 
@@ -98,7 +112,7 @@ export default {
         const action = this.isInclude ? 'linkUserWithCredentialOnEmailAuth' : 'createUserWithEmailSend'
         this.$store.dispatch(action, vals)
           .then(() => {
-            this.$emit('signup-complete')
+            this.$emit('email-signup-complete')
             if (!this.isInclude) this.$router.push({ name: 'SentVerificationMail' })
           })
         .catch((err) => {
@@ -107,6 +121,31 @@ export default {
           this.showGlobalMessage(this.$t(i18nKey))
         })
       }
+    },
+
+    signInWithOAuth: function(providerName) {
+      this.$store.dispatch('linkUserWithCredentialOnOAuth', providerName)
+        .then((res) => {
+          if (this.isInclude) {
+            this.$emit('oauth-signup-complete')
+            return
+          }
+
+          if (!this.isEmpty(this.$route.query.redirect)) {
+            this.$router.push({ path:this.$route.query.redirect })
+          } else {
+            if (this.isUseAdmin && this.isAdmin) {
+              this.$router.push({ name:'AdminTop' })
+            } else {
+              this.$router.push({ name:'UserTop' })
+            }
+          }
+        })
+        .catch(err => {
+          console.log(err)// FOR DEBUG
+          const i18nKey = site.convFirebaseErrorCodeToI18n(err.code)
+          this.showGlobalMessage(this.$t(i18nKey))
+        })
     },
 
     setErrors: function(errors) {

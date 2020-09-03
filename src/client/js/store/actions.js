@@ -364,6 +364,49 @@ export default {
     }
   },
 
+  linkUserWithCredentialOnOAuth: async ({ commit, state }, providerName) => {
+    commit(types.SET_COMMON_LOADING, true)
+    try {
+      let provider
+      switch (providerName) {
+        case 'google.com':
+          provider = new firebase.auth.GoogleAuthProvider()
+          break
+        //case 'twitter.com':
+        //  provider = new firebase.auth.TwitterAuthProvider()
+        //  break
+        //case 'facebook.com':
+        //  provider = new firebase.auth.FacebookAuthProvider()
+        //  break
+      }
+      const res = await firebase.auth().currentUser.linkWithPopup(provider)
+      const fbuser = res.user
+
+      let val = { type:'normal' }
+      if (fbuser.displayName != null) val.name = fbuser.displayName
+      const idToken = await Firebase.getToken(fbuser)
+      const user = await User.edit(state.auth.user.id, val, idToken)
+
+      const stateUser = {
+        id: user.id,
+        email: fbuser.email,
+        name: fbuser.displayName,
+        emailVerified: fbuser.emailVerified,
+        type: user.type,
+        uid: fbuser.uid,
+        serviceCode: 'firebase',
+      }
+      commit(types.AUTH_SET_USER, stateUser)
+      commit(types.AUTH_SET_TOKEN, idToken)
+      commit(types.AUTH_UPDATE_STATE, true)
+      commit(types.SET_COMMON_LOADING, false)
+    } catch (err) {
+      console.log(err)
+      commit(types.SET_COMMON_LOADING, false)
+      throw err
+    }
+  },
+
   changeEmail: async ({ commit }, email) => {
     commit(types.SET_COMMON_LOADING, true)
     try {
