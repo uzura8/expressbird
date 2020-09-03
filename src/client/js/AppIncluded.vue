@@ -7,11 +7,23 @@
 
         <div class="tabs">
           <ul>
-            <li :class="{ 'is-active': !isPublicChat }">
-              <a @click="isPublicChat = false" v-text="dispChatName('support', chat)"></a>
+            <li :class="{ 'is-active': page === 'supportChat' }">
+              <a @click="changeTab('supportChat')" v-text="dispChatName('support', chat)"></a>
             </li>
-            <li :class="{ 'is-active': isPublicChat }">
-              <a @click="isPublicChat = true" v-text="dispChatName('public')"></a>
+            <li :class="{ 'is-active': page === 'groupChat' }">
+              <a @click="changeTab('groupChat')" v-text="dispChatName('public')"></a>
+            </li>
+            <li 
+              v-if="isAnonymous"
+              :class="{ 'is-active': page === 'signUp' }"
+            >
+              <a @click="changeTab('signUp')">{{ this.$t('common.signUp') }}</a>
+            </li>
+            <li 
+              v-else-if="isAuth"
+              :class="{ 'is-active': page === 'settings' }"
+            >
+              <a @click="changeTab('settings')">{{ this.$t('page.Settings') }}</a>
             </li>
           </ul>
 
@@ -21,7 +33,21 @@
           </a>
         </div>
       </header>
+
+      <eb-sign-up-form
+        v-if="page === 'signUp'"
+        :is-include="true"
+        @signup-complete="executeOnSignedUp"
+        class="u-mt3r"
+      ></eb-sign-up-form>
+
+      <eb-settings-container
+        v-else-if="page === 'settings'"
+        class="u-mt3r"
+      ></eb-settings-container>
+
       <eb-chat
+        v-else
         :isInclude="true"
         :chatId="chatId"
         @loaded-chat="setChat"></eb-chat>
@@ -41,18 +67,23 @@
 
 <script>
 import EbChat from '@/components/organisms/EbChat'
+import EbSignUpForm from '@/components/organisms/EbSignUpForm'
+import EbSettingsContainer from '@/components/organisms/EbSettingsContainer'
 import { Chat } from '@/api/'
 
 export default {
   name: 'AppiIncluded',
   components: {
     EbChat,
+    EbSignUpForm,
+    EbSettingsContainer,
   },
 
   data(){
     return {
       isActive: false,
       isPublicChat: false,
+      page: 'supportChat',
       chat: {},
     }
   },
@@ -96,6 +127,23 @@ export default {
         this.activate()
       } else {
         this.isActive = true
+      }
+    },
+
+    changeTab: function(page) {
+      this.page = page
+
+      switch (page) {
+        case 'settings':
+          this.isPublicChat = false
+          break;
+        case 'groupChat':
+          this.isPublicChat = true
+          break;
+        case 'supportChat':
+        default :
+          this.isPublicChat = false
+          break;
       }
     },
 
@@ -164,6 +212,11 @@ export default {
         .catch(err => {
           this.handleApiError(err, this.$t('msg["Failed to get data from server"]'))
         })
+    },
+
+    executeOnSignedUp: function() {
+      this.changeTab('supportChat')
+      this.showGlobalMessage(this.$t('msg["Sent verification email"]'))
     },
   },
 }

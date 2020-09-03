@@ -17,7 +17,10 @@
   </div>
 
   <div v-else>
-    <div class="field is-horizontal">
+    <div
+      v-if="!isAnonymous"
+      class="field is-horizontal"
+    >
       <div class="field-label is-normal">
         <label class="label">{{ $t('form.CurrentPassword') }}</label>
       </div>
@@ -115,7 +118,7 @@ export default {
       passwordOld: '',
       password: '',
       passwordRetype: '',
-      fields: ['passwordOld', 'password', 'passwordRetype'],
+      fields: ['password', 'passwordRetype'],
       errors: {},
       errorGlobal: '',
     }
@@ -134,6 +137,7 @@ export default {
   },
 
   created() {
+    if (!this.isAnonymous) this.fields.push('passwordOld')
   },
 
   methods: {
@@ -142,7 +146,8 @@ export default {
       if (this.hasErrors) return
 
       try {
-        const vals = { passwordOld:this.passwordOld, passwordNew:this.password }
+        const vals = { passwordNew:this.password }
+        if (!this.isAnonymous) vals.passwordOld = this.passwordOld
         await this.$store.dispatch('changePassword', vals)
         this.showGlobalMessage(this.$t('msg["Password updated"]'), 'is-success')
         this.isEdit = false

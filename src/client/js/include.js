@@ -8,6 +8,9 @@ import App from '@/AppIncluded'
 import firebase from 'firebase/app'
 import { SiteConfig } from '@/api/'
 
+import Buefy from 'buefy'
+Vue.use(Buefy)
+
 import mixin from '@/mixins/include'
 Vue.mixin(mixin);
 

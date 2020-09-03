@@ -334,6 +334,36 @@ export default {
     }
   },
 
+  linkUserWithCredentialOnEmailAuth: async ({ commit, state }, vals) => {
+    commit(types.SET_COMMON_LOADING, true)
+    try {
+      const credential = await firebase.auth.EmailAuthProvider.credential(vals.email, vals.password);
+      const res = await firebase.auth().currentUser.linkWithCredential(credential);
+      const fbuser = res.user
+      await Firebase.updateUserProfile(fbuser, {displayName: vals.name})
+      const idToken = await Firebase.getToken(fbuser)
+      const user = await User.edit(state.auth.user.id, { name:vals.name, type:'normal' }, idToken)
+      await Firebase.sendEmailVerification(res.user, 'user/verify-email')
+      const stateUser = {
+        id: user.id,
+        email: fbuser.email,
+        name: fbuser.displayName,
+        emailVerified: fbuser.emailVerified,
+        type: user.type,
+        uid: fbuser.uid,
+        serviceCode: 'firebase',
+      }
+      commit(types.AUTH_SET_USER, stateUser)
+      commit(types.AUTH_SET_TOKEN, idToken)
+      commit(types.AUTH_UPDATE_STATE, true)
+      commit(types.SET_COMMON_LOADING, false)
+    } catch (err) {
+      console.log(err)
+      commit(types.SET_COMMON_LOADING, false)
+      throw err
+    }
+  },
+
   changeEmail: async ({ commit }, email) => {
     commit(types.SET_COMMON_LOADING, true)
     try {
@@ -352,12 +382,14 @@ export default {
     }
   },
 
-  changePassword: async ({ commit }, vals) => {
+  changePassword: async ({ commit, state }, vals) => {
     commit(types.SET_COMMON_LOADING, true)
     try {
       const user = await firebase.auth().currentUser
-      const cred = await firebase.auth.EmailAuthProvider.credential(user.email, vals.passwordOld)
-      await user.reauthenticateAndRetrieveDataWithCredential(cred);
+      if (state.auth.user.type !== 'anonymous') {
+        const cred = await firebase.auth.EmailAuthProvider.credential(user.email, vals.passwordOld)
+        await user.reauthenticateAndRetrieveDataWithCredential(cred);
+      }
       await user.updatePassword(vals.passwordNew)
       const token = await Firebase.getToken(user)// Update token
       commit(types.AUTH_SET_TOKEN, token)

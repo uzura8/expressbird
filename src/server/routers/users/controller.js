@@ -6,6 +6,7 @@ import Authenticator from '@/middlewares/passport'
 import FirebaseAuth from '@/middlewares/firebase/auth'
 import UserAcl from '@/middlewares/userAcl'
 import config from '@/config/config'
+import common from '@/util/common'
 const isFBEnabled = config.auth.firebase.isEnabled
 
 export default {
@@ -86,18 +87,24 @@ export default {
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() })
     }
+
     const id = req.params.userId
-    const name = req.body.name
+    let vals = {
+      name: req.body.name,
+    }
+    if (common.isEmpty(req.body.type) === false) {
+      vals.type = req.body.type
+    }
+
     try {
-      const result = db.sequelize.transaction(async (t) => {
-        const user = await User.update({
-          name: name,
-        }, {
+      db.sequelize.transaction(async (t) => {
+        const user = await User.update(vals, {
           where: {id: id}
         })
         return res.json({
           id: user.id,
           name: user.name,
+          type: user.type,
           createdAt: user.createdAt,
           updatedAt: user.updatedAt,
         })
@@ -203,6 +210,15 @@ export default {
           check('name', 'Name is required')
             .trim()
             .isLength({ min: 1 }).withMessage('Name is required'),
+          check('type')
+            .optional({checkFalsy:true})
+            .customSanitizer(value => {
+              const defaut = 'normal'
+              const accepts = ['normal']
+              if (!value) return defaut
+              if (!accepts.includes(value)) return defaut
+              return value
+            }),
         ]
 
       case 'getServiceUser':
