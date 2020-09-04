@@ -155,7 +155,7 @@ export default {
     setChat: function() {
       if (this.page === 'groupChat') {
         this.setPublicChat()
-      } else {
+      } else if (this.page === 'supportChat') {
         this.setSupportChat()
       }
     },
