@@ -29,7 +29,7 @@ const chatFlameStyles = {
   active: str.convObjToStr({
     border: 'medium none',
     display: 'block',
-    width: '400px !important',
+    width: '100% !important',
     height: '85% !important',
     position: 'fixed',
     top: 'auto',
@@ -38,8 +38,9 @@ const chatFlameStyles = {
     bottom: 0,
     visibility: 'visible',
     'z-index': 10001,
-    'max-width': '100vh',
-    'max-height': '100vw',
+    'max-width': '620px',
+    'min-width': '320px',
+    'min-height': '480px',
     background: 'transparent none repeat scroll 0% 0%',
     opacity: 1,
   }, ';'),
@@ -74,7 +75,9 @@ if (document.readyState !== 'loading') {
 
 window.addEventListener('message', (e) => {
   if (e.origin == origin) {
-    let chatActivityKey = e.data.chatActive === true ? 'active' : 'inActive'
-    chatFrame.setAttribute('style', chatFlameStyles[chatActivityKey])
+    if (e.data.chatActive != null) {
+      let chatActivityKey = e.data.chatActive === true ? 'active' : 'inActive'
+      chatFrame.setAttribute('style', chatFlameStyles[chatActivityKey])
+    }
   }
 }, false);
