@@ -151,9 +151,9 @@ export default {
 
     scrollToEnd() {
       this.$nextTick(() => {
-        if (this.isInclude) {
+        if (this.isInclude && this.$refs.commentList != null) {
           const domRect = this.$refs.commentList.getBoundingClientRect()
-          if (domRect != null && domRect.height != null) {
+          if (domRect.height != null) {
             this.$refs.commentsBox.scrollTop = domRect.height
           }
         } else {
