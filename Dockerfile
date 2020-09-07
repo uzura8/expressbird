@@ -11,9 +11,30 @@ RUN apt-get -y update && apt-get -y install nginx
 RUN rm /etc/nginx/sites-enabled/default
 COPY ./nginx/default.conf /etc/nginx/conf.d/
 
-RUN apt-get -y update && apt-get -y install nodejs npm
-RUN npm install n -g
-RUN n stable
+ENV NVM_DIR /root/.nvm
+ENV NODE_VERSION 12.16.0
+
+RUN apt-get update --fix-missing && \
+	#apt-get install -y curl && \
+	##############################################################################
+	# Install: nvm, node and npm
+	# @see: http://stackoverflow.com/questions/25899912/install-nvm-in-docker
+	##############################################################################
+	curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.35.3/install.sh | bash && \
+	source $NVM_DIR/nvm.sh && \
+	nvm install $NODE_VERSION && \
+	nvm cache clear && \
+	apt-get remove -y curl && \
+	rm -rf /var/lib/apt/lists/*
+
+#ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+nvm install "v${NODE_VERSION}"
+node -v
+npm -v
+
+#RUN apt-get -y update && apt-get -y install nodejs npm
+#RUN npm install n -g
+#RUN n stable
 
 ADD . /gratefulchat
 WORKDIR /gratefulchat
