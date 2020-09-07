@@ -11,7 +11,7 @@ RUN apt-get -y update && apt-get -y install nginx
 RUN rm /etc/nginx/sites-enabled/default
 COPY ./nginx/default.conf /etc/nginx/conf.d/
 
-ENV NVM_DIR /root/.nvm
+ENV NVM_DIR /usr/local/nvm
 ENV NODE_VERSION 12.16.0
 
 # nvm environment variables
