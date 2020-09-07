@@ -15,12 +15,14 @@ ENV NVM_DIR /usr/local/nvm
 ENV NODE_VERSION 12.16.0
 
 # nvm environment variables
-ENV NVM_DIR /usr/local/nvm
+ENV NVM_DIR /root/.nvm
+#ENV NVM_DIR /usr/local/nvm
 ENV NODE_VERSION 12.16.0
 
 # install nvm
 # https://github.com/creationix/nvm#install-script
 RUN curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/v0.35.3/install.sh | bash \
+    && source $NVM_DIR/nvm.sh \
     && . $NVM_DIR/nvm.sh \
     && nvm install $NODE_VERSION \
     && nvm alias default $NODE_VERSION \
