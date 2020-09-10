@@ -35,7 +35,8 @@ module.exports = {
           onUpdate : Sequelize.literal('CURRENT_TIMESTAMP'),
         }
       }),
-      await queryInterface.addConstraint('user_auth', ['user_id'], {
+      await queryInterface.addConstraint('user_auth', {
+        fields: ['user_id'],
         type: 'foreign key',
         name: 'user_auth_user_id_user_id',
         references: {

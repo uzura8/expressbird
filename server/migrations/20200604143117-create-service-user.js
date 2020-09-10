@@ -40,7 +40,8 @@ module.exports = {
           }
         }
       }),
-      await queryInterface.addConstraint('service_user', ['user_id'], {
+      await queryInterface.addConstraint('service_user', {
+        fields: ['user_id'],
         type: 'foreign key',
         name: 'service_user_user_id_user_id',
         references: {

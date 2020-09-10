@@ -33,7 +33,8 @@ module.exports = {
           onUpdate : Sequelize.literal('CURRENT_TIMESTAMP'),
         }
       }),
-      await queryInterface.addConstraint('chat_comment', ['chat_id'], {
+      await queryInterface.addConstraint('chat_comment', {
+        fields: ['chat_id'],
         type: 'foreign key',
         name: 'chat_comment_chat_id_chat_id',
         references: {
