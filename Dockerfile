@@ -11,61 +11,6 @@ RUN apt-get -y update && apt-get -y install nginx
 RUN rm /etc/nginx/sites-enabled/default
 COPY ./nginx/default.conf /etc/nginx/conf.d/
 
-#RUN rm /bin/sh && ln -s /bin/bash /bin/sh
-#
-#
-##ENV NVM_DIR /usr/local/nvm
-##ENV NODE_VERSION 12.16.0
-#
-## nvm environment variables
-#ENV NVM_DIR /root/.nvm
-##ENV NVM_DIR /usr/local/nvm
-#ENV NODE_VERSION 12.16.0
-#
-## install nvm
-## https://github.com/creationix/nvm#install-script
-#RUN curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/v0.35.3/install.sh | bash
-#RUN  source $NVM_DIR/nvm.sh
-#RUN nvm install v12.16.0
-#RUN nvm use v12.16.0
-##RUN  source /root/.bashrc \
-##    && nvm install v12.16.0 \
-##    && nvm alias default $NODE_VERSION \
-##    && nvm use default
-#
-### install node and npm
-##RUN source $NVM_DIR/nvm.sh \
-##    && nvm install $NODE_VERSION \
-##    && nvm alias default $NODE_VERSION \
-##    && nvm use default
-#
-#    #&& . $NVM_DIR/nvm.sh \
-#
-## add node and npm to path so the commands are available
-##ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
-##ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
-#
-## confirm installation
-#RUN node -v
-#RUN npm -v
-#
-##RUN apt-get update --fix-missing && \
-##	#apt-get install -y curl && \
-##	##############################################################################
-##	# Install: nvm, node and npm
-##	# @see: http://stackoverflow.com/questions/25899912/install-nvm-in-docker
-##	##############################################################################
-##	curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.35.3/install.sh | bash && \
-##	source $NVM_DIR/nvm.sh && \
-##	nvm install $NODE_VERSION && \
-##	nvm cache clear && \
-##	apt-get remove -y curl && \
-##	rm -rf /var/lib/apt/lists/*
-##
-###ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
-###nvm install "v${NODE_VERSION}"
-##node -v
-##npm -v
 
 RUN apt-get -y update && apt-get -y install nodejs npm
 RUN npm install n -g
@@ -76,8 +21,7 @@ WORKDIR /gratefulchat
 
 RUN npm install --no-optional -g pm2
 RUN npm install
-#RUN npm run build
-RUN ./node_modules/webpack/bin/webpack.js --mode production --config ./build/webpack.config.js
+RUN npm run build
 
 EXPOSE 80
 
