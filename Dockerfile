@@ -76,7 +76,8 @@ WORKDIR /gratefulchat
 
 RUN npm install --no-optional -g pm2
 RUN npm install
-RUN npm run build
+#RUN npm run build
+RUN ./node_modules/webpack/bin/webpack.js --mode production --config ./build/webpack.config.js
 
 EXPOSE 80
 
