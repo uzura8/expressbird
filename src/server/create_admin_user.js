@@ -45,7 +45,7 @@ const createUser = function(name, email = '', password = '', serviceCode = '', s
         results.serviceUser = serviceUser
       }
       console.log('Create admin user')
-      process.exit(1)
+      //process.exit(1)
     } catch (err) {
       cli.handleError(err)
     }
