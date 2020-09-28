@@ -76,12 +76,15 @@ resource "aws_acm_certificate" "this" {
 }
 
 resource "aws_route53_record" "validation" {
-  count   = length(aws_acm_certificate.this.domain_validation_options)
+  #count   = length(aws_acm_certificate.this.domain_validation_options)
   zone_id = var.route53_zone_id
-  name    = lookup(aws_acm_certificate.this.domain_validation_options[count.index], "resource_record_name")
-  type    = lookup(aws_acm_certificate.this.domain_validation_options[count.index], "resource_record_type")
   ttl     = "300"
-  records = [lookup(aws_acm_certificate.this.domain_validation_options[count.index], "resource_record_value")]
+  name    = lookup(aws_acm_certificate.this.domain_validation_options[0], "resource_record_name")
+  type    = lookup(aws_acm_certificate.this.domain_validation_options[0], "resource_record_type")
+  records = [lookup(aws_acm_certificate.this.domain_validation_options[0], "resource_record_value")]
+  #name    = lookup(aws_acm_certificate.this.domain_validation_options[count.index], "resource_record_name")
+  #type    = lookup(aws_acm_certificate.this.domain_validation_options[count.index], "resource_record_type")
+  #records = [lookup(aws_acm_certificate.this.domain_validation_options[count.index], "resource_record_value")]
 }
 
 #resource "aws_lb_target_group_attachment" "web_b" {
