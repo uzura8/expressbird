@@ -50,6 +50,11 @@ def main():
         terraform_apply_cmd.append('-var')
         terraform_apply_cmd.append('aws_db_password=%s' % db_passwd)
 
+    domain_name = os.environ.get('DOMAIN_NAME', '')
+    if len(domain_name) > 0:
+        terraform_apply_cmd.append('-var')
+        terraform_apply_cmd.append('domain_name=%s' % domain_name)
+
     app_session_key = os.environ.get('SESSION_KEY', '')
     if len(app_session_key) > 0:
         terraform_apply_cmd.append('-var')

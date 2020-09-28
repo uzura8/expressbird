@@ -4,6 +4,7 @@ variable "security_group_alb_web" {}
 variable "subnet_public_a_web_id" {}
 variable "subnet_public_b_web_id" {}
 variable "health_check_path" {}
+variable "domain_name" {}
 #variable "ec2_web1_id" {}
 #variable "ec2_web2_id" {}
 
@@ -62,6 +63,17 @@ resource "aws_lb_target_group" "web" {
 #  port             = 80
 #}
 
+resource "aws_acm_certificate" "this" {
+  domain_name       = var.domain_name
+  validation_method = "DNS"
+  #subject_alternative_names = ["foo.example.net"]
+
+  tags = {
+    Name      = join("-", [var.common_prefix, "acm"])
+    ManagedBy = "terraform"
+  }
+}
+
 #resource "aws_lb_target_group_attachment" "web_b" {
 #  target_group_arn = aws_lb_target_group.web.arn
 #  target_id        = var.ec2_web2_id
@@ -69,10 +81,23 @@ resource "aws_lb_target_group" "web" {
 #}
 
 # Listener of ALB
-resource "aws_lb_listener" "web" {
+resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.web.arn
   port              = "80"
   protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.web.arn
+  }
+}
+
+resource "aws_lb_listener" "https" {
+  load_balancer_arn = aws_lb.web.arn
+  port              = "443"
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2015-05"
+  certificate_arn   = aws_acm_certificate.this.arn
 
   default_action {
     type             = "forward"

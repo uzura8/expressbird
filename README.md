@@ -186,6 +186,7 @@ Input below
         * DB_PASSWORD: password_hoge
         * SESSION_KEY: hoge
         * AWS_S3_BUCKET_NAME: grateful-chat-hoge
+        * DOMAIN_NAME: your-domain.example.com
 *  Section "Buildspec"
     * Build specifications: Use a buildspec file
     * Buildspec 名: buildspec_deploy_infra.yml

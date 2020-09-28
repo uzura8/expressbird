@@ -19,7 +19,7 @@ module "module_vpc" {
   common_prefix      = var.common_prefix
 }
 
-# ELB
+# Security group
 module "module_security_group" {
   source        = "./modules/aws/security_group"
   vpc_id        = module.module_vpc.vpc_id
@@ -35,6 +35,7 @@ module "module_elb" {
   subnet_public_b_web_id = module.module_vpc.subnet_public_b_web_id
   common_prefix          = var.common_prefix
   health_check_path      = var.elb_health_check_path
+  domain_name            = var.domain_name
 }
 
 # RDS
@@ -101,4 +102,5 @@ variable "elb_health_check_path" {}
 variable "ecs_service_task_desired_count" {}
 variable "session_key" {}
 variable "s3_bucket_name" {}
+variable "domain_name" {}
 
