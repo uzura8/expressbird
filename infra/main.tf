@@ -35,6 +35,7 @@ module "module_elb" {
   subnet_public_b_web_id = module.module_vpc.subnet_public_b_web_id
   common_prefix          = var.common_prefix
   health_check_path      = var.elb_health_check_path
+  route53_zone_id        = var.route53_zone_id
   domain_name            = var.domain_name
 }
 
@@ -102,5 +103,6 @@ variable "elb_health_check_path" {}
 variable "ecs_service_task_desired_count" {}
 variable "session_key" {}
 variable "s3_bucket_name" {}
+variable "route53_zone_id" {}
 variable "domain_name" {}
 

@@ -4,6 +4,7 @@ variable "security_group_alb_web" {}
 variable "subnet_public_a_web_id" {}
 variable "subnet_public_b_web_id" {}
 variable "health_check_path" {}
+variable "route53_zone_id" {}
 variable "domain_name" {}
 #variable "ec2_web1_id" {}
 #variable "ec2_web2_id" {}
@@ -72,6 +73,15 @@ resource "aws_acm_certificate" "this" {
     Name      = join("-", [var.common_prefix, "acm"])
     ManagedBy = "terraform"
   }
+}
+
+resource "aws_route53_record" "validation" {
+  count   = length(aws_acm_certificate.this.domain_validation_options)
+  zone_id = var.route53_zone_id
+  name    = lookup(aws_acm_certificate.this.domain_validation_options[count.index], "resource_record_name")
+  type    = lookup(aws_acm_certificate.this.domain_validation_options[count.index], "resource_record_type")
+  ttl     = "300"
+  records = [lookup(aws_acm_certificate.this.domain_validation_options[count.index], "resource_record_value")]
 }
 
 #resource "aws_lb_target_group_attachment" "web_b" {

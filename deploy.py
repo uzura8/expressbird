@@ -50,6 +50,11 @@ def main():
         terraform_apply_cmd.append('-var')
         terraform_apply_cmd.append('aws_db_password=%s' % db_passwd)
 
+    route53_zone_id = os.environ.get('ROUTE53_ZONE_ID', '')
+    if len(route53_zone_id) > 0:
+        terraform_apply_cmd.append('-var')
+        terraform_apply_cmd.append('route53_zone_id=%s' % route53_zone_id)
+
     domain_name = os.environ.get('DOMAIN_NAME', '')
     if len(domain_name) > 0:
         terraform_apply_cmd.append('-var')
