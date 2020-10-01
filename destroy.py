@@ -51,27 +51,27 @@ def main():
                           '-backend-config=region=%s' % backend_region]
     subprocess.run(terraform_init_cmd, cwd='./infra', check=True)
 
-    terraform_destroy_cmd = ['terraform', 'destroy', '-auto-approve']
+    terraform_apply_cmd = ['terraform', 'destroy', '-auto-approve']
 
     if os.path.exists('terraform.tfvars'):
-        terraform_destroy_cmd.append('-var-file=%s' % './terraform.tfvars')
+        terraform_apply_cmd.append('-var-file=%s' % './terraform.tfvars')
 
     #db_passwd = os.environ.get('DB_PASSWORD', '')
     #if len(db_passwd) > 0:
-    #    terraform_destroy_cmd.append('-var')
-    #    terraform_destroy_cmd.append('aws_db_password=%s' % db_passwd)
+    #    terraform_apply_cmd.append('-var')
+    #    terraform_apply_cmd.append('aws_db_password=%s' % db_passwd)
 
     #app_session_key = os.environ.get('SESSION_KEY', '')
     #if len(app_session_key) > 0:
-    #    terraform_destroy_cmd.append('-var')
-    #    terraform_destroy_cmd.append('session_key=%s' % app_session_key)
+    #    terraform_apply_cmd.append('-var')
+    #    terraform_apply_cmd.append('session_key=%s' % app_session_key)
 
     route53_zone_id = os.environ.get('ROUTE53_ZONE_ID', '')
     if len(route53_zone_id) > 0:
         terraform_apply_cmd.append('-var')
         terraform_apply_cmd.append('route53_zone_id=%s' % route53_zone_id)
 
-    subprocess.run(terraform_destroy_cmd, cwd='./infra', check=True)
+    subprocess.run(terraform_apply_cmd, cwd='./infra', check=True)
 
 
 if __name__ == '__main__':
