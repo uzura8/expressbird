@@ -66,6 +66,11 @@ def main():
     #    terraform_destroy_cmd.append('-var')
     #    terraform_destroy_cmd.append('session_key=%s' % app_session_key)
 
+    route53_zone_id = os.environ.get('ROUTE53_ZONE_ID', '')
+    if len(route53_zone_id) > 0:
+        terraform_apply_cmd.append('-var')
+        terraform_apply_cmd.append('route53_zone_id=%s' % route53_zone_id)
+
     subprocess.run(terraform_destroy_cmd, cwd='./infra', check=True)
 
 

@@ -309,6 +309,8 @@ Input below
     * Additional configuration > Environment variables
         * AWS_DEFAULT_REGION: ap-northeast-1
         * TERRAFORM_BACKEND_BUCKET: gc-terraform-state-hoge
+        * ROUTE53_ZONE_ID: route53 hosted zone id of your-domain
+        * DOMAIN_NAME: your-domain.example.com
 * Section "Buildspec"
     * Build specifications: Use a buildspec file
     * Buildspec 名: buildspec_destroy_infra.yml
