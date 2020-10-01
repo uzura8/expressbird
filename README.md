@@ -82,13 +82,19 @@ Open Authentication page.
 
 
 
-Register "Email/Password" and "Anonymous" for "Sign-in providers"
+Register "Email/Password", "Google" and "Anonymous" for "Sign-in providers"
 
 ![firebase_config_08](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/firebase_config_08.png)
 
 ![firebase_config_09](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/firebase_config_09.png)
 
+![firebase_config_10](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/firebase_config_10.png)
 
+
+
+Add Authorized domain
+
+![firebase_config_11](https://raw.githubusercontent.com/uzura8/expressbird/dev_gc/src/doc/assets/img/firebase_config_11.png)
 
 #### Upload config files to S3 Bucket
 
