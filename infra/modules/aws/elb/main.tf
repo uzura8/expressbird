@@ -144,16 +144,16 @@ resource "aws_lb_listener" "https" {
 #  }
 #}
 
-#resource "aws_route53_record" "elb" {
-#  zone_id = var.route53_zone_id
-#  type    = "A"
-#  name    = var.domain_name
-#  #name    = "hoge"
-#
-#  alias {
-#    name                   = aws_lb.web.dns_name
-#    zone_id                = aws_lb.web.zone_id
-#    evaluate_target_health = "true"
-#  }
-#}
+resource "aws_route53_record" "elb" {
+  zone_id = var.route53_zone_id
+  type    = "A"
+  name    = var.domain_name
+  #name    = "hoge"
+
+  alias {
+    name                   = aws_lb.web.dns_name
+    zone_id                = aws_lb.web.zone_id
+    evaluate_target_health = "true"
+  }
+}
 
